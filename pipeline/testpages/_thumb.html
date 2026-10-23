@@ -1,0 +1,14 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
+<style>html,body{margin:0;background:#fff}#box{width:720px;height:540px;background:radial-gradient(ellipse at 50% 45%,#F7F5F0 0%,#ECE8DF 75%)}model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}</style>
+</head><body>
+<div id="box"><model-viewer id="mv" shadow-intensity="1" shadow-softness="0.8" environment-image="neutral" exposure="1.05" interaction-prompt="none"></model-viewer></div>
+<script>
+// renders catalogue thumbnails; served by serve.mjs at /__test/, never deployed
+const q = new URLSearchParams(location.search);
+const mv = document.getElementById("mv");
+mv.cameraOrbit = q.get("orbit");
+mv.src = q.get("src");
+</script>
+</body></html>

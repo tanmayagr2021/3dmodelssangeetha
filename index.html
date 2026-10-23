@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sangeetha 3D and AR</title>
+<meta name="description" content="Search a model number, open it in 3D, then see it at real size in your home on a phone or headset. No app needed.">
+<meta name="theme-color" content="#0E0E0F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0E0E0F;
+    --paper: #F4F4F5;
+    --card: #FFFFFF;
+    --orange: #F58A29;
+    --orange-dk: #B85A12;
+    --orange-bg: #FDEBDC;
+    --slate: #5E6066;
+    --hair: #E3E3E6;
+    --sans: Outfit, -apple-system, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  button, input { font: inherit; color: inherit; }
+  button:focus { outline: none; }
+  button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+  header { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 28px; background: var(--ink); color: #fff; }
+  header img { height: 34px; width: auto; display: block; }
+  .pill { font-size: 12px; font-weight: 600; letter-spacing: 1px; color: var(--ink); background: var(--orange); padding: 6px 12px; border-radius: 999px; }
+
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+  .hero { padding: 48px 0 8px; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--orange-dk); }
+  h1 { font-weight: 600; font-size: 46px; line-height: 1.08; letter-spacing: -0.8px; margin: 10px 0 0; max-width: 17ch; }
+  .lede { font-size: 18px; line-height: 1.5; color: var(--slate); margin: 16px 0 0; max-width: 46ch; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .steps li { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--hair); border-radius: 14px; padding: 14px 16px; font-size: 16px; line-height: 1.35; }
+  .steps b { width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--orange); color: var(--ink); display: grid; place-items: center; font-weight: 700; }
+
+  .bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 26px 0 20px; }
+  .search { flex: 1 1 320px; position: relative; }
+  .search input { width: 100%; border: 1px solid var(--hair); background: #fff; border-radius: 14px; padding: 15px 16px 15px 48px; font-size: 17px; }
+  .search svg { position: absolute; left: 16px; top: 50%; width: 20px; height: 20px; transform: translateY(-50%); color: var(--slate); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { border: 1px solid var(--hair); background: #fff; border-radius: 999px; padding: 11px 18px; font-size: 15px; font-weight: 500; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 44px; }
+  .card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--hair); border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: transform .2s, box-shadow .2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+  .card .pic { position: relative; background: #fff; aspect-ratio: 1 / 1; display: grid; place-items: center; border-bottom: 1px solid var(--hair); }
+  .card .pic img { width: 82%; height: 82%; object-fit: contain; }
+  .card .badge { position: absolute; left: 14px; top: 14px; display: flex; align-items: center; gap: 6px; background: var(--ink); color: #fff; font-size: 12.5px; font-weight: 600; padding: 6px 10px 6px 8px; border-radius: 999px; }
+  .card .badge svg { width: 15px; height: 15px; color: var(--orange); }
+  .card .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .card .brandlogo { height: 20px; width: auto; align-self: flex-start; margin-bottom: 4px; }
+  .card h2 { font-weight: 600; font-size: 20px; line-height: 1.25; margin: 0; }
+  .card .model { font-size: 14px; color: var(--slate); font-weight: 500; }
+  .card mark { background: var(--orange-bg); color: inherit; border-radius: 3px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tags span { font-size: 12.5px; font-weight: 600; background: #F1F1F3; border-radius: 6px; padding: 4px 8px; }
+  .open { margin-top: auto; padding-top: 14px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--orange-dk); }
+  .open svg { width: 16px; height: 16px; }
+
+  .empty { grid-column: 1 / -1; text-align: center; padding: 48px 16px; color: var(--slate); background: var(--card); border: 1px dashed var(--hair); border-radius: 20px; font-size: 16px; line-height: 1.5; }
+  .empty b { color: var(--ink); }
+  footer { border-top: 1px solid var(--hair); padding: 22px 0 36px; font-size: 13px; line-height: 1.6; color: var(--slate); }
+
+  @media (max-width: 900px) {
+    header { height: 56px; padding: 0 16px; }
+    header img { height: 28px; }
+    .wrap { padding: 0 16px; }
+    .hero { grid-template-columns: 1fr; gap: 20px; padding-top: 26px; }
+    .steps { display: none; }
+    h1 { font-size: 34px; }
+    .lede { font-size: 16px; }
+    .bar { padding-top: 18px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <img src="/logos/sangeetha.png" alt="Sangeetha" width="105" height="34">
+  <span class="pill">3D &amp; AR</span>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Sangeetha 3D and AR</div>
+      <h1>See it in your home before you buy</h1>
+      <p class="lede">Open the doors, look inside, check the size, then stand it in your kitchen at real size on your phone or headset. No app needed.</p>
+    </div>
+    <ol class="steps">
+      <li><b>1</b><span>Search the model number</span></li>
+      <li><b>2</b><span>Open it in 3D and open the doors</span></li>
+      <li><b>3</b><span>See it at real size in your home</span></li>
+    </ol>
+  </section>
+
+  <div class="bar">
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search by model number or name" aria-label="Search by model number or name" autocomplete="off">
+    </label>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>3D models made for Sangeetha from each brand’s official photos and published dimensions. Demo prepared by Tanmay Agarwal.</footer>
+</div>
+
+<script type="module">
+const { products } = await fetch("/products.json").then((r) => r.json());
+const CATS = [["All", null], ["Refrigerators", "Refrigerator"], ["Washing machines", "Washing machine"], ["Air conditioners", "Air conditioner"]];
+let cat = null;
+const q = document.getElementById("q");
+const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const AR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>`;
+
+const chips = document.getElementById("chips");
+for (const [label, value] of CATS) {
+  const b = document.createElement("button");
+  b.className = "chip";
+  b.textContent = label;
+  b.setAttribute("aria-pressed", String(value === cat));
+  b.addEventListener("click", () => {
+    cat = value;
+    chips.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === b)));
+    render();
+  });
+  chips.appendChild(b);
+}
+
+// highlight the typed text inside a model number, ignoring spaces and dashes
+function highlight(text, query) {
+  const n = norm(query);
+  if (!n) return esc(text);
+  const map = [];
+  let flat = "";
+  [...text].forEach((ch, i) => { if (/[a-z0-9]/i.test(ch)) { map.push(i); flat += ch.toLowerCase(); } });
+  const at = flat.indexOf(n);
+  if (at < 0) return esc(text);
+  const s = map[at], e = map[at + n.length - 1] + 1;
+  return esc(text.slice(0, s)) + "<mark>" + esc(text.slice(s, e)) + "</mark>" + esc(text.slice(e));
+}
+
+function render() {
+  const query = q.value.trim();
+  const n = norm(query);
+  const list = products.filter((p) => (!cat || p.category === cat) && (!n || norm(`${p.model} ${p.name} ${p.brand} ${p.category}`).includes(n)));
+  const grid = document.getElementById("grid");
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty">No model matches <b>${esc(query)}</b> yet.<br>New models are added from their model number.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map((p) => {
+    const tags = [p.size.w + " × " + p.size.h, p.parts?.length ? "Opens: " + p.parts.map((x) => x.label).join(", ") : null].filter(Boolean);
+    return `<a class="card" href="/p/${p.id}">
+      <div class="pic"><img src="${p.thumb}" alt="${esc(p.name)}" loading="lazy" width="900" height="900"><span class="badge">${AR}3D and AR</span></div>
+      <div class="body">
+        <img class="brandlogo" src="${p.brandLogo}" alt="${esc(p.brand)}">
+        <h2>${esc(p.shortName)}</h2>
+        <div class="model">Model ${highlight(p.model, query)}</div>
+        <div class="tags">${tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+        <div class="open">Open in 3D <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </div>
+    </a>`;
+  }).join("");
+}
+q.addEventListener("input", render);
+q.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+  const first = document.querySelector("#grid .card");
+  if (first) location.href = first.getAttribute("href");
+});
+render();
+</script>
+</body>
+</html>

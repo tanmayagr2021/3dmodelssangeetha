@@ -1,0 +1,14 @@
+node_modules/
+.vercel/
+.DS_Store
+__pycache__/
+*.pyc
+
+# local only: client files, research, pitch decks, notes
+private/
+
+# local tools (Pixar USD env, compiled checks, headset emulator)
+tools/
+
+# build scratch
+.work/
