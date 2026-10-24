@@ -13,7 +13,8 @@ const ID = "lg-fhp1412z9b";
 // ── size (metres); photo measurements at 1 px per mm ──
 const W = 0.6, H = 0.85, D = 0.565;
 const zF = D / 2, zB = -D / 2;
-const feet = 0.014, stripY = 0.745;                        // control strip from 0.745 to 0.85
+const feet = 0.014, frontTop = 0.745;                     // the lower front panel starts at 0.745
+const stripY = 0.85 - 404 / 3.61 / 1000;                 // 0.7381: the control strip is 112 mm tall (rows 150-554 of LG's panel photo, 3.61 px/mm) and overlaps the front below
 const drawerX0 = -0.299, drawerX1 = -0.09;
 const cx = 0.005, cy = 0.469, ringR = 0.26, holeR = 0.2;   // door centre and sizes
 
@@ -119,7 +120,7 @@ for (const [fx, fz] of [[-1, 1], [1, 1], [-1, -1], [1, -1]]) {
 }
 
 // ── front: photo of LG's own front with the porthole cut out ──
-const mainFront = frontWithHoles("FrontMain", W, stripY - feet, [{ x: cx, y: cy - feet, r: holeR }], front, 0.004);
+const mainFront = frontWithHoles("FrontMain", W, frontTop - feet, [{ x: cx, y: cy - feet, r: holeR }], front, 0.004);
 mainFront.position.set(0, feet, zF - 0.004);
 cab.add(mainFront);
 // control strip: dial, programmes and display, right of the drawer
