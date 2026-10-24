@@ -498,6 +498,10 @@ if (!product) {
   $("main").outerHTML = `<div class="missing"><h1>We couldn’t find that product</h1><p class="blurb">The link may be old, or the model isn’t in the catalogue yet.</p><a href="/">See all products</a></div>`;
   throw new Error("unknown product " + id);
 }
+// Vercel's other addresses for this site (per deployment and per branch) ask for a Vercel
+// login, so the links people scan and share always point at the public address
+const PUBLIC_ORIGIN = "https://3dmodelssangeetha.vercel.app";
+const shareUrl = (location.hostname.endsWith(".vercel.app") ? PUBLIC_ORIGIN : location.origin) + location.pathname + location.search;
 
 // ── what this device can do ──
 const ua = navigator.userAgent;
@@ -980,7 +984,7 @@ function openQuickLook() {
   a.rel = "ar";
   a.href = `${f.usdz}#allowsContentScaling=0` +
     (location.protocol === "https:" ? `&custom=${banner}&customHeight=small` : "") +
-    `&canonicalWebPageURL=${encodeURIComponent(location.href)}`;
+    `&canonicalWebPageURL=${encodeURIComponent(shareUrl)}`;
   a.appendChild(document.createElement("img"));
   a.style.display = "none";
   document.body.appendChild(a);
@@ -1056,7 +1060,7 @@ const openTitle = parts.length ? `Open the ${parts.map((p) => p.label).join(" or
 function qrSvg(size = 4) {
   if (!/^https?:$/.test(location.protocol) || !window.qrcode) return "";
   const q = qrcode(0, "M");
-  q.addData(location.href);
+  q.addData(shareUrl);
   q.make();
   return q.createSvgTag({ cellSize: size, margin: 0, scalable: true });
 }
@@ -1158,15 +1162,15 @@ $("btnVR").addEventListener("click", () => openHeadset("vr"));
 
 // ── share ──
 async function copyLink() {
-  try { await navigator.clipboard.writeText(location.href); toast("Link copied."); }
-  catch { toast(location.href); }
+  try { await navigator.clipboard.writeText(shareUrl); toast("Link copied."); }
+  catch { toast(shareUrl); }
 }
 if (framed) {
   $("shareText").innerHTML = "<b>Preview only.</b><br>Open the shared link on a phone or headset to place it in your room.";
   $("qrCode").classList.add("hide");
 } else $("qrCode").innerHTML = qrSvg();
 $("btnCopy").addEventListener("click", copyLink);
-$("btnWhatsApp").href = `https://wa.me/?text=${encodeURIComponent(`${product.brand} ${product.shortName}: open it in 3D and see it at real size in your room. ${location.href}`)}`;
+$("btnWhatsApp").href = `https://wa.me/?text=${encodeURIComponent(`${product.brand} ${product.shortName}: open it in 3D and see it at real size in your room. ${shareUrl}`)}`;
 
 // test hook for automated checks
 window.__demo = { product, state, togglePart, applyFinish, openHeadset, openGuide, showFeature, closeFeature, fitCheck: () => fitResult, caps: { platform, isPhone, hasQuickLook, xrAR, xrVR, headsetAR, headsetVR } };
