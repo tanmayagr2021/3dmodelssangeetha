@@ -1,0 +1,116 @@
+{
+  "products": [
+    {
+      "id": "carrier-19k-xceed-edge-gxi",
+      "brand": "Carrier",
+      "brandLogo": "/logos/carrier.png",
+      "category": "Air conditioner",
+      "model": "19K XCEED EDGE GXi",
+      "name": "Carrier 1.5 ton 3-star XCEED EDGE GXi inverter split AC",
+      "shortName": "1.5 ton XCEED EDGE GXi AC",
+      "summary": "Swing the louvre open, lift the front panel to see the filters, then hang it on your wall at its real size.",
+      "arTip": "Tap the louvre or the front panel to open it",
+      "glb": "/models/carrier-19k-xceed-edge-gxi.glb",
+      "thumb": "/photos/carrier-19k-xceed-edge-gxi/0.jpg",
+      "photos": ["/photos/carrier-19k-xceed-edge-gxi/0.jpg", "/photos/carrier-19k-xceed-edge-gxi/1.jpg", "/photos/carrier-19k-xceed-edge-gxi/2.jpg", "/photos/carrier-19k-xceed-edge-gxi/3.jpg"],
+      "placement": "wall",
+      "arLabel": "View on your wall",
+      "orbit": "-22deg 82deg 128%",
+      "finishes": [
+        {
+          "name": "White",
+          "swatchColor": "#f3f4f6",
+          "usdz": "/models/usdz/carrier-19k-xceed-edge-gxi-white.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "panel",
+          "label": "front panel",
+          "node": "FrontPanel",
+          "axis": "x",
+          "angle": -62,
+          "zone": {
+            "closed": [
+              [-0.47, 0.07, 0.193],
+              [0.47, 0.275, 0.205]
+            ],
+            "open": [
+              [-0.47, 0.168, 0.199],
+              [0.47, 0.275, 0.386]
+            ]
+          }
+        },
+        {
+          "key": "louvre",
+          "label": "louvre",
+          "node": "Louvre",
+          "axis": "x",
+          "angle": -58,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [-0.435, 0.018, 0.193],
+              [0.435, 0.066, 0.201]
+            ],
+            "open": [
+              [-0.435, 0.035, 0.198],
+              [0.435, 0.067, 0.243]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "94 cm",
+        "h": "27.5 cm",
+        "d": "20.5 cm"
+      },
+      "sizeNote": "Indoor unit. Outdoor unit 79 x 54 x 27 cm",
+      "specs": [
+        ["Capacity", "1.5 ton, 5050 W"],
+        ["Energy rating", "3 star, ISEER 4.4"],
+        ["Inverter", "FlexiCool 6-in-1"],
+        ["Smart features", "X-Sense AI, Wi-Fi 2.0 with Alexa and Google"],
+        ["Outdoor cooling", "HybridJet 2.0"],
+        ["Cleaning", "Auto Cleaner (defrost clean)"],
+        ["Filters", "PM 2.5 and HD filter"],
+        ["Airflow", "580 CFM, 4-way swing"],
+        ["Indoor noise", "42 / 40 / 37 dB"],
+        ["Refrigerant", "R32"],
+        ["Indoor unit weight", "10.1 kg"]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://carriermideaindia.com/product/xceed-edge-gxi-wi-fi-3-star-split-inverter-ac/",
+      "hotspots": [
+        {
+          "title": "FlexiCool 6-in-1 inverter",
+          "text": "Six cooling modes to match your needs and the room, saving up to 50% energy.",
+          "pos": [0.25, 0.19, 0.206],
+          "normal": [0, 0, 1],
+          "show": "!panel"
+        },
+        {
+          "title": "X-Sense AI",
+          "text": "Predictive AI learns your habits and sets the temperature with the least energy.",
+          "pos": [-0.25, 0.19, 0.206],
+          "normal": [0, 0, 1],
+          "show": "!panel"
+        },
+        {
+          "title": "Pull-down structure",
+          "text": "The front panel lifts on a pull-down structure for easy access and maintenance.",
+          "pos": [-0.2, 0.17, 0.192],
+          "normal": [0, 0, 1],
+          "show": "panel"
+        },
+        {
+          "title": "Wi-Fi with Alexa and Google",
+          "text": "Control it by voice or from your phone, with Alexa and Google Assistant.",
+          "pos": [0.471, 0.16, 0.1],
+          "normal": [1, 0, 0],
+          "show": "always"
+        }
+      ]
+    }
+  ]
+}

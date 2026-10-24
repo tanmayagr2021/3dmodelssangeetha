@@ -1,0 +1,225 @@
+{
+  "products": [
+    {
+      "id": "lg-fhp1412z9b",
+      "brand": "LG",
+      "brandLogo": "/logos/lg.png",
+      "category": "Washing machine",
+      "model": "FHP1412Z9B",
+      "name": "LG 12 kg front-load washing machine with AI Direct Drive",
+      "shortName": "12 kg AI Direct Drive washer",
+      "summary": "Open the door to see the drum, pull out the detergent drawer, then place it in your home at its real size.",
+      "arTip": "Tap the door or the drawer to open it",
+      "glb": "/models/lg-fhp1412z9b.glb",
+      "thumb": "/photos/lg-fhp1412z9b/0.jpg",
+      "photos": [
+        "/photos/lg-fhp1412z9b/0.jpg",
+        "/photos/lg-fhp1412z9b/1.jpg",
+        "/photos/lg-fhp1412z9b/2.jpg",
+        "/photos/lg-fhp1412z9b/3.jpg"
+      ],
+      "placement": "floor",
+      "arLabel": "View in your home",
+      "orbit": "-26deg 76deg 114%",
+      "finishes": [
+        {
+          "name": "Platinum Black",
+          "swatchColor": "#45444a",
+          "usdz": "/models/usdz/lg-fhp1412z9b-platinum-black.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "drawer",
+          "label": "drawer",
+          "node": "Drawer",
+          "slide": [
+            0,
+            0,
+            0.2
+          ],
+          "zone": {
+            "closed": [
+              [
+                -0.298,
+                0.746,
+                0
+              ],
+              [
+                -0.091,
+                0.849,
+                0.283
+              ]
+            ],
+            "open": [
+              [
+                -0.298,
+                0.746,
+                0.2
+              ],
+              [
+                -0.091,
+                0.849,
+                0.483
+              ]
+            ]
+          }
+        },
+        {
+          "key": "door",
+          "label": "door",
+          "node": "Door",
+          "axis": "y",
+          "angle": -110,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.257,
+                0.207,
+                0.19
+              ],
+              [
+                0.267,
+                0.731,
+                0.342
+              ]
+            ],
+            "open": [
+              [
+                -0.476,
+                0.207,
+                0.27
+              ],
+              [
+                -0.19,
+                0.731,
+                0.775
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "60 cm",
+        "h": "85 cm",
+        "d": "56.5 cm"
+      },
+      "sizeNote": "61.5 cm deep with the door, 110 cm with the door open at 90°",
+      "specs": [
+        [
+          "Capacity",
+          "12 kg"
+        ],
+        [
+          "Energy rating",
+          "5 star"
+        ],
+        [
+          "Max spin",
+          "1400 RPM"
+        ],
+        [
+          "Motor",
+          "AI Direct Drive, 6 Motion"
+        ],
+        [
+          "Programmes",
+          "14, including TurboWash 39 and Steam+"
+        ],
+        [
+          "Smart features",
+          "ThinQ with Wi-Fi"
+        ],
+        [
+          "Drum",
+          "Stainless steel"
+        ],
+        [
+          "Door",
+          "Black tinted tempered glass"
+        ],
+        [
+          "Controls",
+          "Dial, touch and buttons with LED display"
+        ],
+        [
+          "Weight",
+          "69 kg"
+        ],
+        [
+          "Warranty",
+          "10 years on the motor"
+        ]
+      ],
+      "sangeethaUrl": "https://www.sangeetha.com/product-details/lg-12-kg-front-load-washing-machine-with-ai-direct-drivetm-steam-5-star-or-platinum-black-fhp1412z9bapbqeil/21214",
+      "source": "https://www.lg.com/in/laundry/front-loading-washing-machines/fhp1412z9b/",
+      "hotspots": [
+        {
+          "title": "AI Direct Drive",
+          "text": "It weighs the load and senses how soft the fabric is, then picks the best wash motions by itself.",
+          "pos": [
+            0.06,
+            0.53,
+            0.341
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!door"
+        },
+        {
+          "title": "Steam+",
+          "text": "Hygienic, fabric-friendly washing with 99.9% allergen removal and up to 30% fewer wrinkles.",
+          "pos": [
+            0.005,
+            0.469,
+            -0.124
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "door"
+        },
+        {
+          "title": "TurboWash 360°",
+          "text": "Wash clothes in just 39 minutes.",
+          "pos": [
+            0.13,
+            0.8,
+            0.283
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        },
+        {
+          "title": "6 Motion Direct Drive",
+          "text": "Six wash motions, each designed to give every fabric a better wash.",
+          "pos": [
+            0.301,
+            0.4,
+            0
+          ],
+          "normal": [
+            1,
+            0,
+            0
+          ],
+          "show": "always"
+        }
+      ],
+      "fit": {
+        "front": 54,
+        "note": "LG: 61.5 cm deep with the door closed and 110 cm with the door open at 90°."
+      }
+    }
+  ]
+}
