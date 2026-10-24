@@ -1,0 +1,244 @@
+{
+  "products": [
+    {
+      "id": "samsung-wa70bg4441bytl",
+      "brand": "Samsung",
+      "brandLogo": "/logos/samsung.png",
+      "category": "Washing machine",
+      "model": "WA70BG4441BYTL",
+      "name": "Samsung 7 kg Ecobubble top-load washing machine",
+      "shortName": "7 kg Ecobubble top-load washer",
+      "summary": "Lift the soft-closing lid, pull out the detergent box and look into the diamond drum, then place it in your home at its real size.",
+      "arTip": "Tap the lid to open it",
+      "glb": "/models/samsung-wa70bg4441bytl.glb",
+      "thumb": "/photos/samsung-wa70bg4441bytl/0.jpg",
+      "photos": [
+        "/photos/samsung-wa70bg4441bytl/0.jpg",
+        "/photos/samsung-wa70bg4441bytl/1.jpg",
+        "/photos/samsung-wa70bg4441bytl/2.jpg",
+        "/photos/samsung-wa70bg4441bytl/3.jpg"
+      ],
+      "placement": "floor",
+      "arLabel": "View in your home",
+      "orbit": "-30deg 66deg 125%",
+      "finishes": [
+        {
+          "name": "Lavender Gray",
+          "swatchColor": "#bcbec4",
+          "usdz": "/models/usdz/samsung-wa70bg4441bytl-lavender-gray.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "lid",
+          "label": "lid",
+          "node": "Lid",
+          "axis": "x",
+          "angle": -100,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.263,
+                0.841,
+                -0.131
+              ],
+              [
+                0.263,
+                0.937,
+                0.298
+              ]
+            ],
+            "open": [
+              [
+                -0.263,
+                0.889,
+                -0.219
+              ],
+              [
+                0.263,
+                1.324,
+                -0.05
+              ]
+            ]
+          }
+        },
+        {
+          "key": "detergent",
+          "label": "detergent box",
+          "node": "DetergentBox",
+          "slide": [
+            0,
+            0,
+            0.07
+          ],
+          "needs": "lid",
+          "zone": {
+            "closed": [
+              [
+                -0.095,
+                0.862,
+                -0.12
+              ],
+              [
+                0.095,
+                0.894,
+                -0.035
+              ]
+            ],
+            "open": [
+              [
+                -0.095,
+                0.862,
+                -0.05
+              ],
+              [
+                0.095,
+                0.894,
+                0.035
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "54 cm",
+        "h": "98.8 cm",
+        "d": "56.8 cm"
+      },
+      "sizeNote": "Body only, 98.8 cm tall; with the lid open it is about 132 cm",
+      "specs": [
+        [
+          "Capacity",
+          "7 kg"
+        ],
+        [
+          "Type",
+          "Fully automatic top load"
+        ],
+        [
+          "Energy rating",
+          "5 star, 0.0089 kWh/kg/cycle"
+        ],
+        [
+          "Motor",
+          "Digital Inverter, 10 years on the motor"
+        ],
+        [
+          "Spin speed",
+          "700 rpm"
+        ],
+        [
+          "Technology",
+          "Ecobubble, BubbleStorm, Dual Storm pulsator"
+        ],
+        [
+          "Drum",
+          "Diamond Drum"
+        ],
+        [
+          "Programmes",
+          "Normal, Quick Wash, Delicates, Bedding, Jeans, Energy Saving, Rinse+Spin, Eco Tub Clean"
+        ],
+        [
+          "Water levels",
+          "5"
+        ],
+        [
+          "Display",
+          "Red LED, rear control panel"
+        ],
+        [
+          "Lid",
+          "Soft closing, tempered glass window"
+        ],
+        [
+          "Filter",
+          "Magic Filter"
+        ],
+        [
+          "Extras",
+          "Delay End, Child Lock, Auto Restart, Eco Tub Clean"
+        ],
+        [
+          "Weight",
+          "28.5 kg"
+        ],
+        [
+          "Warranty",
+          "2 years on the machine, 10 years on the motor"
+        ]
+      ],
+      "sangeethaUrl": "https://www.sangeetha.com/product-details/samsung-70-kg-ecobubbletm-top-load-washing-machine-or-lavender-gray-or-wa70bg4441by-wa70bg4441bytl/21224",
+      "source": "https://www.samsung.com/in/support/model/WA70BG4441BYTL/",
+      "hotspots": [
+        {
+          "title": "Ecobubble",
+          "text": "Creates rich bubbles that help detergent penetrate fabrics faster for powerful and efficient cleaning.",
+          "pos": [
+            0,
+            0.838,
+            -0.095
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "show": "lid"
+        },
+        {
+          "title": "Diamond Drum",
+          "text": "The smooth Diamond Drum design helps protect fabrics while providing effective washing performance.",
+          "pos": [
+            0.12,
+            0.62,
+            0.09
+          ],
+          "normal": [
+            -1,
+            0,
+            0
+          ],
+          "show": "lid"
+        },
+        {
+          "title": "Soft closing lid",
+          "text": "The lid closes gently and quietly, and the tempered glass window lets you see the laundry.",
+          "pos": [
+            0,
+            0.8825,
+            0.27
+          ],
+          "normal": [
+            0,
+            1,
+            0.14
+          ],
+          "show": "!lid"
+        },
+        {
+          "title": "Rear control panel",
+          "text": "The slanted rear control panel is easy to see and keeps the controls protected from water splashes.",
+          "pos": [
+            0.17,
+            0.952,
+            -0.205
+          ],
+          "normal": [
+            0,
+            0.9,
+            0.43
+          ],
+          "show": "always"
+        }
+      ],
+      "fit": {
+        "sides": 10,
+        "back": 10,
+        "top": 34,
+        "note": "From Samsung's user manual: keep the machine 10 cm from the adjacent wall. The lid swings up and back: with it open, this model is about 132 cm tall (the opening angle is estimated), so keep 34 cm free above it."
+      }
+    }
+  ]
+}

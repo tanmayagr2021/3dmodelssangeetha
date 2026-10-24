@@ -158,6 +158,9 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
   function togglePart(key) {
     const s = moving.get(key);
     if (!s) return;
+    // a part inside another (the ice tray behind the freezer door) opens its outer part with it, and shuts before the outer part does
+    if (!s.isOpen && s.part.needs && !moving.get(s.part.needs)?.isOpen) togglePart(s.part.needs);
+    if (s.isOpen) for (const [k, o] of moving) if (o.part.needs === key && o.isOpen) togglePart(k);
     s.isOpen = !s.isOpen;
     s.from = s.t;
     s.to = s.isOpen ? 1 : 0;

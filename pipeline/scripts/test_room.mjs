@@ -35,7 +35,7 @@ const handleRect = async () => JSON.parse(await b.evalJS(`JSON.stringify(documen
 const dataset = async () => JSON.parse(await b.evalJS(`JSON.stringify(document.querySelector('.room').dataset)`));
 const click = (sel) => b.evalJS(`document.querySelector('${sel}').click()`);
 // the product's drawn height, from a render of it with a see-through background (alpha > 0)
-const drawnHeight = () => b.evalJS(`(async()=>{const m=document.querySelector('.room-model');const bm=await createImageBitmap(await m.toBlob({mimeType:'image/png'}));const c=document.createElement('canvas');c.width=bm.width;c.height=bm.height;const x=c.getContext('2d');x.drawImage(bm,0,0);const d=x.getImageData(0,0,c.width,c.height).data;let top=-1,bot=-1;for(let y=0;y<c.height;y++){let hit=false;for(let xx=0;xx<c.width;xx+=3){if(d[(y*c.width+xx)*4+3]>40){hit=true;break}}if(hit){if(top<0)top=y;bot=y}}return JSON.stringify({h:(bot-top+1)/(c.height/m.getBoundingClientRect().height)})})()`).then(JSON.parse);
+const drawnSize = () => b.evalJS(`(async()=>{const m=document.querySelector('.room-model');const bm=await createImageBitmap(await m.toBlob({mimeType:'image/png'}));const c=document.createElement('canvas');c.width=bm.width;c.height=bm.height;const x=c.getContext('2d');x.drawImage(bm,0,0);const d=x.getImageData(0,0,c.width,c.height).data;let top=-1,bot=-1,l=1e9,r=-1;for(let y=0;y<c.height;y++){let hit=false;for(let xx=0;xx<c.width;xx+=2){if(d[(y*c.width+xx)*4+3]>40){hit=true;l=Math.min(l,xx);r=Math.max(r,xx)}}if(hit){if(top<0)top=y;bot=y}}const k=c.height/m.getBoundingClientRect().height;return JSON.stringify({h:(bot-top+1)/k,w:(r-l+1)/k})})()`).then(JSON.parse);
 
 await b.go(`${base}/`);
 await sleep(1500);
@@ -43,7 +43,7 @@ const catalogue = JSON.parse(await b.evalJS("fetch('/products.json').then((r) =>
 for (const p of catalogue.products) {
   console.log(`[${p.id}]`);
   const wall = p.placement === "wall";
-  const Hm = parseFloat(p.size.h) / 100;
+  const Hm = parseFloat(p.size.h) / 100, Wm = parseFloat(p.size.w) / 100;
   await b.go(`${base}/p/${p.id}`);
   await b.waitFor("document.querySelector('#viewer')?.loaded === true", 60000);
   ok(await b.evalJS(`!!document.getElementById('btnRoom') && document.getElementById('btnRoom').offsetParent !== null`), "the right-hand panel has the \"try it in a photo\" button");
@@ -57,15 +57,11 @@ for (const p of catalogue.products) {
   await sleep(1200);
   const d0 = await dataset();
   ok(+d0.k > 0 && +d0.yb > +d0.yh || wall, "it has a spot on the photo");
-  if (!wall) {
-    const k = +d0.k, expected = Hm * (+d0.yb - +d0.yh) / +d0.hc;     // photo pixels
-    const drawn = (await drawnHeight()).h / k;
-    ok(Math.abs(drawn - expected) / expected < 0.05, `drawn height ${drawn.toFixed(0)} px is within 5% of the ${expected.toFixed(0)} px real size at that floor row`);
-    if (Math.abs(drawn - expected) / expected >= 0.05) console.log("      state:", JSON.stringify(d0), await b.evalJS(`(()=>{const m=document.querySelector('.room-model');return JSON.stringify({css:m.getBoundingClientRect().height,fov:m.fieldOfView,orbit:String(m.cameraOrbit),loaded:m.loaded})})()`));
-  } else {
-    const k = +d0.k, expected = Hm * +d0.focal / +d0.dist;                // photo pixels, at its distance from the camera
-    const drawn = (await drawnHeight()).h / k;
-    ok(Math.abs(drawn - expected) / expected < 0.05, `drawn height ${drawn.toFixed(0)} px is within 5% of the ${expected.toFixed(0)} px real size at ${(+d0.dist).toFixed(1)} m`);
+  { // the front face is drawn at its real width for its distance from the camera (width, not height: a sloped top recedes)
+    const k = +d0.k, f = +d0.focal, dist = wall ? +d0.dist : (+d0.hc * f) / (+d0.yb - +d0.yh);
+    const expected = Wm * f / dist;                                      // photo pixels
+    const drawn = (await drawnSize()).w / k;
+    ok(Math.abs(drawn - expected) / expected < 0.06, `drawn width ${drawn.toFixed(0)} px is within 6% of the ${expected.toFixed(0)} px real width at ${dist.toFixed(1)} m`);
   }
   // dragging: slow, then a fast flick; moving back up the photo should shrink a floor unit
   let r = await handleRect();

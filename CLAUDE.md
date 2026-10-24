@@ -8,6 +8,8 @@ A static site that shows Sangeetha's appliances in 3D and AR:
 
 **Start here:** read `private/HANDOFF.md`. It has the current task, its status and the next steps. It is local only and not in git.
 
+**Before building or changing any product,** read `pipeline/entries/BENCHMARK.md`: the quality bar, research steps and checks every product must pass.
+
 ## Layout
 - **Site (repo root):**
   - `index.html` (catalogue), `product.html` (one product, `/p/<id>`), `xr.js` (headsets)

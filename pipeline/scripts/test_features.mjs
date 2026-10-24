@@ -50,8 +50,21 @@ for (const p of products) {
   await sleep(700);
   for (const part of p.parts || []) {
     if (!part.zone) { check(false, `${part.key}: no zone`); continue; }
+    if (part.needs) { // lives behind another part: it cannot be tapped while closed, but opening it opens the outer part too
+      const was = await state();
+      await b.evalJS(`window.__demo.togglePart("${part.key}")`); await sleep(2800);
+      const now = await state();
+      check(now[part.key] && now[part.needs], `${part.key} opens ${part.needs} first (${JSON.stringify(now)})`);
+      await b.evalJS(`window.__demo.togglePart("${part.needs}")`); await sleep(2800);
+      const closed = await state();
+      check(!closed[part.key] && !closed[part.needs], `closing ${part.needs} closes ${part.key} first (${JSON.stringify(closed)})`);
+      void was;
+      continue;
+    }
     const [a, z] = part.zone.closed;
-    const front = [(a[0] + z[0]) / 2, (a[1] + z[1]) / 2, z[2]];
+    // a flat part such as a top-loader's lid is tapped on its top surface; anything else on the middle of its front face
+    const flat = z[1] - a[1] < 0.12 && z[2] - a[2] > 0.2;
+    const front = flat ? [(a[0] + z[0]) / 2, z[1], (a[2] + z[2]) / 2] : [(a[0] + z[0]) / 2, (a[1] + z[1]) / 2, z[2]];
     const before = await state();
     const others = Object.keys(before).filter((k) => k !== part.key && before[k]);
     if (others.length) { log(`  (skip tap on ${part.key}: ${others} open)`); continue; }

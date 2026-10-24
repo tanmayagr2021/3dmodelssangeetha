@@ -695,6 +695,11 @@ const swingsWide = parts.some((p) => p.axis === "y");
 let busy = false;
 async function togglePart(key, { instant = false } = {}) {
   if (busy || !(key in state)) return;
+  // a part inside another (the ice tray lives behind the freezer door): open the outer one first, and close the inner one before the outer
+  const self = parts.find((x) => x.key === key);
+  const outer = self?.needs && !state[key] && !state[self.needs] ? self.needs : null;
+  const inner = state[key] ? parts.find((x) => x.needs === key && state[x.key])?.key : null;
+  if (outer || inner) { await togglePart(outer || inner, { instant }); await sleep(instant ? 80 : 950); if (busy) return; }
   busy = true;
   const from = stateKey();
   const anyBefore = Object.values(state).some(Boolean);

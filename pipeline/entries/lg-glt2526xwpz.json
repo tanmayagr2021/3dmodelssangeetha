@@ -1,0 +1,142 @@
+{
+  "products": [
+    {
+      "id": "lg-glt2526xwpz",
+      "brand": "LG",
+      "brandLogo": "/logos/lg.png",
+      "category": "Refrigerator",
+      "model": "GLT2526XWPZ",
+      "name": "LG 251 L double-door refrigerator with Smart Inverter Compressor",
+      "shortName": "251 L double-door refrigerator",
+      "summary": "Open the freezer, pull out the ice tray and open the fridge, look inside, then stand it in your kitchen at its real size.",
+      "arTip": "Tap a door to open it",
+      "glb": "/models/lg-glt2526xwpz.glb",
+      "thumb": "/photos/lg-glt2526xwpz/0.jpg",
+      "photos": ["/photos/lg-glt2526xwpz/0.jpg", "/photos/lg-glt2526xwpz/1.jpg", "/photos/lg-glt2526xwpz/2.jpg", "/photos/lg-glt2526xwpz/3.jpg"],
+      "placement": "floor",
+      "arLabel": "View in your kitchen",
+      "orbit": "-28deg 78deg 130%",
+      "finishes": [
+        {
+          "name": "Shiny Steel",
+          "swatchColor": "#b4b5b7",
+          "usdz": "/models/usdz/lg-glt2526xwpz-shiny-steel.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "freezer",
+          "label": "freezer",
+          "node": "FreezerDoor",
+          "axis": "y",
+          "angle": 135,
+          "zone": {
+            "closed": [
+              [-0.273, 1.092, 0.203],
+              [0.277, 1.573, 0.319]
+            ],
+            "open": [
+              [0.263, 1.092, 0.242],
+              [0.699, 1.573, 0.677]
+            ]
+          }
+        },
+        {
+          "key": "icemaker",
+          "label": "ice tray",
+          "node": "IceMaker",
+          "slide": [0, 0, 0.16],
+          "needs": "freezer",
+          "zone": {
+            "closed": [
+              [0, 1.174, 0.033],
+              [0.176, 1.318, 0.242]
+            ],
+            "open": [
+              [0, 1.174, 0.193],
+              [0.176, 1.318, 0.402]
+            ]
+          }
+        },
+        {
+          "key": "fridge",
+          "label": "fridge",
+          "node": "FridgeDoor",
+          "axis": "y",
+          "angle": 135,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [-0.274, 0.028, 0.177],
+              [0.278, 1.085, 0.319]
+            ],
+            "open": [
+              [0.246, 0.028, 0.242],
+              [0.699, 1.085, 0.695]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "55.5 cm",
+        "h": "157.3 cm",
+        "d": "63.7 cm"
+      },
+      "sizeNote": "LG's manual lists 99.9 cm total depth and 95.3 cm total width with a door open",
+      "specs": [
+        ["Total capacity", "251 L (freezer 59 L, fridge 192 L)"],
+        ["Type", "Frost free, double door"],
+        ["Convertible", "Yes, with Dairy Mode"],
+        ["Energy rating", "2 star, 233 units a year"],
+        ["Compressor", "Smart Inverter (BLDC), 10 years on the compressor"],
+        ["Cooling", "Multi Air Flow, Turbo Fresh Zone"],
+        ["Fresh Zone", "25.3 L vegetable drawer"],
+        ["Shelves", "2 tempered glass (fridge)"],
+        ["Door baskets", "2 in the freezer, 3 in the fridge, transparent"],
+        ["Ice maker", "Manual, 1 lever and 2 trays"],
+        ["Control", "Knob dial, Express Freeze"],
+        ["Handle", "Pocket, black decor"],
+        ["Light", "Top LED"],
+        ["Power cuts", "Auto Smart Connect (inverter-compatible)"],
+        ["Weight", "48 kg"]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt2526xwpz/",
+      "hotspots": [
+        {
+          "title": "Convertible",
+          "text": "Convert the freezer into a fridge with a dedicated dairy mode.",
+          "pos": [-0.12, 1.36, -0.244],
+          "normal": [0, 0, 1],
+          "show": "freezer"
+        },
+        {
+          "title": "Smart Inverter Compressor",
+          "text": "Higher energy efficiency, long-lasting performance with a 10-year warranty on the compressor, and whisper-quiet operation.",
+          "pos": [0, 0.8, 0.3185],
+          "normal": [0, 0, 1],
+          "show": "!fridge"
+        },
+        {
+          "title": "Multi Air Flow",
+          "text": "Multiple cooling air vents circulate cool air to every corner of the refrigerator, so every food item is properly cooled.",
+          "pos": [0.085, 1.14, -0.2475],
+          "normal": [0, 0, 1],
+          "show": "freezer"
+        },
+        {
+          "title": "Fresh Zone",
+          "text": "A spacious 25.3 L compartment with 20% more room to keep fruits and vegetables fresh and crisp.",
+          "pos": [0, 0.145, 0.2345],
+          "normal": [0, 0, 1],
+          "show": "fridge"
+        }
+      ],
+      "fit": {
+        "front": 36,
+        "back": 5,
+        "note": "From LG's owner's manual: keep at least 5 cm between the back and the wall. The manual gives 99.9 cm total depth with a door open, which is 36 cm in front of the fridge."
+      }
+    }
+  ]
+}
