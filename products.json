@@ -264,7 +264,7 @@
               [
                 -0.298,
                 0.746,
-                0
+                0.003
               ],
               [
                 -0.091,
@@ -276,7 +276,7 @@
               [
                 -0.298,
                 0.746,
-                0.2
+                0.203
               ],
               [
                 -0.091,
@@ -298,24 +298,24 @@
               [
                 -0.257,
                 0.207,
-                0.19
+                0.199
               ],
               [
                 0.267,
                 0.731,
-                0.342
+                0.333
               ]
             ],
             "open": [
               [
-                -0.476,
+                -0.47,
                 0.207,
-                0.27
+                0.269
               ],
               [
-                -0.19,
+                -0.201,
                 0.731,
-                0.775
+                0.773
               ]
             ]
           }
@@ -382,7 +382,7 @@
           "pos": [
             0.06,
             0.53,
-            0.341
+            0.331
           ],
           "normal": [
             0,
@@ -480,26 +480,26 @@
           "zone": {
             "closed": [
               [
-                -0.47,
-                0.07,
-                0.193
+                -0.493,
+                0.098,
+                0.205
               ],
               [
-                0.47,
-                0.275,
-                0.205
+                0.493,
+                0.306,
+                0.217
               ]
             ],
             "open": [
               [
-                -0.47,
-                0.168,
-                0.199
+                -0.493,
+                0.198,
+                0.211
               ],
               [
-                0.47,
-                0.275,
-                0.386
+                0.493,
+                0.306,
+                0.401
               ]
             ]
           }
@@ -514,35 +514,35 @@
           "zone": {
             "closed": [
               [
-                -0.435,
-                0.018,
-                0.193
+                -0.458,
+                0.032,
+                0.205
               ],
               [
-                0.435,
-                0.066,
-                0.201
+                0.458,
+                0.096,
+                0.215
               ]
             ],
             "open": [
               [
-                -0.435,
-                0.035,
-                0.198
+                -0.458,
+                0.055,
+                0.209
               ],
               [
-                0.435,
-                0.067,
-                0.243
+                0.458,
+                0.098,
+                0.269
               ]
             ]
           }
         }
       ],
       "size": {
-        "w": "94 cm",
-        "h": "27.5 cm",
-        "d": "20.5 cm"
+        "w": "98.5 cm",
+        "h": "30.6 cm",
+        "d": "21.7 cm"
       },
       "sizeNote": "Indoor unit. Outdoor unit 79 x 54 x 27 cm",
       "specs": [
@@ -576,11 +576,11 @@
         ],
         [
           "Airflow",
-          "580 CFM, 4-way swing"
+          "715 CFM, 4-way swing"
         ],
         [
           "Indoor noise",
-          "42 / 40 / 37 dB"
+          "46 / 44 / 38 dB"
         ],
         [
           "Refrigerant",
@@ -588,7 +588,7 @@
         ],
         [
           "Indoor unit weight",
-          "10.1 kg"
+          "10.3 kg"
         ]
       ],
       "sangeethaUrl": null,
@@ -598,9 +598,9 @@
           "title": "FlexiCool 6-in-1 inverter",
           "text": "Six cooling modes to match your needs and the room, saving up to 50% energy.",
           "pos": [
-            0.25,
-            0.19,
-            0.206
+            0.262,
+            0.22,
+            0.218
           ],
           "normal": [
             0,
@@ -613,9 +613,9 @@
           "title": "X-Sense AI",
           "text": "Predictive AI learns your habits and sets the temperature with the least energy.",
           "pos": [
-            -0.25,
-            0.19,
-            0.206
+            -0.262,
+            0.22,
+            0.218
           ],
           "normal": [
             0,
@@ -628,9 +628,9 @@
           "title": "Pull-down structure",
           "text": "The front panel lifts on a pull-down structure for easy access and maintenance.",
           "pos": [
-            -0.2,
-            0.17,
-            0.192
+            -0.21,
+            0.19,
+            0.204
           ],
           "normal": [
             0,
@@ -643,9 +643,9 @@
           "title": "Wi-Fi with Alexa and Google",
           "text": "Control it by voice or from your phone, with Alexa and Google Assistant.",
           "pos": [
-            0.471,
-            0.16,
-            0.1
+            0.4925,
+            0.18,
+            0.11
           ],
           "normal": [
             1,

@@ -32,12 +32,12 @@
           "angle": -62,
           "zone": {
             "closed": [
-              [-0.47, 0.07, 0.193],
-              [0.47, 0.275, 0.205]
+              [-0.493, 0.098, 0.205],
+              [0.493, 0.306, 0.217]
             ],
             "open": [
-              [-0.47, 0.168, 0.199],
-              [0.47, 0.275, 0.386]
+              [-0.493, 0.198, 0.211],
+              [0.493, 0.306, 0.401]
             ]
           }
         },
@@ -50,20 +50,20 @@
           "hint": true,
           "zone": {
             "closed": [
-              [-0.435, 0.018, 0.193],
-              [0.435, 0.066, 0.201]
+              [-0.458, 0.032, 0.205],
+              [0.458, 0.096, 0.215]
             ],
             "open": [
-              [-0.435, 0.035, 0.198],
-              [0.435, 0.067, 0.243]
+              [-0.458, 0.055, 0.209],
+              [0.458, 0.098, 0.269]
             ]
           }
         }
       ],
       "size": {
-        "w": "94 cm",
-        "h": "27.5 cm",
-        "d": "20.5 cm"
+        "w": "98.5 cm",
+        "h": "30.6 cm",
+        "d": "21.7 cm"
       },
       "sizeNote": "Indoor unit. Outdoor unit 79 x 54 x 27 cm",
       "specs": [
@@ -74,10 +74,10 @@
         ["Outdoor cooling", "HybridJet 2.0"],
         ["Cleaning", "Auto Cleaner (defrost clean)"],
         ["Filters", "PM 2.5 and HD filter"],
-        ["Airflow", "580 CFM, 4-way swing"],
-        ["Indoor noise", "42 / 40 / 37 dB"],
+        ["Airflow", "715 CFM, 4-way swing"],
+        ["Indoor noise", "46 / 44 / 38 dB"],
         ["Refrigerant", "R32"],
-        ["Indoor unit weight", "10.1 kg"]
+        ["Indoor unit weight", "10.3 kg"]
       ],
       "sangeethaUrl": null,
       "source": "https://carriermideaindia.com/product/xceed-edge-gxi-wi-fi-3-star-split-inverter-ac/",
@@ -85,28 +85,28 @@
         {
           "title": "FlexiCool 6-in-1 inverter",
           "text": "Six cooling modes to match your needs and the room, saving up to 50% energy.",
-          "pos": [0.25, 0.19, 0.206],
+          "pos": [0.262, 0.22, 0.218],
           "normal": [0, 0, 1],
           "show": "!panel"
         },
         {
           "title": "X-Sense AI",
           "text": "Predictive AI learns your habits and sets the temperature with the least energy.",
-          "pos": [-0.25, 0.19, 0.206],
+          "pos": [-0.262, 0.22, 0.218],
           "normal": [0, 0, 1],
           "show": "!panel"
         },
         {
           "title": "Pull-down structure",
           "text": "The front panel lifts on a pull-down structure for easy access and maintenance.",
-          "pos": [-0.2, 0.17, 0.192],
+          "pos": [-0.21, 0.19, 0.204],
           "normal": [0, 0, 1],
           "show": "panel"
         },
         {
           "title": "Wi-Fi with Alexa and Google",
           "text": "Control it by voice or from your phone, with Alexa and Google Assistant.",
-          "pos": [0.471, 0.16, 0.1],
+          "pos": [0.4925, 0.18, 0.11],
           "normal": [1, 0, 0],
           "show": "always"
         }

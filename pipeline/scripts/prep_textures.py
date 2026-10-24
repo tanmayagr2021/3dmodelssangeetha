@@ -105,11 +105,9 @@ def lg():
     drawer_right = 440                                    # detergent drawer front ends here
     scale = 2
 
-    # control panel strip, right of the drawer: dial, programmes, display
-    strip = src.crop((drawer_right, top, right, band_bottom))
-    strip = strip.resize((strip.width * scale, strip.height * scale), Image.LANCZOS)
-    save(strip, "lg", "panel.jpg")
-
+    # the control strip (dial, programme names, display, buttons) is redrawn crisp by tex_lg_panel.py,
+    # which also writes knob_top.jpg and the button caps; the rear and side photos are handled by tex_lg_rear.py.
+    # Run both after this script; they own panel.jpg, rear.jpg, side_l.jpg, side_r.jpg, tubplate.jpg, hose.jpg.
     drawer = src.crop((left, top, drawer_right, band_bottom))
     drawer = drawer.resize((drawer.width * scale, drawer.height * scale), Image.LANCZOS)
     save(drawer, "lg", "drawer.jpg")
@@ -152,36 +150,44 @@ def lg():
 
 # ── Carrier XCEED EDGE GXi 1.5 ton: indoor unit front 940 W x 275 H mm ──
 def carrier():
+    # 1.5 ton (19K) indoor unit: Carrier's variant table lists 306 H x 985 W x 217 D mm.
+    # The front panel is the 208 mm above the louvre slot.
     px_mm = 2.0
-    W, H = 940, 205                      # front panel, above the louvre
+    W, H = 985, 208
     w, h = round(W * px_mm), round(H * px_mm)
     base = np.full((h, w, 3), [244, 245, 247.0])
     yy, xx = np.mgrid[0:h, 0:w] / np.array([h, w])[:, None, None]
-    # the faceted front: a flat centre with four angled planes running to the corners
-    crease_y = 0.78
-    left_plane = xx < 0.18 * (1 - yy / crease_y)
-    right_plane = xx > 1 - 0.18 * (1 - yy / crease_y)
-    lower = yy > crease_y
-    base[left_plane] -= 13
-    base[right_plane] -= 17
-    base[lower] -= 9
+    # the faceted front as in Carrier's photo of the same design: a lighter trapezoid bounded by two diagonals
+    # (from 5% across at the top to 28% across at 82% of the height) and a horizontal crease at 82% of the height
+    crease_y, x_top, x_foot = 0.82, 0.053, 0.283
+    edge = x_top + (x_foot - x_top) * np.clip(yy / crease_y, 0, 1)
+    left_plane = (xx < edge) & (yy < crease_y)
+    right_plane = (xx > 1 - edge) & (yy < crease_y)
+    lower = yy >= crease_y
+    base[left_plane] -= 9
+    base[right_plane] -= 11
+    base[lower] -= 6
     base += (np.sin(yy * np.pi) * 3)[:, :, None]
     img = Image.fromarray(base.clip(0, 255).astype(np.uint8))
     d = ImageDraw.Draw(img)
-    line = (196, 200, 207)
-    d.line([(0, 0), (0.18 * w, crease_y * h), (0.82 * w, crease_y * h), (w, 0)], fill=line, width=3)
-    # the Carrier oval, centred a little below the middle
+    line = (200, 203, 212)
+    d.line([(x_top * w, 0.04 * h), (x_foot * w, crease_y * h), ((1 - x_foot) * w, crease_y * h), ((1 - x_top) * w, 0.04 * h)], fill=line, width=3)
+    # the Carrier oval, centred a little below the middle (the photo has it at 56% of the panel height)
     oval = logo("carrier.png", round(34 * px_mm))
-    img.paste(oval, ((w - oval.width) // 2, round(0.52 * h - oval.height / 2)), oval)
-    # the small grey outlined feature emblem on the right, where the photo shows it
-    bx, by, bw, bh = round(0.845 * w), round(0.66 * h), round(62 * px_mm), round(16 * px_mm)
-    grey = (150, 154, 160)
-    d.rounded_rectangle((bx, by, bx + bw, by + bh), bh // 2, outline=grey, width=3)
-    d.rounded_rectangle((bx + bw * 0.3, by + 5, bx + bw * 0.7, by + bh - 5), 6, outline=grey, width=3)
-    d.line([(bx + 8, by + bh + 8), (bx + bw - 8, by + bh + 8)], fill=(190, 193, 198), width=2)
+    img.paste(oval, ((w - oval.width) // 2, round(0.56 * h - oval.height / 2)), oval)
+    # the feature badge at the right end of the crease, cropped from Carrier's photo (the photo is the 1 ton unit
+    # of the same design; the badge is about 61 x 22 mm there, assumed the same here)
+    ph = Image.open(os.path.join(PHOTOS, "carrier/1.jpg")).convert("RGB")
+    badge = ph.crop((435, 281, 470, 297)).resize((round(61 * px_mm), round(22 * px_mm)), Image.LANCZOS)
+    bx, by = round((0.925 * W - 61 / 2) * px_mm), round(0.76 * h - 11 * px_mm)
+    region = np.asarray(img.crop((bx, by, bx + badge.width, by + badge.height))).astype(float)
+    ba = np.asarray(badge).astype(float)
+    delta = ba - np.median(ba.reshape(-1, 3), axis=0)
+    delta *= np.clip((np.abs(delta).max(axis=2, keepdims=True) - 8) / 25, 0, 1)
+    img.paste(Image.fromarray((region + delta).clip(0, 255).astype(np.uint8)), (bx, by))
     save(img, "carrier", "front.jpg")
 
-    louvre = np.full((round(36 * px_mm), w, 3), [240, 241, 243.0])
+    louvre = np.full((round(64 * px_mm), w, 3), [240, 241, 243.0])
     louvre += (np.linspace(6, -8, louvre.shape[0]))[:, None, None]
     save(Image.fromarray(louvre.clip(0, 255).astype(np.uint8)), "carrier", "louvre.jpg")
 

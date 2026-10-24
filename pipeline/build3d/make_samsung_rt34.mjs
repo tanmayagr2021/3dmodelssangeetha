@@ -3,6 +3,7 @@
 // freezer on top (75 L), fridge below (255 L), both doors hinged on the right with
 // recessed handles on the left edge, the BEE label on the freezer door.
 // usage: node make_samsung_rt34.mjs <products.json> <tex dir> <out.glb>
+import fs from "node:fs";
 import { THREE, mat, mesh, box, faced, group, stateClips, exportGLB, productParts, saveZones } from "./lib.mjs";
 
 const [PRODUCTS, TEX, OUT] = process.argv.slice(2);
@@ -35,7 +36,18 @@ const light = mat("Light", 0xffffff, { emissive: 0xf4f8ff, emissiveIntensity: 1.
 const panelMat = mat("InnerPanel", 0xffffff, { rough: 0.45 });
 const back = mat("Back", 0x96999d, { metal: 0.3, rough: 0.7 });
 const foot = mat("Foot", 0x141518, { rough: 0.7 });
+const sideBrushed = mat("SideBrushed", 0xffffff, { metal: 0.3, rough: 0.5 });
+const rearMat = mat("Rear", 0xffffff, { metal: 0.35, rough: 0.55 });
+const bayMat = mat("Bay", 0xffffff, { rough: 0.7 });
+const bayDark = mat("BayDark", 0x0f1012, { rough: 0.85 });
+const cordMat = mat("Cord", 0x5d6064, { rough: 0.6 });
+const plugMat = mat("Plug", 0x45474b, { rough: 0.5 });
+const pinMat = mat("Pin", 0xb7bbc0, { metal: 0.9, rough: 0.3 });
 const silver = mat("Silver", 0xc9ccd0, { metal: 0.9, rough: 0.25 });
+
+// rear: the cord path and bay position are read off Samsung's rear photo by tex_samsung_extra.py
+const rp = JSON.parse(fs.readFileSync(`${TEX}/samsung/cord_path.json`, "utf8"));
+const bayTop = rp.bay_top, bayD = 0.17;       // the compressor bay opens at the rear, up to 284 mm; its depth is an estimate
 
 const root = group("SamsungRT34");
 const cab = group("Cabinet");
@@ -43,12 +55,38 @@ root.add(cab);
 
 // ── cabinet: dark metal outside, white inside ──
 const shellH = H - feet, shellMid = feet + shellH / 2, zMid = zBack + Dc / 2;
-cab.add(faced("SideLeft", wall, shellH, Dc, [liner, body, topSkin, body, body, body], -W / 2 + wall / 2, shellMid, zMid));
-cab.add(faced("SideRight", wall, shellH, Dc, [body, liner, topSkin, body, body, body], W / 2 - wall / 2, shellMid, zMid));
+cab.add(faced("SideLeft", wall, shellH, Dc, [liner, sideBrushed, topSkin, body, body, body], -W / 2 + wall / 2, shellMid, zMid));
+cab.add(faced("SideRight", wall, shellH, Dc, [sideBrushed, liner, topSkin, body, body, body], W / 2 - wall / 2, shellMid, zMid));
 cab.add(faced("Top", W - 2 * wall, wall, Dc, [body, body, topSkin, liner, body, body], 0, H - wall / 2, zMid));
 cab.add(faced("Floor", W - 2 * wall, floorTop - feet, Dc, [body, body, liner, body, body, body], 0, feet + (floorTop - feet) / 2, zMid));
-cab.add(faced("BackWall", W - 2 * wall, H - wall - floorTop, wall, [liner, liner, liner, liner, liner, back], 0, floorTop + (H - wall - floorTop) / 2, zBack + wall / 2));
-cab.add(box("BackSkin", W, shellH, 0.004, back, 0, shellMid, zBack - 0.002));
+const wallH = H - wall - bayTop;
+cab.add(faced("BackWall", W - 2 * wall, wallH, wall, [liner, liner, liner, liner, liner, back], 0, bayTop + wallH / 2, zBack + 0.004 + wall / 2));
+// outer back: Samsung's silver dimpled panel above the compressor bay (flush with the 740 mm depth)
+const rearH = H - bayTop;
+cab.add(mesh("RearPanel", flipV(new THREE.BoxGeometry(W, rearH, 0.004)), [back, back, back, back, back, rearMat], 0, bayTop + rearH / 2, zBack + 0.002));
+// the open compressor bay below it: dark walls, ceiling and floor, and the photographed machinery on its back wall
+const bayH = bayTop - floorTop, bayW = W - 2 * wall;
+cab.add(box("BayCeiling", bayW, 0.01, bayD, bayDark, 0, bayTop + 0.005, zBack + bayD / 2));
+cab.add(box("BayFloor", bayW, 0.004, bayD, bayDark, 0, floorTop + 0.002, zBack + bayD / 2));
+cab.add(box("BaySideL", 0.004, bayH, bayD, bayDark, -bayW / 2 + 0.002, floorTop + bayH / 2, zBack + bayD / 2));
+cab.add(box("BaySideR", 0.004, bayH, bayD, bayDark, bayW / 2 - 0.002, floorTop + bayH / 2, zBack + bayD / 2));
+cab.add(mesh("BayBack", flipV(new THREE.BoxGeometry(bayW, bayH, 0.012)), [liner, liner, liner, liner, liner, bayMat], 0, floorTop + bayH / 2, zBack + bayD + 0.006));
+{ // power cord down the back to its three-pin plug (cord 8 mm and plug 45 x 42 x 20 mm, estimated from the photo)
+  const pts = rp.cord.map(([x, y]) => new THREE.Vector3(x, y, zBack - 0.004));
+  cab.add(mesh("PowerCord", new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, false, "centripetal"), 120, rp.cord_d / 2, 6, false), cordMat));
+  const [px, py] = rp.plug;
+  const sh = new THREE.Shape(), w = 0.045, h = 0.042, r = 0.012;
+  sh.moveTo(-w / 2 + r, -h / 2); sh.lineTo(w / 2 - r, -h / 2); sh.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
+  sh.lineTo(w / 2, h / 2 - r); sh.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2); sh.lineTo(-w / 2 + r, h / 2);
+  sh.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r); sh.lineTo(-w / 2, -h / 2 + r); sh.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+  const plug = mesh("Plug", new THREE.ExtrudeGeometry(sh, { depth: 0.016, bevelEnabled: true, bevelSize: 0.002, bevelThickness: 0.002, bevelSegments: 2, curveSegments: 8 }), plugMat, px, py, zBack - 0.004);
+  plug.rotation.y = Math.PI;
+  cab.add(plug);
+  for (const [dx, dy] of [[0, 0.0105], [-0.0095, -0.0065], [0.0095, -0.0065]]) {
+    const pin = mesh("PlugPin", new THREE.CylinderGeometry(0.0026, 0.0026, 0.016, 10), pinMat, px + dx, py + dy, zBack - 0.004 - 0.016 - 0.008);
+    pin.rotation.x = Math.PI / 2; cab.add(pin);
+  }
+}
 cab.add(box("Divider", W - 2 * wall, 0.05, Dc - wall, liner, 0, yDiv, zMid + wall / 2));
 cab.add(box("DividerTrim", W - 2 * wall, 0.008, 0.004, silver, 0, yDiv, zFront - 0.001));
 cab.add(box("Plinth", W - 0.03, doorBottom - feet - 0.002, 0.012, foot, 0, feet + (doorBottom - feet) / 2, zFront - 0.008));
@@ -59,11 +97,13 @@ for (const [fx, fz] of [[-1, 1], [1, 1], [-1, -1], [1, -1]]) {
 
 // ── fridge inside: crisper drawer, two tempered glass shelves, light and controls ──
 const inW = W - 2 * wall - 0.006, inD = Dc - wall - 0.11, inZ = zBack + wall + inD / 2 + 0.01;
-cab.add(box("CrisperFront", inW - 0.02, 0.2, 0.008, frosted, 0, floorTop + 0.11, inZ + inD / 2 - 0.004));
-cab.add(box("CrisperTrim", inW - 0.02, 0.016, 0.012, trim, 0, floorTop + 0.205, inZ + inD / 2 - 0.004));
-cab.add(box("CrisperSideL", 0.006, 0.2, inD - 0.02, binMat, -inW / 2 + 0.012, floorTop + 0.11, inZ));
-cab.add(box("CrisperSideR", 0.006, 0.2, inD - 0.02, binMat, inW / 2 - 0.012, floorTop + 0.11, inZ));
-cab.add(box("CrisperLid", inW, 0.008, inD, glass, 0, floorTop + 0.23, inZ));
+// the crisper stops short of the compressor bay's step at the rear
+const stepIn = bayD + 0.015 - (wall + 0.01), inDc = inD - stepIn, inZc = inZ + stepIn / 2;
+cab.add(box("CrisperFront", inW - 0.02, 0.2, 0.008, frosted, 0, floorTop + 0.11, inZc + inDc / 2 - 0.004));
+cab.add(box("CrisperTrim", inW - 0.02, 0.016, 0.012, trim, 0, floorTop + 0.205, inZc + inDc / 2 - 0.004));
+cab.add(box("CrisperSideL", 0.006, 0.2, inDc - 0.02, binMat, -inW / 2 + 0.012, floorTop + 0.11, inZc));
+cab.add(box("CrisperSideR", 0.006, 0.2, inDc - 0.02, binMat, inW / 2 - 0.012, floorTop + 0.11, inZc));
+cab.add(box("CrisperLid", inW, 0.008, inDc, glass, 0, floorTop + 0.23, inZc));
 for (const [i, y] of [[1, 0.56], [2, 0.82]]) {
   cab.add(box(`Shelf${i}`, inW, 0.007, inD, glass, 0, y, inZ));
   cab.add(box(`ShelfTrim${i}`, inW, 0.016, 0.012, trim, 0, y, inZ + inD / 2));
@@ -95,7 +135,7 @@ const bottle = (name, h, r, body, x, y, z) => {
   return g;
 };
 const tub = (name, w, h, d, x, y, z) => { const g = group(name, x, y, z); g.add(box(name + "Tub", w, h, d, food.tub, 0, h / 2, 0)); g.add(box(name + "Lid", w + 0.004, 0.012, d + 0.004, food.lid, 0, h + 0.006, 0)); return g; };
-const crispY = floorTop + 0.045, crispZ = inZ + 0.05;
+const crispY = floorTop + 0.045, crispZ = inZc + 0.05;
 [[-0.2, food.red], [-0.12, food.orange], [-0.04, food.green], [0.05, food.red], [0.13, food.yellow], [0.2, food.orange]].forEach(([x, m], i) => cab.add(sphere("Fruit" + i, 0.036, m, x, crispY, crispZ + (i % 2) * 0.07)));
 cab.add(sphere("Cabbage", 0.065, food.leaf, -0.15, crispY + 0.03, crispZ - 0.12));
 cab.add(sphere("Lettuce", 0.06, food.leaf, 0.14, crispY + 0.025, crispZ - 0.13));
@@ -161,4 +201,7 @@ await exportGLB(root, clips, OUT, {
   FreezerFront: `${TEX}/samsung/freezer-door.jpg`,
   FridgeFront: `${TEX}/samsung/fridge-door.jpg`,
   InnerPanel: `${TEX}/samsung/inner-panel.jpg`,
+  SideBrushed: `${TEX}/samsung/side.jpg`,
+  Rear: `${TEX}/samsung/rear.jpg`,
+  Bay: `${TEX}/samsung/bay.jpg`,
 });
