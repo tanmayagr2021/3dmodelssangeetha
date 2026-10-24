@@ -1,6 +1,6 @@
 # Brief for each new product build
 
-Site: /Users/apple/Documents/3D (call it SITE). Local-only data in SITE/private, tools in SITE/tools (neither is in git).
+Site: /Users/apple/Documents/REL/3D (call it SITE). Local-only data in SITE/private, tools in SITE/tools (neither is in git).
 
 Goal: one real Sangeetha product, made "pitch perfect": a 3D model built to the maker's published
 dimensions, its surfaces textured from the real product photos, every real moving part opening on its
@@ -28,7 +28,7 @@ against their current vendor, so it must look like the product in the photos fro
 - SITE/logos/<brand>.png only if your assignment says so (transparent PNG, ~300 px tall, like logos/samsung.png)
 - anything under SITE/.work/<slug>/ (not in git)
 
-Do NOT edit: SITE/products.json, product.html, index.html, xr.js, lib.mjs, make_usdz.mjs, prep_textures.py,
+Do NOT edit: SITE/products.json, product.html, index.html, xr.js, site.js, compare.html, showroom.*, lib.mjs, make_usdz.mjs, prep_textures.py,
 build_usdz.sh, make_banners.mjs, banners/, or another product's files. Don't run build_usdz.sh or make_banners.mjs
 (they rebuild everything). If shared code can't handle your product, prototype the fix on a copy in your work dir
 and report the exact diff. The main session may update product.html / xr.js / index.html while you work; if a page
@@ -45,7 +45,26 @@ test breaks in page code rather than your model, report it.
 - Textures from the real photos (perspective-rectified fronts, control panels, logos, labels), like
   prep_textures.py does. Use flipV / frontWithHoles for UV orientation. One-sided rendering: use inward() for surfaces
   seen from inside. Real interior: shelves, bins, drum, filters etc. as the photos show them.
-- Keep the GLB under ~1.2 MB and the USDZ under ~1.5 MB (jpg textures ~1024 px, quality 85-90).
+- Keep the GLB under ~1.2 MB and the USDZ under ~1.5 MB (jpg textures ~1024 px, quality 85-90). If real detail
+  needs more, go up to ~2 MB and say so in the report.
+
+## Detail: the user's standard is "exactly like the real one"
+The user: "i want all 3d models to be exactly like the real one, look at every intricate details the wiring the
+plugs everything pitch perfect and exact". So model the back, sides and underside too, not only the front, from
+every photo you can find (brand gallery incl. rear and side views, Sangeetha shots, the manual's figures and
+installation diagrams). Get proportions exact by measuring photos at a known mm scale. Typical small parts:
+- Fridges: the power cord leaving the back where the real one does, with its Indian 3-pin plug; the rear
+  compressor/condenser area and its cover; hinge covers; the exact handle shape; gaskets; levelling feet and
+  rollers; vents and grilles; the rating label; dispenser paddle and display; every shelf, bin and tray.
+- Washers: cord and plug; water inlet valve and hose; drain hose and its clip or hook; transit-bolt caps and screws
+  on the back; the service flap and emergency drain; feet; the door rim, glass, handle and hinge; gasket folds;
+  dial, buttons and display; detergent drawer compartments; drum hole pattern (as a texture, not geometry).
+- Wall ACs: the two insulated refrigerant pipes, the interconnecting cable and the drain hose as a short taped
+  bundle (about 30-40 cm, the way a showroom unit looks); a power cord and plug only if the manual shows one;
+  mounting-plate hooks; the outlet's vertical vanes; display window; side caps; filter mesh; coil fins (texture).
+Use TubeGeometry/LatheGeometry with modest segments and shared materials to stay within the size budget. Check
+rear, 3/4-rear, side and (for ACs) underside renders next to the photos as well. Model only what the photos or the
+manual show; if you can't see a detail, say so in the report instead of guessing.
 
 ## Entry fields (copy the shape of the existing entries) plus two new ones
 - "hotspots": 3-4 feature callouts, each {"title": "Ice and water dispenser", "text": "<one plain sentence from the

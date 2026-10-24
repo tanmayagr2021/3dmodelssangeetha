@@ -3,7 +3,7 @@
 // official photos: control strip with the detergent drawer on the left, a black tinted
 // glass door hinged on the left, stainless drum, filter cover bottom right.
 // usage: node make_lg_fhp1412.mjs <products.json> <tex dir> <out.glb>
-import { THREE, mat, mesh, box, faced, group, lathe, frontWithHoles, flipV, inward, stateClips, exportGLB, productParts } from "./lib.mjs";
+import { THREE, mat, mesh, box, faced, group, lathe, frontWithHoles, flipV, inward, stateClips, exportGLB, productParts, saveZones } from "./lib.mjs";
 
 const [PRODUCTS, TEX, OUT] = process.argv.slice(2);
 const ID = "lg-fhp1412z9b";
@@ -96,7 +96,9 @@ dc.add(lathe("DoorGlass", [[0.205, 0.05], [0.15, 0.054], [0.08, 0.056], [0.0, 0.
 dc.add(lathe("DoorBowl", [[0.19, 0.0], [0.165, -0.05], [0.11, -0.085], [0.0, -0.095]], bowl));
 root.add(door);
 
-const clips = stateClips(root, productParts(PRODUCTS, ID));
+const parts = productParts(PRODUCTS, ID);
+const clips = stateClips(root, parts);
+saveZones(PRODUCTS, ID, root, parts);
 await exportGLB(root, clips, OUT, {
   BodySide: `${TEX}/lg/side.jpg`,
   Front: `${TEX}/lg/front.jpg`,

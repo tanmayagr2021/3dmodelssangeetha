@@ -10,6 +10,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { partAt, hotspotShown } from "/site.js";
 
 // Sangeetha colours: black, white and the logo orange
 const NAVY = "#0E0E0F", PAPER = "#FFFFFF", COPPER = "#F58A29", COPPER_DK = "#B85A12", SLATE = "#5E6066", HAIR = "#E3E3E6";
@@ -163,14 +164,32 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
     s.start = performance.now();
     panel.draw();
   }
+  // a hit on a moving part's own mesh names it; a hit on the cabinet goes by the parts' zones
   function partFor(hit) {
     if (hit.object.userData.partKey) return hit.object.userData.partKey;
-    const list = product.parts || [];
-    if (product.partSplitY != null && list.length > 1) {
-      const local = model.worldToLocal(hit.point.clone());
-      return local.y > product.partSplitY ? list[0].key : list[1].key;
-    }
-    return list[0]?.key;
+    return partAt(product, partState(), model.worldToLocal(hit.point.clone()));
+  }
+  const partState = () => Object.fromEntries([...moving].map(([k, s]) => [k, s.isOpen]));
+
+  // ── feature hotspots: orange dots on the model; point at one to read about it ──
+  const spotTex = spotTexture();
+  const spots = (product.hotspots || []).map((h, i) => {
+    const dot = new THREE.Mesh(new THREE.CircleGeometry(0.024, 32), new THREE.MeshBasicMaterial({ map: spotTex, transparent: true, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -4 }));
+    const n = new THREE.Vector3(...h.normal).normalize();
+    dot.position.set(...h.pos).addScaledVector(n, 0.003);
+    dot.quaternion.setFromUnitVectors(AXES.z, n);
+    dot.userData.spot = i;
+    dot.visible = false;
+    model.add(dot);
+    return { h, dot, n };
+  });
+  const card = makeCard();
+  scene.add(card.mesh);
+  let pinnedSpot = -1;
+  function updateSpots() {
+    const st = partState();
+    const swinging = [...moving.values()].some((s) => s.t !== s.to);
+    for (const s of spots) s.dot.visible = hotspotShown(s.h, st) && !swinging;
   }
   const partLabel = (key) => { const s = moving.get(key); return s ? `${s.isOpen ? "Close" : "Open"} ${s.part.label}` : ""; };
 
@@ -268,6 +287,7 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
     const ui = raycaster.intersectObject(panel.mesh, false)[0];
     if (ui) return { type: "ui", point: ui.point, button: panel.buttonAt(ui.uv), distance: ui.distance };
     const hit = raycaster.intersectObject(model, true).find((h) => h.object.visible);
+    if (hit?.object.userData.spot != null) return { type: "spot", point: hit.point, spot: hit.object.userData.spot, distance: hit.distance };
     if (hit) return { type: "part", point: hit.point, key: partFor(hit), distance: hit.distance };
     if (!ar && onWall && showroomWall) {
       const w = raycaster.intersectObject(showroomWall, true)[0];
@@ -292,6 +312,7 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
   function act(hit, src) {
     if (!hit) return;
     if (hit.type === "ui" && hit.button) panel.press(hit.button);
+    else if (hit.type === "spot") pinnedSpot = pinnedSpot === hit.spot ? -1 : hit.spot;
     else if (hit.type === "part") togglePart(hit.key);
     else if (hit.type === "floor") placeOnFloor(hit.point);
     else if (hit.type === "wall") placeOnWall(hit.point, hit.normal);
@@ -343,7 +364,8 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
       s.node.position.lerpVectors(s.at, s.out, s.t);
     }
 
-    let tip = null, ret = null, hoverButton = null;
+    updateSpots();
+    let tip = null, ret = null, hoverButton = null, hoverSpot = -1;
     for (const [src, e] of sources) {
       if (!e.line) continue;
       const pose = frame && frame.getPose(src.targetRaySpace, refSpace());
@@ -359,6 +381,7 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
       e.line.scale.set(1, 1, len);
       e.dot.position.copy(raycaster.ray.at(len, tmp));
       if (hit?.type === "part") tip = { text: partLabel(hit.key), point: hit.point };
+      else if (hit?.type === "spot") hoverSpot = hit.spot;
       else if (hit?.type === "ui") hoverButton = hit.button;
       else if (hit && !e.squeeze) ret = hit;
 
@@ -373,6 +396,9 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
     }
     panel.setHover(hoverButton);
     tooltip.show(tip, head);
+    if (pinnedSpot >= 0 && !spots[pinnedSpot].dot.visible) pinnedSpot = -1;
+    const shown = hoverSpot >= 0 ? hoverSpot : pinnedSpot;
+    card.show(shown >= 0 ? spots[shown] : null, head);
     if (ret) {
       reticle.visible = true;
       reticle.position.copy(ret.point);
@@ -404,6 +430,8 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
       hovers: [...sources.values()].map((e) => e.hover && { type: e.hover.type, key: e.hover.key, button: e.hover.button?.id, point: e.hover.point?.toArray() }),
     }),
     buttonWorld: (id) => panel.buttonWorld(id)?.toArray(),
+    spotWorld: (i) => spots[i] && spots[i].dot.visible ? spots[i].dot.getWorldPosition(new THREE.Vector3()).toArray() : null,
+    card: () => card.current,
     partWorld: (key) => { const s = moving.get(key); if (!s) return null; const b = new THREE.Box3().setFromObject(s.node); return b.getCenter(new THREE.Vector3()).toArray(); },
   };
 
@@ -411,8 +439,8 @@ export async function runXR(session, { mode, product, finishIndex = 0, parts = {
   return { session };
 }
 
-// ── helpers ──
-function radialTexture(stops) {
+// ── helpers (the showroom uses them too) ──
+export function radialTexture(stops) {
   const c = document.createElement("canvas");
   c.width = c.height = 256;
   const g = c.getContext("2d");
@@ -425,7 +453,7 @@ function radialTexture(stops) {
   return t;
 }
 
-function roundRect(g, x, y, w, h, r) {
+export function roundRect(g, x, y, w, h, r) {
   g.beginPath();
   g.moveTo(x + r, y);
   g.arcTo(x + w, y, x + w, y + h, r);
@@ -435,7 +463,7 @@ function roundRect(g, x, y, w, h, r) {
   g.closePath();
 }
 
-function wrapText(g, text, maxW) {
+export function wrapText(g, text, maxW) {
   const words = text.split(" "), lines = [];
   let line = "";
   for (const w of words) {
@@ -446,7 +474,68 @@ function wrapText(g, text, maxW) {
   return lines;
 }
 
-function makeTooltip() {
+export function spotTexture() {
+  const c = document.createElement("canvas");
+  c.width = c.height = 128;
+  const g = c.getContext("2d");
+  g.fillStyle = "#FFFFFF";
+  g.beginPath(); g.arc(64, 64, 62, 0, Math.PI * 2); g.fill();
+  g.fillStyle = COPPER;
+  g.beginPath(); g.arc(64, 64, 50, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = NAVY; g.lineWidth = 12; g.lineCap = "round";
+  g.beginPath(); g.moveTo(64, 38); g.lineTo(64, 90); g.moveTo(38, 64); g.lineTo(90, 64); g.stroke();
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// a feature card beside a hotspot: its title and one sentence, turned to face you
+export function makeCard() {
+  const W = 1024, H = 420, M = 0.36 / W;
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(W * M, H * M), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false, depthTest: false }));
+  mesh.renderOrder = 998;
+  mesh.visible = false;
+  const api = { mesh, current: null };
+  const at = new THREE.Vector3();
+  api.show = (spot, head) => {
+    mesh.visible = !!spot;
+    if (!spot) { api.current = null; return; }
+    if (api.current !== spot.h.title) {
+      api.current = spot.h.title;
+      const g = c.getContext("2d");
+      g.clearRect(0, 0, W, H);
+      g.font = `400 36px ${FONT}`;
+      const lines = wrapText(g, spot.h.text, W - 112).slice(0, 4);
+      const h = 150 + lines.length * 50;
+      g.fillStyle = "rgba(253,252,249,0.97)";
+      roundRect(g, 0, 0, W, h, 40);
+      g.fill();
+      g.fillStyle = COPPER;
+      g.fillRect(56, 44, 60, 6);
+      g.fillStyle = NAVY;
+      g.font = `600 50px ${FONT}`;
+      g.textAlign = "left";
+      g.textBaseline = "alphabetic";
+      g.fillText(spot.h.title, 56, 112);
+      g.fillStyle = SLATE;
+      g.font = `400 36px ${FONT}`;
+      lines.forEach((l, i) => g.fillText(l, 56, 168 + i * 50));
+      tex.needsUpdate = true;
+    }
+    spot.dot.getWorldPosition(at);
+    const toHead = head.clone().sub(at).normalize();
+    mesh.position.copy(at).addScaledVector(toHead, 0.12);
+    mesh.position.y += 0.1;
+    mesh.lookAt(head);
+  };
+  return api;
+}
+
+export function makeTooltip() {
   const c = document.createElement("canvas");
   c.width = 640; c.height = 128;
   const tex = new THREE.CanvasTexture(c);

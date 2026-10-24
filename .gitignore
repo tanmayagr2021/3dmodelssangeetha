@@ -12,3 +12,8 @@ tools/
 
 # build scratch
 .work/
+
+# client documents and stray exports at the repo root
+/*.pdf
+/*.xlsx
+/*.glb

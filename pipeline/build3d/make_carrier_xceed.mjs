@@ -3,7 +3,7 @@
 // the bottom, and the front panel that lifts to reach the filters ("pull-down structure").
 // The back sits at z = 0 so the unit hangs flat on a wall.
 // usage: node make_carrier_xceed.mjs <products.json> <tex dir> <out.glb>
-import { THREE, mat, mesh, box, faced, group, flipV, inward, stateClips, exportGLB, productParts } from "./lib.mjs";
+import { THREE, mat, mesh, box, faced, group, flipV, inward, stateClips, exportGLB, productParts, saveZones } from "./lib.mjs";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 
 const [PRODUCTS, TEX, OUT] = process.argv.slice(2);
@@ -50,7 +50,9 @@ const lv = group("Louvre", 0, outY1 - 0.002, D - 0.004);
 lv.add(mesh("LouvreFace", flipV(new THREE.BoxGeometry(W - 0.07, outY1 - outY0 - 0.004, 0.008)), [white, white, white, white, louvreFront, white], 0, -(outY1 - outY0) / 2, -0.004));
 root.add(lv);
 
-const clips = stateClips(root, productParts(PRODUCTS, ID));
+const parts = productParts(PRODUCTS, ID);
+const clips = stateClips(root, parts);
+saveZones(PRODUCTS, ID, root, parts);
 await exportGLB(root, clips, OUT, {
   PanelFront: `${TEX}/carrier/front.jpg`,
   LouvreFront: `${TEX}/carrier/louvre.jpg`,

@@ -3,7 +3,7 @@
 // freezer on top (75 L), fridge below (255 L), both doors hinged on the right with
 // recessed handles on the left edge, the BEE label on the freezer door.
 // usage: node make_samsung_rt34.mjs <products.json> <tex dir> <out.glb>
-import { THREE, mat, mesh, box, faced, group, stateClips, exportGLB, productParts } from "./lib.mjs";
+import { THREE, mat, mesh, box, faced, group, stateClips, exportGLB, productParts, saveZones } from "./lib.mjs";
 
 const [PRODUCTS, TEX, OUT] = process.argv.slice(2);
 const ID = "samsung-rt34hg5a42bxhl";
@@ -154,7 +154,9 @@ stock(fridgeDoor, "FridgeDoor", fridgeBins);
 stock(freezerDoor, "FreezerDoor", freezerBins);
 root.add(fridgeDoor, freezerDoor);
 
-const clips = stateClips(root, productParts(PRODUCTS, ID));
+const parts = productParts(PRODUCTS, ID);
+const clips = stateClips(root, parts);
+saveZones(PRODUCTS, ID, root, parts);
 await exportGLB(root, clips, OUT, {
   FreezerFront: `${TEX}/samsung/freezer-door.jpg`,
   FridgeFront: `${TEX}/samsung/fridge-door.jpg`,

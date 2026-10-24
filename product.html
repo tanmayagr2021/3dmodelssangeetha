@@ -99,6 +99,63 @@
   .progress i { display: block; height: 100%; width: 0; background: var(--copper-dk); transition: width .2s; }
   .progress.done { opacity: 0; }
 
+  /* feature hotspots */
+  .hs { --s: 30px; width: var(--s); height: var(--s); padding: 0; border: 0; border-radius: 50%; background: transparent; display: grid; place-items: center; transition: opacity .3s, transform .2s; }
+  .hs i { width: 22px; height: 22px; border-radius: 50%; background: var(--copper); border: 2.5px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.35); display: grid; place-items: center; color: var(--navy); font-style: normal; font-size: 15px; font-weight: 700; line-height: 1; }
+  .hs::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--copper); opacity: 0; animation: ping 2.4s ease-out infinite; }
+  .hs:hover i, .hs[aria-pressed="true"] i { background: var(--navy); color: var(--copper); }
+  .hs[aria-pressed="true"] { transform: scale(1.15); }
+  .hs.off, model-viewer.no-hs .hs { opacity: 0 !important; pointer-events: none; }
+  .hs:not([data-visible]) { opacity: .25; }
+  @keyframes ping { 0% { transform: scale(.6); opacity: .9; } 70%, 100% { transform: scale(1.5); opacity: 0; } }
+  .fcard { position: absolute; left: 20px; bottom: 92px; width: min(360px, calc(100% - 40px)); border-radius: 18px; padding: 16px 16px 14px 18px; z-index: 6; transition: opacity .25s, transform .25s; }
+  .fcard.gone { opacity: 0; transform: translateY(8px); pointer-events: none; }
+  .fcard .top { display: flex; align-items: flex-start; gap: 10px; }
+  .fcard small { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--copper-dk); }
+  .fcard h3 { margin: 3px 0 0; font-size: 18px; font-weight: 600; line-height: 1.25; }
+  .fcard p { margin: 8px 0 12px; font-size: 14.5px; line-height: 1.5; color: var(--slate); }
+  .fcard .x { margin-left: auto; width: 32px; height: 32px; border: 0; border-radius: 50%; background: #F1F1F3; display: grid; place-items: center; flex: none; }
+  .fcard .x svg { width: 16px; height: 16px; }
+  .fcard .nav { display: flex; gap: 8px; }
+  .fcard .nav button { flex: 1; border: 1px solid var(--hair); background: #fff; border-radius: 999px; padding: 9px 12px; font-size: 13.5px; font-weight: 600; }
+  .fcard .nav button:hover { border-color: var(--navy); }
+
+  /* will it fit */
+  .fit-in { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .fit-in.two { grid-template-columns: repeat(2, 1fr); }
+  .fit-in label { display: flex; flex-direction: column; gap: 5px; font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--slate); }
+  .fit-in .box { display: flex; align-items: center; border: 1px solid var(--hair); border-radius: 12px; background: #fff; padding: 0 10px 0 12px; }
+  .fit-in .box:focus-within { border-color: var(--navy); box-shadow: 0 0 0 1px var(--navy); }
+  .fit-in input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; padding: 12px 0; font: 500 18px var(--sans); color: var(--navy); }
+  .fit-in .box span { font-size: 13px; color: var(--slate); letter-spacing: 0; text-transform: none; }
+  .fit-help { font-size: 13px; line-height: 1.5; color: var(--slate); margin: 8px 0 0; }
+  .fit-out { margin-top: 12px; border-radius: 14px; padding: 14px 16px; background: #F1F1F3; }
+  .fit-out.yes { background: #E6F4EA; }
+  .fit-out.no { background: #FCE8E6; }
+  .fit-out .verdict { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; }
+  .fit-out .verdict svg { width: 22px; height: 22px; flex: none; }
+  .fit-out.yes .verdict svg { color: #1E7B34; }
+  .fit-out.no .verdict svg { color: #B3261E; }
+  .fit-out ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; line-height: 1.4; }
+  .fit-out li { display: flex; justify-content: space-between; gap: 12px; }
+  .fit-out li span { color: var(--slate); }
+  .fit-out li b { font-weight: 600; text-align: right; }
+  .fit-out li b.short { color: #B3261E; }
+  .fit-out .front { margin: 10px 0 0; font-size: 13.5px; line-height: 1.45; color: var(--navy); }
+  .fit-out .src { margin: 8px 0 0; font-size: 12.5px; line-height: 1.45; color: var(--slate); }
+  .fit-show { margin-top: 10px; }
+  .flist { display: grid; gap: 8px; }
+  .flist button { display: block; text-align: left; border: 1px solid var(--hair); background: #fff; border-radius: 12px; padding: 11px 14px; }
+  .flist button:hover { border-color: var(--navy); }
+  .flist b { display: block; font-size: 14.5px; font-weight: 600; }
+  .flist span { display: block; margin-top: 2px; font-size: 13.5px; line-height: 1.45; color: var(--slate); }
+  .fit-lines { pointer-events: none; position: absolute; inset: 0; }
+  .fit-lines line { stroke-width: 2.5; stroke-dasharray: 7 5; stroke-linecap: round; }
+  .fit-lines.yes line { stroke: #1E9E45; }
+  .fit-lines.no line { stroke: #D93025; }
+  .fit-tag { background: #1E9E45; color: #fff; border-radius: 6px; padding: 5px 9px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 0; pointer-events: none; }
+  .fit-tag.no { background: #D93025; }
+
   .dot { display: none; }
   .dim { background: var(--navy); color: var(--paper); border-radius: 6px; padding: 5px 9px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 0; pointer-events: none; }
   .dim-lines { pointer-events: none; position: absolute; inset: 0; }
@@ -155,7 +212,10 @@
   .share .code svg { width: 100%; height: 100%; display: block; }
   .share p { margin: 0 0 10px; font-size: 14px; line-height: 1.45; color: var(--slate); }
   .share p b { color: var(--navy); }
-  .link-btn { border: 1px solid var(--hair); background: #fff; border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 600; }
+  .link-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--hair); background: #fff; border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 600; text-decoration: none; }
+  .link-btn svg { width: 16px; height: 16px; flex: none; }
+  .link-btn.wa svg { color: #1FA855; }
+  .share-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 
   h1 { font-weight: 600 !important; letter-spacing: -0.3px; }
   .credit { margin-top: auto; font-size: 12.5px; line-height: 1.55; color: var(--slate); border-top: 1px solid var(--hair); padding-top: 18px; }
@@ -214,6 +274,8 @@
     #btnZoomIn, #btnZoomOut, #btnFullscreen, .controls hr { display: none; }
     .hint { left: 12px; top: 12px; right: 12px; width: fit-content; max-width: calc(100% - 24px); font-size: 12.5px; }
     .parts { bottom: 16px; }
+    .fcard { left: 12px; right: 12px; width: auto; bottom: 74px; }
+    .parts { flex-wrap: wrap; justify-content: center; border-radius: 24px; width: max-content; }
     .parts button { padding: 10px 14px 10px 12px; font-size: 13.5px; }
     aside { border-left: 0; padding: 24px 16px 120px; gap: 24px; overflow: visible; }
     h1 { font-size: 28px; }
@@ -272,6 +334,8 @@
       <svg class="dim-lines hide" id="dimLines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <line></line><line></line><line></line>
       </svg>
+      <svg class="fit-lines hide" id="fitLines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+      <button class="fit-tag hide" slot="hotspot-fit-tag" id="fitTag" data-position="0 0 0" data-normal="0 0 1" tabindex="-1"></button>
     </model-viewer>
 
     <div class="hint glass" id="hint"></div>
@@ -281,11 +345,18 @@
       <button id="btnZoomOut" title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
       <hr>
       <button id="btnDims" title="Show dimensions" aria-label="Show dimensions" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4z"/><path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2M4.5 13.5l2 2"/></svg></button>
+      <button id="btnFeatures" class="hide" title="Hide features" aria-label="Show features" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></button>
       <button id="btnReset" title="Reset view" aria-label="Reset view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
       <button id="btnFullscreen" title="Full screen" aria-label="Full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     </div>
 
     <div class="parts glass hide" id="parts" role="group" aria-label="Open and close"></div>
+
+    <div class="fcard glass gone" id="fcard" role="dialog" aria-labelledby="fcTitle" aria-hidden="true">
+      <div class="top"><div><small id="fcCount"></small><h3 id="fcTitle"></h3></div><button class="x" id="fcClose" aria-label="Close"></button></div>
+      <p id="fcText"></p>
+      <div class="nav"><button id="fcPrev">Previous</button><button id="fcNext">Next feature</button></div>
+    </div>
   </section>
 
   <aside>
@@ -325,9 +396,21 @@
       <p class="size-note hide" id="sizeNote"></p>
     </div>
 
+    <div id="fitBox">
+      <div class="label">Will it fit?</div>
+      <div class="fit-in" id="fitIn"></div>
+      <p class="fit-help" id="fitHelp"></p>
+      <div class="fit-out hide" id="fitOut" aria-live="polite"></div>
+    </div>
+
     <div>
       <div class="label">Photos</div>
       <div class="gallery" id="gallery"></div>
+    </div>
+
+    <div id="featureBox" class="hide">
+      <div class="label">Features</div>
+      <div class="flist" id="flist"></div>
     </div>
 
     <div>
@@ -344,7 +427,10 @@
       <div class="code" id="qrCode"></div>
       <div>
         <p id="shareText"><b>Open on another device</b><br>Scan with a phone, or open the link on a Meta Quest or Vision Pro.</p>
-        <button class="link-btn" id="btnCopy">Copy link</button>
+        <div class="share-btns">
+          <button class="link-btn" id="btnCopy">Copy link</button>
+          <a class="link-btn wa" id="btnWhatsApp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>WhatsApp</a>
+        </div>
       </div>
     </div>
 
@@ -361,9 +447,10 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
+import { esc, cm, partAt, hotspotShown, fitCheck } from "/site.js";
 const $ = (id) => document.getElementById(id);
 const mv = $("viewer");
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function toast(text) {
   const t = $("toast");
@@ -397,6 +484,10 @@ const I = {
   panel: svg('<path d="M3 10 21 5"/><rect x="2" y="12" width="20" height="7" rx="2"/><path d="M6 15.5h12"/>'),
   drawer: svg('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9.5h18M7 7h5"/>'),
   link: svg('<path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>'),
+  yes: svg('<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.5"/>'),
+  no: svg('<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/>'),
+  plus: svg('<path d="M12 6v12M6 12h12"/>', 'stroke-width="3"'),
+  box: svg('<path d="M12 3 3 7.5v9L12 21l9-4.5v-9z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/>'),
 };
 
 // ── which product: /p/<id>, or ?id=<id> ──
@@ -575,6 +666,7 @@ async function togglePart(key, { instant = false } = {}) {
     mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${anyAfter ? o.radius * 1.3 : o.radius / 1.3}m`;
   }
   renderParts();
+  renderHotspots(instant ? 0 : 850);
   $("hint").classList.add("gone");
   setTimeout(() => (busy = false), instant ? 50 : 900);
 }
@@ -590,8 +682,8 @@ mv.addEventListener("pointerup", (e) => {
   if (moved > 6 || !quick || e.target.closest?.("button")) return;
   const hit = mv.positionAndNormalFromPoint(e.clientX, e.clientY);
   if (!hit) return;
-  const key = product.partSplitY != null && parts.length > 1 ? (hit.position.y > product.partSplitY ? parts[0].key : parts[1].key) : parts[0].key;
-  togglePart(key);
+  const key = partAt(product, state, hit.position);
+  if (key) togglePart(key);
 });
 
 // ── camera ──
@@ -661,8 +753,205 @@ $("btnDims").addEventListener("click", () => {
 });
 mv.addEventListener("camera-change", (e) => {
   renderDims();
+  renderFitBox();
   if (e.detail.source === "user-interaction") $("hint").classList.add("gone");
 });
+
+// ── feature hotspots: a dot on the model opens a short card; Next walks through them,
+// opening or closing whatever each one needs and turning the camera to face it ──
+const hotspots = product.hotspots || [];
+let featuresOn = true, featureIndex = -1, touring = false;
+const hsEls = hotspots.map((h, i) => {
+  const b = document.createElement("button");
+  b.className = "hs off";
+  b.slot = `hotspot-f${i}`;
+  b.dataset.position = h.pos.map((n) => `${n}m`).join(" ");
+  b.dataset.normal = h.normal.join(" ");
+  b.setAttribute("aria-label", `Feature: ${h.title}`);
+  b.setAttribute("aria-pressed", "false");
+  b.innerHTML = `<i>${I.plus}</i>`;
+  b.querySelector("svg").style.cssText = "width:13px;height:13px";
+  b.addEventListener("click", () => (featureIndex === i ? closeFeature() : showFeature(i)));
+  mv.appendChild(b);
+  return b;
+});
+$("flist").innerHTML = hotspots.map((h, i) => `<button data-i="${i}"><b>${esc(h.title)}</b><span>${esc(h.text)}</span></button>`).join("");
+$("flist").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+  if (innerWidth <= 900) $("stage").scrollIntoView({ behavior: "smooth", block: "start" });
+  showFeature(+b.dataset.i, { tour: true });
+}));
+$("featureBox").classList.toggle("hide", !hotspots.length);
+$("btnFeatures").classList.toggle("hide", !hotspots.length);
+$("fcClose").innerHTML = I.close;
+
+let hsTimer = null;
+// hide at once what the new door state hides; show what it reveals once the door has moved
+function renderHotspots(delay = 0) {
+  clearTimeout(hsTimer);
+  const apply = (hideOnly) => hotspots.forEach((h, i) => {
+    if (!hotspotShown(h, state)) hsEls[i].classList.add("off");
+    else if (!hideOnly) hsEls[i].classList.remove("off");
+  });
+  apply(delay > 0);
+  if (delay) hsTimer = setTimeout(() => apply(false), delay);
+  if (featureIndex >= 0 && !hotspotShown(hotspots[featureIndex], state)) closeFeature();
+}
+async function showFeature(i, { tour = false } = {}) {
+  const h = hotspots[i];
+  if (!h) return;
+  const need = h.show && h.show !== "always" ? h.show : null;
+  if (need) {
+    const key = need.replace("!", ""), wantOpen = !need.startsWith("!");
+    if (key in state && state[key] !== wantOpen) {
+      while (busy) await sleep(80);
+      await togglePart(key);
+      await sleep(700);
+    }
+  }
+  featureIndex = i;
+  hsEls.forEach((b, j) => b.setAttribute("aria-pressed", String(j === i)));
+  $("fcCount").textContent = `Feature ${i + 1} of ${hotspots.length}`;
+  $("fcTitle").textContent = h.title;
+  $("fcText").textContent = h.text;
+  $("fcPrev").disabled = hotspots.length < 2;
+  $("fcNext").textContent = hotspots.length < 2 ? "Close" : "Next feature";
+  $("fcard").classList.remove("gone");
+  $("fcard").setAttribute("aria-hidden", "false");
+  $("hint").classList.add("gone");
+  if (tour && baseRadius) {
+    touring = true;
+    const [nx, , nz] = h.normal;
+    const o = mv.getCameraOrbit();
+    const theta = Math.hypot(nx, nz) < 0.2 ? o.theta : Math.atan2(nx, nz);
+    mv.cameraTarget = `${h.pos[0]}m ${h.pos[1]}m ${h.pos[2]}m`;
+    mv.cameraOrbit = `${theta}rad 78deg ${baseRadius * 0.6}m`;
+  }
+}
+function closeFeature() {
+  if (featureIndex < 0) return;
+  featureIndex = -1;
+  hsEls.forEach((b) => b.setAttribute("aria-pressed", "false"));
+  $("fcard").classList.add("gone");
+  $("fcard").setAttribute("aria-hidden", "true");
+  if (touring) { touring = false; mv.cameraTarget = "auto"; mv.cameraOrbit = orbit(); }
+}
+const stepFeature = (d) => (hotspots.length < 2 ? closeFeature() : showFeature((featureIndex + d + hotspots.length) % hotspots.length, { tour: true }));
+$("fcNext").addEventListener("click", () => stepFeature(1));
+$("fcPrev").addEventListener("click", () => stepFeature(-1));
+$("fcClose").addEventListener("click", closeFeature);
+$("btnFeatures").addEventListener("click", () => {
+  featuresOn = !featuresOn;
+  mv.classList.toggle("no-hs", !featuresOn);
+  $("btnFeatures").setAttribute("aria-pressed", String(featuresOn));
+  $("btnFeatures").title = featuresOn ? "Hide features" : "Show features";
+  if (!featuresOn) closeFeature();
+});
+
+// ── will it fit: the shopper's space against the size plus the maker's gaps, drawn in 3D
+// around the product ──
+const FIT_KEY = `fit-space-${onWall ? "wall" : "floor"}`;
+const fitFields = onWall ? [["w", "Width"], ["h", "Height"]] : [["w", "Width"], ["h", "Height"], ["d", "Depth"]];
+$("fitIn").className = `fit-in${onWall ? " two" : ""}`;
+$("fitIn").innerHTML = fitFields.map(([k, l]) => `<label>${l}<span class="box"><input id="fit-${k}" type="number" inputmode="decimal" min="0" step="0.5" aria-label="${l} of your space, in centimetres"><span>cm</span></span></label>`).join("");
+$("fitHelp").textContent = onWall
+  ? "Measure the free wall where it would hang: its width, and its height up to the ceiling."
+  : "Measure the space you have for it: width, height and depth.";
+try { const saved = JSON.parse(localStorage.getItem(FIT_KEY) || "{}"); for (const [k] of fitFields) if (saved[k]) $(`fit-${k}`).value = saved[k]; } catch {}
+let fitResult = null, fitBoxOn = false;
+const fitCorners = onWall ? 4 : 8;
+for (let i = 0; i < fitCorners; i++) {
+  const d = document.createElement("div");
+  d.className = "dot";
+  d.slot = `hotspot-fc${i}`;
+  d.dataset.position = "0 0 0";
+  d.dataset.normal = "0 0 1";
+  mv.appendChild(d);
+}
+const FIT_EDGES = onWall ? [[0, 1], [1, 3], [3, 2], [2, 0]] : [[0, 1], [1, 3], [3, 2], [2, 0], [4, 5], [5, 7], [7, 6], [6, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
+$("fitLines").innerHTML = FIT_EDGES.map(() => "<line></line>").join("");
+const cmText = (n) => `${+n.toFixed(1)} cm`;
+function renderFit() {
+  const space = {};
+  for (const [k] of fitFields) space[k] = parseFloat($(`fit-${k}`).value) || 0;
+  try { localStorage.setItem(FIT_KEY, JSON.stringify(space)); } catch {}
+  const r = fitResult = fitCheck(product, space);
+  const out = $("fitOut");
+  const rows = r.rows.filter((x) => x.given);
+  if (!rows.length) { out.classList.add("hide"); setFitBox(false); return; }
+  const short = rows.filter((x) => !x.ok);
+  const word = { w: "wide", h: "tall", d: "deep" };
+  let verdict;
+  if (short.length) verdict = `${I.no}<span>It won’t fit: ${short.map((x) => `${cmText(-x.margin)} too ${word[x.key]}`).join(", ")}</span>`;
+  else if (r.given) {
+    const tight = [...rows].sort((a, b) => a.margin - b.margin)[0];
+    verdict = `${I.yes}<span>It fits${tight.margin < 3 ? `, just: ${cmText(tight.margin)} to spare in ${tight.label.toLowerCase()}` : ""}</span>`;
+  } else verdict = `${I.info}<span>So far it fits. Add the ${r.rows.filter((x) => !x.given).map((x) => x.label.toLowerCase()).join(" and ")}.</span>`;
+  out.className = `fit-out ${short.length ? "no" : r.given ? "yes" : ""}`;
+  const front = r.front && !onWall ? `<p class="front">Keep about ${r.front} cm free in front so the ${(product.parts || []).map((p) => p.label).join(" and ")} can open fully.</p>` : "";
+  const src = r.note || (r.gaps ? "" : `${product.brand} doesn’t publish installation gaps for it, so this checks its size alone. Leave a little room for air.`);
+  out.innerHTML = `<div class="verdict">${verdict}</div>
+    <ul>${rows.map((x) => `<li><span>${x.label}: needs ${cmText(x.need)}${x.gap ? ` (${esc(x.gapText)})` : ""}</span><b class="${x.ok ? "" : "short"}">${x.ok ? `${cmText(x.margin)} spare` : `${cmText(-x.margin)} short`}</b></li>`).join("")}</ul>
+    ${front}${src ? `<p class="src">${esc(src)}</p>` : ""}
+    <button class="link-btn fit-show" id="fitShow">${I.box}<span></span></button>`;
+  $("fitShow").addEventListener("click", () => {
+    setFitBox(!fitBoxOn);
+    if (fitBoxOn && innerWidth <= 900) $("stage").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  // on a wide screen the 3D view is beside the form, so draw the space as soon as it's typed
+  setFitBox(fitBoxOn || (innerWidth > 900 && r.given), { keepCamera: fitBoxOn });
+}
+function setFitBox(on, { keepCamera = false } = {}) {
+  fitBoxOn = !!on && !!fitResult?.rows.some((x) => x.given);
+  $("fitLines").classList.toggle("hide", !fitBoxOn);
+  $("fitTag").classList.toggle("hide", !fitBoxOn);
+  const label = $("fitShow")?.querySelector("span");
+  if (label) label.textContent = `${fitBoxOn ? "Hide" : "Show"} your space in 3D`;
+  if (fitBoxOn) placeFitBox();
+  if (baseRadius && !touring && !keepCamera) {
+    // pull back so the whole space is in view
+    const grow = fitBoxOn ? Math.min(1.8, Math.max(1, ...fitResult.rows.filter((x) => x.given).map((x) => x.have / (x.need || 1)))) : 1;
+    const o = mv.getCameraOrbit();
+    mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${baseRadius * grow}m`;
+  }
+}
+// the space: centred on the product, standing on the floor with the maker's back gap
+// behind it, or on the wall with the top gap below the ceiling
+function placeFitBox() {
+  const c = mv.getBoundingBoxCenter(), s = mv.getDimensions(), f = product.fit || {};
+  const have = (k, fallback) => { const r = fitResult.rows.find((x) => x.key === k); return r?.given ? r.have / 100 : fallback; };
+  const W = have("w", s.x), H = have("h", s.y);
+  const x0 = c.x - W / 2, x1 = c.x + W / 2;
+  let pts, tagAt;
+  if (onWall) {
+    const z = c.z - s.z / 2 + 0.002, top = c.y + s.y / 2 + (f.top || 0) / 100;
+    pts = [[x0, top - H, z], [x1, top - H, z], [x0, top, z], [x1, top, z]];
+    tagAt = [c.x, top, z];
+  } else {
+    const D = have("d", s.z), zb = c.z - s.z / 2 - (f.back || 0) / 100, y0 = c.y - s.y / 2;
+    pts = [...Array(8)].map((_, i) => [i & 1 ? x1 : x0, i & 2 ? y0 + H : y0, i & 4 ? zb + D : zb]);
+    tagAt = [c.x, y0 + H, zb + D];
+  }
+  pts.forEach((p, i) => mv.updateHotspot({ name: `hotspot-fc${i}`, position: p.map((n) => `${n}m`).join(" ") }));
+  mv.updateHotspot({ name: "hotspot-fit-tag", position: tagAt.map((n) => `${n}m`).join(" ") });
+  const bad = fitResult.rows.some((x) => x.given && !x.ok);
+  $("fitTag").textContent = `Your space · ${fitResult.rows.map((x) => (x.given ? +x.have.toFixed(1) : "?")).join(" × ")} cm`;
+  $("fitTag").className = `fit-tag${bad ? " no" : ""}`;
+  $("fitLines").setAttribute("class", `fit-lines ${bad ? "no" : "yes"}`);
+  requestAnimationFrame(renderFitBox);
+}
+function renderFitBox() {
+  if (!fitBoxOn) return;
+  const L = $("fitLines").querySelectorAll("line");
+  const q = (i) => mv.queryHotspot(`hotspot-fc${i}`);
+  FIT_EDGES.forEach(([a, b], i) => {
+    const A = q(a), B = q(b);
+    if (!A || !B) return;
+    L[i].setAttribute("x1", A.canvasPosition.x); L[i].setAttribute("y1", A.canvasPosition.y);
+    L[i].setAttribute("x2", B.canvasPosition.x); L[i].setAttribute("y2", B.canvasPosition.y);
+  });
+}
+let fitTimer = null;
+$("fitIn").addEventListener("input", () => { clearTimeout(fitTimer); fitTimer = setTimeout(renderFit, 300); });
 
 // ── loading ──
 mv.addEventListener("progress", (e) => {
@@ -670,11 +959,15 @@ mv.addEventListener("progress", (e) => {
   $("progress").querySelector("i").style.width = `${Math.round(p * 100)}%`;
   if (p >= 1) $("progress").classList.add("done");
 });
+let baseRadius = null;
 mv.addEventListener("load", () => {
   applyFinish(finishIndex);
   placeDims();
   for (const k in state) state[k] = false;
   renderParts();
+  renderHotspots();
+  baseRadius ??= mv.getCameraOrbit().radius;
+  renderFit();
 });
 
 // ── AR and VR ──
@@ -742,6 +1035,8 @@ mv.addEventListener("ar-status", (e) => {
   const s = e.detail.status;
   arActive = s === "session-started" || s === "object-placed";
   $("arUi").classList.toggle("hide", !arActive);
+  mv.classList.toggle("no-hs", arActive || !featuresOn);
+  if (arActive) closeFeature();
   renderParts();
   if (s === "session-started") { placedOnce = false; arStatus(onWall ? "Point at the wall and move your phone slowly" : "Point at the floor and move your phone slowly"); }
   if (s === "object-placed" && !placedOnce) { placedOnce = true; arStatus("Drag to move · Twist to turn", 4500); }
@@ -871,9 +1166,10 @@ if (framed) {
   $("qrCode").classList.add("hide");
 } else $("qrCode").innerHTML = qrSvg();
 $("btnCopy").addEventListener("click", copyLink);
+$("btnWhatsApp").href = `https://wa.me/?text=${encodeURIComponent(`${product.brand} ${product.shortName}: open it in 3D and see it at real size in your room. ${location.href}`)}`;
 
 // test hook for automated checks
-window.__demo = { product, state, togglePart, applyFinish, openHeadset, openGuide, caps: { platform, isPhone, hasQuickLook, xrAR, xrVR, headsetAR, headsetVR } };
+window.__demo = { product, state, togglePart, applyFinish, openHeadset, openGuide, showFeature, closeFeature, fitCheck: () => fitResult, caps: { platform, isPhone, hasQuickLook, xrAR, xrVR, headsetAR, headsetVR } };
 </script>
 </body>
 </html>

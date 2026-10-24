@@ -30,7 +30,7 @@ log("search 'RT34HG5' ->", await b.evalJS("[...document.querySelectorAll('.card 
 await b.evalJS("(()=>{const q=document.getElementById('q'); q.value='xyz123'; q.dispatchEvent(new Event('input'));})()");
 await sleep(200);
 log("search 'xyz123' ->", await b.evalJS("document.querySelector('.empty')?.textContent"));
-await b.evalJS("(()=>{const q=document.getElementById('q'); q.value=''; q.dispatchEvent(new Event('input')); [...document.querySelectorAll('.chip')].find(c=>c.textContent==='Air conditioners').click();})()");
+await b.evalJS("(()=>{const q=document.getElementById('q'); q.value=''; q.dispatchEvent(new Event('input')); [...document.querySelectorAll('.chip')].find(c=>c.textContent.startsWith('Air conditioners')).click();})()");
 await sleep(200);
 log("chip AC ->", await b.evalJS("[...document.querySelectorAll('.card h2')].map(h=>h.textContent).join(' | ')"));
 await b.viewport(390, 844, true, IPHONE);
