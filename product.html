@@ -502,6 +502,9 @@ if (!product) {
 // login, so the links people scan and share always point at the public address
 const PUBLIC_ORIGIN = "https://3dmodelssangeetha.vercel.app";
 const shareUrl = (location.hostname.endsWith(".vercel.app") ? PUBLIC_ORIGIN : location.origin) + location.pathname + location.search;
+// Phones kept model files for an hour before 24 Oct 2026; this query string made them fetch
+// the files with the fixed doors. The files now revalidate on every load (vercel.json).
+const model = (url) => `${url}?v=2`;
 
 // ── what this device can do ──
 const ua = navigator.userAgent;
@@ -550,7 +553,7 @@ const orbit = () => {
 };
 mv.cameraOrbit = orbit();
 mv.arPlacement = onWall ? "wall" : "floor";
-mv.src = product.glb;
+mv.src = model(product.glb);
 $("specs").innerHTML = product.specs.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
 $("credit").innerHTML = `3D model made for Sangeetha from ${esc(product.brand)}’s official photos and published size (${esc(product.size.w)} W × ${esc(product.size.h)} H × ${esc(product.size.d)} D). <a href="${esc(product.source)}" target="_blank" rel="noopener">${esc(product.brand)} product page</a> · Demo by Tanmay Agarwal`;
 $("brandLogo").src = product.brandLogo;
@@ -983,7 +986,7 @@ function openQuickLook() {
   const banner = `${location.origin}/banners/${product.id}`;
   const a = document.createElement("a");
   a.rel = "ar";
-  a.href = `${f.usdz}#allowsContentScaling=0` +
+  a.href = `${model(f.usdz)}#allowsContentScaling=0` +
     (location.protocol === "https:" ? `&custom=${banner}&customHeight=small` : "") +
     `&canonicalWebPageURL=${encodeURIComponent(shareUrl)}`;
   a.appendChild(document.createElement("img"));

@@ -8,14 +8,14 @@
       "source": "/models/usdz/(.*)",
       "headers": [
         { "key": "Content-Type", "value": "model/vnd.usdz+zip" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {
       "source": "/models/(.*).glb",
       "headers": [
         { "key": "Content-Type", "value": "model/gltf-binary" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     }
   ]
