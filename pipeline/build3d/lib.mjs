@@ -96,7 +96,14 @@ export function stateClips(root, parts, seconds = 1) {
     return ["quaternion", new THREE.Quaternion().setFromAxisAngle(AX[p.axis], THREE.MathUtils.degToRad(open ? p.angle : 0)).toArray()];
   };
   const states = [...Array(2 ** parts.length).keys()].map((i) => i.toString(2).padStart(parts.length, "0"));
-  const clips = [];
+  // Google's Scene Viewer (Android without WebXR) loops the first clip and has no other
+  // way to pick one, so the first clip holds everything closed
+  const rest = parts.map((p, i) => {
+    const [prop, a] = pose(p, nodes[i], false);
+    const T = prop === "position" ? THREE.VectorKeyframeTrack : THREE.QuaternionKeyframeTrack;
+    return new T(`${p.node}.${prop}`, [0, seconds], [...a, ...a]);
+  });
+  const clips = [new THREE.AnimationClip("Rest", seconds, rest)];
   for (const from of states) for (const to of states) {
     if (from === to) continue;
     const tracks = parts.map((p, i) => {

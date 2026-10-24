@@ -3,8 +3,10 @@
 //
 // Quick Look has no state, so each moving part is written twice: a closed copy and an
 // open copy. Tapping the closed copy swings it open, then swaps it for the open copy;
-// tapping the open copy does the reverse. Quick Look ignores the visibility token, so
-// the open copies are also hidden by a scene-start behaviour.
+// tapping the open copy does the reverse. The copy not in use is parked: shrunk to a
+// speck at its own hinge. Every step is a Transform action, the one kind Quick Look
+// runs reliably; no visibility token or Show/Hide action is used, since a part that
+// failed to show again would vanish after opening.
 //
 // usage: node make_usdz.mjs <model.glb> <products.json> <productId> <outDir>
 import fs from "node:fs";
@@ -20,6 +22,7 @@ const root = doc.getRoot();
 fs.mkdirSync(path.join(outDir, "textures"), { recursive: true });
 
 const SWING = 0.8; // seconds for a door to open or close
+const PARK = 0.001; // scale of a parked copy (a 60 cm door becomes 0.6 mm)
 const num = (v) => (Math.abs(v) < 1e-9 ? "0" : String(+v.toPrecision(7)));
 const tuple = (a) => `(${a.map(num).join(", ")})`;
 // mesh data at the precision it needs: 0.01 mm positions, 3-place normals, 4-place UVs
@@ -103,13 +106,12 @@ for (const finish of finishes) {
     const p = `${parentPath}/${name}`;
     const tapTargets = [];
     w.open(`def Xform "${name}"`);
-    const t = opts.translation || node.getTranslation(), r = opts.rotation || node.getRotation(), s = node.getScale();
+    const t = opts.translation || node.getTranslation(), r = opts.rotation || node.getRotation(), s = opts.scale || node.getScale();
     const ops = [];
     if (opts.translation || t.some((v) => v !== 0)) { w.line(`double3 xformOp:translate = ${tuple(t)}`); ops.push('"xformOp:translate"'); }
     if (opts.rotation || r[3] !== 1) { w.line(`quatf xformOp:orient = ${tuple([r[3], r[0], r[1], r[2]])}`); ops.push('"xformOp:orient"'); }
     if (s.some((v) => v !== 1)) { w.line(`double3 xformOp:scale = ${tuple(s)}`); ops.push('"xformOp:scale"'); }
     if (ops.length) w.line(`uniform token[] xformOpOrder = [${ops.join(", ")}]`);
-    if (opts.hidden) w.line('token visibility = "invisible"');
 
     const mesh = node.getMesh();
     if (mesh) {
@@ -130,25 +132,27 @@ for (const finish of finishes) {
         tapTargets.push(...writeNode(child, p, childNames, { tappable: opts.tappable, inPart: opts.inPart }));
         continue;
       }
-      // a moving part: closed copy, open copy, and three empty poses to move between.
-      // A part either turns on a hinge (axis + angle) or slides (slide, in metres).
+      // a moving part: closed copy, open copy (parked at first), and four empty poses to
+      // move between. A part either turns on a hinge (axis + angle) or slides (slide, in metres).
       const part = partByNode.get(child.getName());
-      const base = child.getRotation(), t0 = child.getTranslation();
+      const base = child.getRotation(), t0 = child.getTranslation(), s0 = child.getScale();
       const turn = (k) => (part.slide ? base : quatMul(base, quatAxisAngle(part.axis, part.angle * k)));
       const move = (k) => (part.slide ? t0.map((v, i) => v + part.slide[i] * k) : t0);
+      const parked = s0.map((v) => v * PARK);
       const info = { part };
       info.closedTargets = writeNode(child, p, childNames, { tappable: true, inPart: true });
       info.closedPath = `${p}/${[...childNames].pop()}`;
-      info.openTargets = writeNode(child, p, childNames, { name: `${child.getName()}_Open`, rotation: turn(1), translation: move(1), hidden: true, tappable: true, inPart: true });
+      info.openTargets = writeNode(child, p, childNames, { name: `${child.getName()}_Open`, rotation: turn(0), translation: move(0), scale: parked, tappable: true, inPart: true });
       info.openPath = `${p}/${[...childNames].pop()}`;
-      for (const [label, k] of [["PoseClosed", 0], ["PoseOpen", 1], ["PoseAjar", 0.16]]) {
+      for (const [label, k, scale] of [["PoseClosed", 0, s0], ["PoseOpen", 1, s0], ["PoseAjar", 0.16, s0], ["PoseParked", 0, parked]]) {
         const n = safe(`${child.getName()}_${label}`);
         const rot = turn(k);
         childNames.add(n);
         w.open(`def Xform "${n}"`);
         w.line(`double3 xformOp:translate = ${tuple(move(k))}`);
         w.line(`quatf xformOp:orient = ${tuple([rot[3], rot[0], rot[1], rot[2]])}`);
-        w.line('uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]');
+        w.line(`double3 xformOp:scale = ${tuple(scale)}`);
+        w.line('uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]');
         w.close();
         info[label[0].toLowerCase() + label.slice(1)] = `${p}/${n}`;
       }
@@ -208,16 +212,6 @@ for (const finish of finishes) {
     'token type = "absolute"',
     `rel xformTarget = <${pose}>`,
   ]);
-  const visibility = (name, targets, show) => action(name, [
-    `rel affectedObjects = ${rel(targets)}`,
-    "double duration = 0",
-    'token easeType = "none"',
-    'token info:id = "Visibility"',
-    'token motionType = "none"',
-    "double moveDistance = 0",
-    'token style = "basic"',
-    `token type = "${show ? "show" : "hide"}"`,
-  ]);
   function group(name, type, children) {
     w.open(`def Preliminary_Action "${name}"`);
     w.line(`rel actions = ${rel(children.map((c) => c.name))}`);
@@ -268,6 +262,8 @@ for (const finish of finishes) {
   writeNode(sceneRoot, `${scenePath}/Placement`, new Set());
   w.close();
 
+  // tap the closed copy: it swings open, then the open copy takes its place and it parks;
+  // tap the open copy: the reverse. The swap is two instant moves in one frame.
   for (const [node, info] of partInfo) {
     const n = safe(node);
     behavior(`Open_${n}`, tap(info.closedTargets), {
@@ -275,10 +271,9 @@ for (const finish of finishes) {
       write: () => group("Open", "serial", [
         { name: "Swing", write: () => transform("Swing", info.closedPath, info.poseOpen, SWING) },
         { name: "Swap", write: () => group("Swap", "parallel", [
-          { name: "ShowOpen", write: () => visibility("ShowOpen", [info.openPath], true) },
-          { name: "HideClosed", write: () => visibility("HideClosed", [info.closedPath], false) },
+          { name: "PlaceOpen", write: () => transform("PlaceOpen", info.openPath, info.poseOpen, 0) },
+          { name: "ParkClosed", write: () => transform("ParkClosed", info.closedPath, info.poseParked, 0) },
         ]) },
-        { name: "Reset", write: () => transform("Reset", info.closedPath, info.poseClosed, 0) },
       ]),
     });
     behavior(`Close_${n}`, tap(info.openTargets), {
@@ -286,21 +281,19 @@ for (const finish of finishes) {
       write: () => group("Close", "serial", [
         { name: "Swing", write: () => transform("Swing", info.openPath, info.poseClosed, SWING) },
         { name: "Swap", write: () => group("Swap", "parallel", [
-          { name: "ShowClosed", write: () => visibility("ShowClosed", [info.closedPath], true) },
-          { name: "HideOpen", write: () => visibility("HideOpen", [info.openPath], false) },
+          { name: "PlaceClosed", write: () => transform("PlaceClosed", info.closedPath, info.poseClosed, 0) },
+          { name: "ParkOpen", write: () => transform("ParkOpen", info.openPath, info.poseParked, 0) },
         ]) },
-        { name: "Reset", write: () => transform("Reset", info.openPath, info.poseOpen, 0) },
       ]),
     });
   }
 
-  // on start: hide the open copies, then nudge the main part ajar once so people know it moves
+  // on start: nudge the main part ajar once so people know it moves
   const hint = [...partInfo.values()].find((i) => i.part.hint) || [...partInfo.values()][0];
   if (partInfo.size) {
     behavior("OnStart", ['token info:id = "SceneTransition"', 'token type = "enter"'], {
       name: "Start",
       write: () => group("Start", "serial", [
-        { name: "HideOpenCopies", write: () => visibility("HideOpenCopies", [...partInfo.values()].map((i) => i.openPath), false) },
         { name: "Pause", write: () => action("Pause", ["double duration = 1.2", 'token info:id = "Wait"']) },
         { name: "Ajar", write: () => transform("Ajar", hint.closedPath, hint.poseAjar, 0.45) },
         { name: "Back", write: () => transform("Back", hint.closedPath, hint.poseClosed, 0.45) },

@@ -14,10 +14,13 @@ let scene = try SCNScene(url: url, options: [.checkConsistency: true])
 var names: [String] = []
 scene.rootNode.enumerateHierarchy { node, _ in
   if let n = node.name { names.append(n) }
-  // show every part's open copy in place of its closed one
-  if let n = node.name, showOpen, n.hasSuffix("_Open") {
-    node.isHidden = false
-    node.parent?.childNode(withName: String(n.dropLast(5)), recursively: false)?.isHidden = true
+  // do what a tap does: move every part's open copy (parked at first) to its open pose,
+  // and the closed copy to the parked pose
+  if let n = node.name, showOpen, n.hasSuffix("_Open"), let parent = node.parent {
+    let part = String(n.dropLast(5))
+    if let pose = parent.childNode(withName: "\(part)_PoseOpen", recursively: false) { node.transform = pose.transform }
+    if let closed = parent.childNode(withName: part, recursively: false),
+       let park = parent.childNode(withName: "\(part)_PoseParked", recursively: false) { closed.transform = park.transform }
   }
 }
 let hidden = names.filter { n in scene.rootNode.childNode(withName: n, recursively: true)?.isHidden == true }

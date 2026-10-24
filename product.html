@@ -163,7 +163,7 @@
 
   /* inside phone AR (Android) */
   .ar-ui { position: absolute; inset: 0; pointer-events: none; }
-  .ar-status { position: absolute; left: 50%; top: calc(18px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); width: max-content; max-width: calc(100% - 120px); background: rgba(18,34,58,.88); color: var(--paper); font-size: 15px; font-weight: 500; line-height: 1.35; text-align: center; padding: 11px 18px; border-radius: 20px; transition: opacity .4s; }
+  .ar-status { position: absolute; left: 50%; top: calc(18px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); width: max-content; max-width: calc(100% - 120px); background: rgba(18,34,58,.88); color: var(--paper); font-size: 15px; font-weight: 500; line-height: 1.35; text-align: center; padding: 11px 18px; border-radius: 20px; transition: opacity .4s; white-space: pre-line; }
   .ar-status.gone { opacity: 0; }
   .ar-bottom { position: absolute; left: 0; right: 0; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; }
   .ar-bottom > * { pointer-events: auto; }
@@ -312,7 +312,7 @@
       shadow-intensity="1" shadow-softness="0.8"
       environment-image="neutral" exposure="1.05"
       interaction-prompt="none"
-      ar ar-modes="webxr scene-viewer" ar-scale="fixed" ar-placement="floor">
+      ar ar-modes="webxr scene-viewer" ar-scale="fixed" ar-placement="floor" xr-environment>
       <button slot="ar-button" class="hide" aria-hidden="true"></button>
       <div slot="progress-bar" class="progress" id="progress"><i></i></div>
 
@@ -675,11 +675,12 @@ async function togglePart(key, { instant = false } = {}) {
   setTimeout(() => (busy = false), instant ? 50 : 900);
 }
 
-// tap the product (a tap, not a drag) to open or close the part under your finger
+// tap the product (a tap, not a drag) to open or close the part under your finger;
+// inside Android AR too, where model-viewer raycasts from the phone's camera
 let press = null;
 mv.addEventListener("pointerdown", (e) => (press = { x: e.clientX, y: e.clientY, t: Date.now() }));
 mv.addEventListener("pointerup", (e) => {
-  if (!press || !parts.length || arActive) return;
+  if (!press || !parts.length) return;
   const moved = Math.hypot(e.clientX - press.x, e.clientY - press.y);
   const quick = Date.now() - press.t < 450;
   press = null;
@@ -1043,7 +1044,7 @@ mv.addEventListener("ar-status", (e) => {
   if (arActive) closeFeature();
   renderParts();
   if (s === "session-started") { placedOnce = false; arStatus(onWall ? "Point at the wall and move your phone slowly" : "Point at the floor and move your phone slowly"); }
-  if (s === "object-placed" && !placedOnce) { placedOnce = true; arStatus("Drag to move · Twist to turn", 4500); }
+  if (s === "object-placed" && !placedOnce) { placedOnce = true; arStatus(parts.length ? `${product.arTip}\nDrag it to move · Twist two fingers to turn` : "Drag it to move · Twist two fingers to turn", 6500); }
   if (s === "failed") toast("AR couldn’t start on this phone. Try Chrome with Google Play Services for AR.");
 });
 mv.addEventListener("ar-tracking", (e) => {
@@ -1096,7 +1097,7 @@ function guide() {
     case "android": return mv.canActivateAR ? {
       title: "How to use AR", sub: `${name}, in your room at real size.`,
       place: onWall ? { icon: I.wall, text: "Point your camera at the wall where it would hang and move slowly until it appears there." } : placeFloor,
-      groups: [["In AR", [parts.length && row(I.tap, openTitle, "Use the buttons at the bottom", true), product.finishes.length > 1 && row(I.swatch, "Change the finish", "Tap a colour at the bottom"), row(I.move, "Move", "Drag with one finger"), row(I.rotate, "Rotate", "Twist with two fingers"), lock]]],
+      groups: [["In AR", [parts.length && row(I.tap, openTitle, "Tap it, or use the buttons at the bottom", true), product.finishes.length > 1 && row(I.swatch, "Change the finish", "Tap a colour at the bottom"), row(I.move, "Move", "Drag with one finger"), row(I.rotate, "Rotate", "Twist with two fingers"), lock]]],
       go: "Open AR",
     } : {
       title: "AR isn’t available here", sub: "This browser or phone can’t open the camera view.",
