@@ -284,13 +284,16 @@ export function initRoom({ product, model, parts, onWall, toast, openButton }) {
     if (!root) return;
     document.removeEventListener("keydown", onKey);
     window.removeEventListener("resize", layout);
+    clearTimeout(note.t);
+    cancelAnimationFrame(raf);
+    S?.ro?.disconnect();
     if (S?.photo) URL.revokeObjectURL(S.photo.url);
     root.remove();
     root = null; S = null;
     document.documentElement.style.overflow = "";
     openButton.focus();
   }
-  const q = (id) => root.querySelector("#" + id);
+  const q = (id) => root?.querySelector("#" + id) ?? null;
 
   async function load(file) {
     const err = q("roomError");
@@ -299,6 +302,7 @@ export function initRoom({ product, model, parts, onWall, toast, openButton }) {
     let photo;
     try { photo = await readPhoto(file); }
     catch { err.textContent = "We could not read that photo. Please try a JPEG or PNG, or take a new one."; err.classList.remove("hide"); return; }
+    if (!root) { URL.revokeObjectURL(photo.url); return; }       // closed while the photo was being read
     if (S.photo) URL.revokeObjectURL(S.photo.url);
     S.photo = photo;
     S.yh = 0.5; S.userSize = 1; S.turn = 0;
@@ -419,7 +423,16 @@ export function initRoom({ product, model, parts, onWall, toast, openButton }) {
     stage.appendChild(handle);
     S.drag = handle;
     q("roomLoading").classList.remove("hide");
-    mv.addEventListener("load", () => { if (!root || S?.mv !== mv) return; q("roomLoading").classList.add("hide"); draw(); }, { once: true });
+    mv.addEventListener("load", () => {
+      if (!root || S?.mv !== mv) return;
+      q("roomLoading").classList.add("hide");
+      draw();
+      setTimeout(() => { if (root && S?.mv === mv) draw(); }, 300);          // once more when it has settled
+    }, { once: true });
+    // the 3D view takes its new size a moment after it is set: put the camera back as soon as it has
+    S.ro?.disconnect();
+    S.ro = new ResizeObserver(() => { if (S?.mv === mv) mv.jumpCameraToGoal?.(); });
+    S.ro.observe(mv);
     // dragging: while a drag is on, the whole window listens, so a quick flick cannot outrun the handle
     let grab = null;
     const stageBox = () => stage.getBoundingClientRect();
@@ -520,9 +533,10 @@ export function initRoom({ product, model, parts, onWall, toast, openButton }) {
 
   // ── the controls ──
   function note(text, ms = 4500) {
-    const n = q("roomNote").firstElementChild;
-    n.textContent = text;
-    q("roomNote").classList.toggle("hide", !text);
+    const box = q("roomNote");
+    if (!box) return;
+    box.firstElementChild.textContent = text;
+    box.classList.toggle("hide", !text);
     clearTimeout(note.t);
     if (text && ms) note.t = setTimeout(() => q("roomNote")?.classList.add("hide"), ms);
   }
@@ -597,12 +611,12 @@ export function initRoom({ product, model, parts, onWall, toast, openButton }) {
     await mv.updateComplete;
     mv.currentTime = 0;
     mv.play({ repetitions: 1 });
-    root.querySelectorAll("[data-part]").forEach((b) => {
+    root?.querySelectorAll("[data-part]").forEach((b) => {
       const p = parts.find((x) => x.key === b.dataset.part);
       b.setAttribute("aria-pressed", String(S.open[p.key]));
       b.querySelector("span").textContent = `${S.open[p.key] ? "Close" : "Open"} ${p.label}`;
     });
-    setTimeout(() => (S.busy = false), 900);
+    setTimeout(() => { if (S) S.busy = false; }, 900);
   }
 
   // ── a picture to keep: the photo, the shadow and the product ──

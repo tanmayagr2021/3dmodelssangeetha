@@ -37,7 +37,9 @@ const click = (sel) => b.evalJS(`document.querySelector('${sel}').click()`);
 // the product's drawn height, from a render of it with a see-through background (alpha > 0)
 const drawnHeight = () => b.evalJS(`(async()=>{const m=document.querySelector('.room-model');const bm=await createImageBitmap(await m.toBlob({mimeType:'image/png'}));const c=document.createElement('canvas');c.width=bm.width;c.height=bm.height;const x=c.getContext('2d');x.drawImage(bm,0,0);const d=x.getImageData(0,0,c.width,c.height).data;let top=-1,bot=-1;for(let y=0;y<c.height;y++){let hit=false;for(let xx=0;xx<c.width;xx+=3){if(d[(y*c.width+xx)*4+3]>40){hit=true;break}}if(hit){if(top<0)top=y;bot=y}}return JSON.stringify({h:(bot-top+1)/(c.height/m.getBoundingClientRect().height)})})()`).then(JSON.parse);
 
-const catalogue = JSON.parse(await (await fetch(`${base}/products.json`)).text());
+await b.go(`${base}/`);
+await sleep(1500);
+const catalogue = JSON.parse(await b.evalJS("fetch('/products.json').then((r) => r.text())"));
 for (const p of catalogue.products) {
   console.log(`[${p.id}]`);
   const wall = p.placement === "wall";
@@ -59,6 +61,7 @@ for (const p of catalogue.products) {
     const k = +d0.k, expected = Hm * (+d0.yb - +d0.yh) / +d0.hc;     // photo pixels
     const drawn = (await drawnHeight()).h / k;
     ok(Math.abs(drawn - expected) / expected < 0.05, `drawn height ${drawn.toFixed(0)} px is within 5% of the ${expected.toFixed(0)} px real size at that floor row`);
+    if (Math.abs(drawn - expected) / expected >= 0.05) console.log("      state:", JSON.stringify(d0), await b.evalJS(`(()=>{const m=document.querySelector('.room-model');return JSON.stringify({css:m.getBoundingClientRect().height,fov:m.fieldOfView,orbit:String(m.cameraOrbit),loaded:m.loaded})})()`));
   } else {
     const k = +d0.k, expected = Hm * +d0.focal / +d0.dist;                // photo pixels, at its distance from the camera
     const drawn = (await drawnHeight()).h / k;
