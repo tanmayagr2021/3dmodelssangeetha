@@ -201,6 +201,12 @@
   .size small { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--slate); }
   .size b { font-family: var(--serif); font-weight: 500; font-size: 20px; white-space: nowrap; }
   .size-note { font-size: 13px; color: var(--slate); margin: 8px 0 0; }
+  .need ul { list-style: none; margin: 0; padding: 0; display: grid; border: 1px solid var(--hair); border-radius: 14px; background: #fff; overflow: hidden; }
+  .need li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 16px; font-size: 14px; line-height: 1.4; }
+  .need li + li { border-top: 1px solid var(--hair); }
+  .need li span { color: var(--slate); }
+  .need li b { font-weight: 600; text-align: right; }
+  .need p { font-size: 13px; line-height: 1.5; color: var(--slate); margin: 8px 0 0; }
 
   .specs { margin: 0; display: grid; grid-template-columns: auto 1fr; border-top: 1px solid var(--hair); }
   .specs dt, .specs dd { margin: 0; padding: 10px 0; border-bottom: 1px solid var(--hair); font-size: 14px; line-height: 1.4; }
@@ -394,6 +400,12 @@
         <div><small>Depth</small><b id="sizeD">–</b></div>
       </div>
       <p class="size-note hide" id="sizeNote"></p>
+    </div>
+
+    <div class="need" id="needBox">
+      <div class="label">Space it needs</div>
+      <ul id="needList"></ul>
+      <p id="needNote"></p>
     </div>
 
     <div id="fitBox">
@@ -592,6 +604,18 @@ for (const [url, kind, use] of files) {
   }).catch(() => {});
 }
 if (product.sizeNote) { $("sizeNote").textContent = `${product.sizeNote}. Placed at real size.`; $("sizeNote").classList.remove("hide"); }
+{ // the gaps the maker publishes, shown before the shopper types anything
+  const f = product.fit || {};
+  const rows = [
+    f.sides && ["At each side", `${f.sides} cm`],
+    f.back && ["Behind it", `${f.back} cm`],
+    f.top && [onWall ? "Below the ceiling" : "Above it", `${f.top} cm`],
+    f.front && !onWall && ["In front, doors open", `${f.front} cm`],
+  ].filter(Boolean);
+  $("needList").innerHTML = rows.map(([k, v]) => `<li><span>${k}</span><b>${v}</b></li>`).join("");
+  $("needList").classList.toggle("hide", !rows.length);
+  $("needNote").textContent = f.note || `${product.brand} doesn’t publish installation gaps for this ${onWall ? "unit" : "model"}, so only its size is checked. Leave a little room for air.`;
+}
 $("hint").innerHTML = `${I.tap}<span>${parts.length ? `Drag to turn · ${product.arTip}` : "Drag to turn"}</span>`;
 if (headsetVR) $("btnVR").classList.remove("hide");
 if (platform === "desktop") $("arNote").querySelector("span").textContent = "Real size · On a phone or headset · No app";

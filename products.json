@@ -34,7 +34,7 @@
           "label": "freezer",
           "node": "FreezerDoor",
           "axis": "y",
-          "angle": 105,
+          "angle": 110,
           "zone": {
             "closed": [
               [
@@ -50,14 +50,14 @@
             ],
             "open": [
               [
-                0.233,
+                0.241,
                 1.148,
-                0.307
+                0.303
               ],
               [
-                0.526,
+                0.577,
                 1.71,
-                0.927
+                0.91
               ]
             ]
           }
@@ -67,7 +67,7 @@
           "label": "fridge",
           "node": "FridgeDoor",
           "axis": "y",
-          "angle": 105,
+          "angle": 115,
           "hint": true,
           "zone": {
             "closed": [
@@ -84,14 +84,14 @@
             ],
             "open": [
               [
-                0.233,
+                0.25,
                 0.04,
-                0.307
+                0.299
               ],
               [
-                0.526,
+                0.626,
                 1.142,
-                0.927
+                0.889
               ]
             ]
           }
@@ -218,7 +218,9 @@
       ],
       "fit": {
         "front": 56,
-        "note": "Samsung doesn’t publish installation gaps on its product page. The front space is the 63 cm doors’ swing in this model."
+        "sides": 5,
+        "back": 5,
+        "note": "From Samsung's user manual for this range: at least 5 cm at each side, more than 5 cm behind it, and 129.4 cm of depth in total with the doors open (they open to 110° for the freezer and 115° for the fridge)."
       }
     },
     {
@@ -439,7 +441,9 @@
       ],
       "fit": {
         "front": 54,
-        "note": "LG: 61.5 cm deep with the door closed and 110 cm with the door open at 90°."
+        "sides": 2,
+        "back": 10,
+        "note": "From LG's owner's manual: at least 2 cm at each side and 10 cm behind for the hoses and air, and 110 cm of depth in total with the door open at 90°."
       }
     },
     {

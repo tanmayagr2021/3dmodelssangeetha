@@ -7,10 +7,12 @@ usage: python tex_lg_panel.py <photos dir> <out dir> [--compare <png>]
 
 The photo only has about 1.18 px per mm, so enlarging it just blurs the dial and the programme
 names. Everything legible in the photo is retypeset at 4 px per mm instead: the programme names,
-leader lines, dial surround, the two round buttons, the display numbers and the five button
-labels. The positions are read off the photo (source pixels below). The small print under the
-buttons and the "extra function" notes are unreadable in every photo we have, so they are left out
-rather than guessed; the tiny display icons and the warranty badge are cropped from the photo.
+leader lines, dial surround, the two round buttons and the display numbers. The positions are read
+off the photo (source pixels below). The wording and artwork that is too small to read in the photo
+(the display icons, the five key labels with their sub-labels, "*Beep On/Off", "*Child Lock" and the
+extra-function note) come from the control-panel diagram in LG's own owner's manual for this model
+(MFL72036403, page 21), saved as small alpha images in pipeline/sources/lg-panel/. The warranty
+badge is still cropped from the photo.
 """
 import math
 import os
@@ -20,6 +22,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 PHOTOS, OUT = sys.argv[1:3]
+HERE = os.path.dirname(os.path.abspath(__file__))
 COMPARE = sys.argv[4] if len(sys.argv) > 4 and sys.argv[3] == "--compare" else None
 
 PPM = 1.176            # photo pixels per mm (body 705 px = 600 mm wide; 1001 px = 850 mm tall)
@@ -70,7 +73,7 @@ def main():
     # ── display glass: photo first (icons), then numbers and grids redrawn over it ──
     crop_paste((1125, 181, 1306, 262), (1125, 181), base_fill=(27, 25, 26))
     glass = (27, 25, 26)
-    d.rectangle([*P(1129, 196), *P(1205, 225)], fill=glass)          # clock digits
+    d.rectangle([*P(1127, 183), *P(1213, 241)], fill=glass)          # icons and clock digits (both redrawn)
     d.rectangle([*P(1215, 188), *P(1306, 241)], fill=glass)          # temp / spin grid and captions
 
     # 7-segment digits: unlit ghost "88" and the lit "39"
@@ -107,15 +110,29 @@ def main():
     # display frame
     d.rectangle([*P(1125, 181), *P(1306, 260)], outline=(20, 19, 20), width=2 * SS)
 
-    # five button labels under the display
+    # the five touch keys with their sub-labels, from the manual's diagram
     d.rectangle([*P(1127, 242), *P(1305, 259)], fill=(66, 65, 70))
-    bf = font(6.0, 5)
-    for cx, s in ((1146, "Steam"), (1181.5, "TurboWash"), (1217, "Pre Wash"), (1253, "Delay End"), (1288.5, "Add Item")):
-        d.text(P(cx, 249.5), s, font=bf, fill=(226, 226, 232), anchor="mm")
-    for x in (1163, 1199, 1235, 1271):
-        d.line([P(x, 243), P(x, 258)], fill=(84, 83, 88), width=SS)
     d.rectangle([*P(1127, 242), *P(1305, 259)], outline=(40, 39, 42), width=SS)
-    crop_paste((1255, 259, 1306, 287), (1255, 259))                  # DIRECT DRIVE MOTOR / 10 years badge
+    def overlay(name, box, colour, alpha_scale=1.0, x_range=None):
+        im = Image.open(os.path.join(HERE, "..", "sources", "lg-panel", name + ".png"))
+        a = np.asarray(im)[..., 3].astype(float) * alpha_scale
+        w_, h_ = round((box[2] - box[0]) * K), round((box[3] - box[1]) * K)
+        a = np.asarray(Image.fromarray(a.astype(np.uint8)).resize((w_, h_), Image.LANCZOS)).astype(float) / 255
+        if x_range:
+            a[:, : round(x_range[0] * w_)] *= 0.0 if x_range[0] else 1
+        x, y = round(P(box[0], box[1])[0]), round(P(box[0], box[1])[1])
+        region = np.asarray(img.crop((x, y, x + w_, y + h_))).astype(float)
+        col = np.array(colour, float)
+        img.paste(Image.fromarray((region * (1 - a[..., None]) + col * a[..., None]).clip(0, 255).astype(np.uint8)), (x, y))
+    overlay("keys_text", (1129, 242.3, 1303.5, 257.3), (228, 228, 234))
+    overlay("bracket_text", (1178, 259.5, 1291, 266.2), (170, 170, 178))
+    d.text(P(1304.7, 177.2), "*Extra Function : Hold 3 seconds", font=font(3.6, 7), fill=(170, 170, 178), anchor="rm")   # wording from the manual
+    # display icons: the AI mark is unlit, the other three on top are lit; the bottom row is unlit
+    overlay("icons_top", (1135, 187.5, 1205, 196.5), (92, 92, 98))
+    top = Image.open(os.path.join(HERE, "..", "sources", "lg-panel", "icons_top.png"))
+    overlay("icons_top", (1135, 187.5, 1205, 196.5), (246, 246, 250), x_range=(0.26, 1))
+    overlay("icons_bottom", (1135, 222.5, 1205, 231.5), (92, 92, 98))
+    crop_paste((1255, 267, 1306, 287), (1255, 267))                  # DIRECT DRIVE MOTOR / 10 years badge
 
     # ── dial surround ──
     cx, cy = 1002.3, 224.5          # centre of the surround on the panel; the raised knob top reads a little up-left in the photo
