@@ -124,7 +124,7 @@ mainFront.position.set(0, feet, zF - 0.004);
 cab.add(mainFront);
 // control strip: dial, programmes and display, right of the drawer
 const stripW = W / 2 - drawerX1, stripH = H - stripY;
-cab.add(mesh("ControlStrip", flipV(new THREE.BoxGeometry(stripW, stripH, 0.012)), [side, side, side, side, panel, side], drawerX1 + stripW / 2, stripY + stripH / 2, zF - 0.006));
+cab.add(mesh("ControlStrip", flipV(new THREE.BoxGeometry(stripW, stripH, 0.012)), [side, side, side, side, panel, side], drawerX1 + stripW / 2, stripY + stripH / 2, zF - 0.006 + 0.0004));
 // the drawer bay: a dark slot the drawer slides out of
 const bayW = drawerX1 - drawerX0;
 cab.add(mesh("DrawerBay", inward(new THREE.BoxGeometry(bayW, stripH - 0.004, 0.3)), dark, drawerX0 + bayW / 2, stripY + stripH / 2, zF - 0.15));
@@ -155,33 +155,36 @@ drawer.add(mesh("DrawerFace", flipV(new RoundedBoxGeometry(bayW - 0.002, stripH 
 cab.add(drawer);
 
 // ── rotary selector: a raised black knob with a brushed-aluminium top in a chrome-edged surround ──
-// Centre and sizes read off LG's front photo (ring 63 mm across, knob top 51 mm); the knob's height
-// (12.5 mm) is an estimate from the 3/4 photos, not a published figure.
-const dial = group("Dial", 0.006, 0.802, zF);
+// Centre and sizes measured on LG's straight-on photo of the panel (3.61 px/mm): the ring is 73 mm across, the knob
+// top 59 mm, the centre 5 mm right of the middle and 61 mm below the top edge. The knob's height (12.5 mm) is an
+// estimate from the 3/4 photos, not a published figure.
+const dial = group("Dial", 0.0053, 0.7915, zF);
 dial.add(lathe("DialRing", [[0.0364, 0], [0.0364, 0.0012], [0.0375, 0.0012], [0.0375, 0]], knobEdge, 64));
 dial.add(lathe("KnobSkirt", [[0.0, 0.0], [0.0302, 0.0], [0.0302, 0.0104], [0.0286, 0.0121], [0.0, 0.0121]], knobSkirt, 64));
 dial.add(lathe("KnobEdge", [[0.0286, 0.0121], [0.0273, 0.0125], [0.0271, 0.0123], [0.0284, 0.0119]], knobEdge, 64));
-dial.add(mesh("KnobTop", new THREE.CircleGeometry(0.0271, 64), knobTop, 0, 0, 0.0125));
+dial.add(mesh("KnobTop", new THREE.CircleGeometry(0.0285, 64), knobTop, 0, 0, 0.0125));
 cab.add(dial);
 
 // ── buttons: two round push buttons with chrome rings, and the five touch keys under the display ──
-// Positions from LG's front photo (1.176 px per mm); how far they stand out (3 mm, 1.2 mm) is estimated.
-const px = (sx) => (sx - 641) / 1.176 / 1000 - 0.3, py = (sy) => 0.85 - (sy - 168) / 1.176 / 1000;
-for (const [name, sx, sy, m] of [["PowerButton", 928.7, 265, btnPower], ["StartButton", 1070, 264, btnPlay]]) {
-  const b = group(name, px(sx), py(sy), zF);
+// Positions measured on LG's straight-on panel photo (3.61 px/mm, x from the left edge, y down from the top edge);
+// how far they stand out (3 mm, 1.2 mm) is estimated.
+const mx = (ph) => (ph - 4) / 3.61 / 1000 - 0.3, my = (ph) => 0.85 - (ph - 150) / 3.61 / 1000;
+for (const [name, ex, ey, m] of [["PowerButton", 876, 479, btnPower], ["StartButton", 1320, 481, btnPlay]]) {
+  const b = group(name, mx(ex), my(ey), zF);
   b.add(lathe(name + "Ring", [[0.0106, 0], [0.0106, 0.0022], [0.0096, 0.0024], [0.0096, 0]], knobEdge, 64));
   b.add(lathe(name + "Cap", [[0, 0], [0.0092, 0], [0.0092, 0.0027], [0.0086, 0.0031], [0, 0.0031]], knobSkirt, 64));
   b.add(mesh(name + "Face", new THREE.CircleGeometry(0.0084, 48), m, 0, 0, 0.00315));
   cab.add(b);
 }
 { // touch keys: one raised bar, its face the same strip texture so the labels sit on the keys
-  const wK = (1305 - 1127) / 1.176 / 1000, hK = 17 / 1.176 / 1000, g = new THREE.BoxGeometry(wK, hK, 0.0012);
-  const uv = g.attributes.uv, S0 = (888 - 0), SW = 458.6, SH = 123.5;
-  for (let i = 16; i < 20; i++) { // the +Z face
+  const x0 = mx(1499), x1 = mx(2074), y0 = my(418), y1 = my(469);          // photo columns 1499-2074, rows 418-469
+  const g = new THREE.BoxGeometry(x1 - x0, y0 - y1, 0.0012);
+  const uv = g.attributes.uv;
+  for (let i = 16; i < 20; i++) { // the +Z face, mapped to where the keys are on the strip texture (390 x 105 mm)
     const u = uv.getX(i), v = uv.getY(i);
-    uv.setXY(i, ((1127 + u * 178) - 888) / SW, (242 + (1 - v) * 17 - 168) / SH);
+    uv.setXY(i, (x0 + u * (x1 - x0) - drawerX1) / stripW, (H - (y1 + v * (y0 - y1))) / stripH);
   }
-  cab.add(mesh("TouchKeys", g, [dark, dark, dark, dark, panel, dark], px((1127 + 1305) / 2), py(250.5), zF + 0.0006));
+  cab.add(mesh("TouchKeys", g, [dark, dark, dark, dark, panel, dark], (x0 + x1) / 2, (y0 + y1) / 2, zF + 0.0006));
 }
 
 // ── gasket and stainless drum behind the porthole ──
