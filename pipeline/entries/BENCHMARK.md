@@ -107,3 +107,14 @@ and any figure marked ESTIMATED. Higher-resolution sources do not exist for most
 - **Interiors.** Stock is separate small meshes grouped with the shelf or door they sit on, so it swings with the door. Printed labels on tubs and jars are wrapped round the cylinder (an open cylinder segment), never a flat plane. Keep the glass clear enough that the food shows.
 - **Never rewrite products.json with a different formatter.** The file is `json.dumps(indent=2)`; builders that call `saveZones` run against a staging copy and the zones are copied back (see how `setzones.py` was used in this session), otherwise the whole file shows as changed.
 - **Size budget.** About 1.5 MB GLB and 2.5 MB USDZ. The fridge came to 1.4 MB and 2.8 MB (about 1,000 small meshes, and each door is stored twice for Quick Look); lower segment counts on food items first.
+
+## 7. Lessons from the third batch (LG GLT3426SNPZ fridge, Bosch WGA1420PIN washer, Voltas 183INV AC)
+- **Fridge stock is Indian and recognisable** (owner's rule): eggs in the egg basket, idli batter and dosa batter in separate labelled tubs, curd, sambar, chutney, ghee, pickle, filter coffee, and Coke, Fanta, Thums Up and Sprite in cans (wrapped print on each can) and 2.25 L bottles. Labels are drawn by `tex_lg_glt3426.py` (`can_*.jpg`, `bottle_*.jpg`, `lbl_*.jpg`) and reused by the other fridge builders. Keep label words inside their box (check PAROTTA, GREEN PEAS, ICE CREAM).
+- **A hotspot dot on a part blocks the headset tap.** In `xr.js` a hotspot ("spot") is picked before the part under it, so never put a hotspot at the centre of a part (the flap's centre). Offset it sideways.
+- **Colour-neutral 360 frames** (Bosch sides) are recoloured from their luminance to the maker's colour; textures render about 25% brighter in the viewer, so darken (`SHADE`).
+- **Avenir Next Condensed** matches the print width of Bosch's panel; Avenir Next suits the Voltas front.
+- **Hinged flaps must stay above the floor** when open (Bosch pump flap: 90 degrees, not 105).
+- **When the maker shows no photo of a part open, do not invent it.** Voltas gave no photo of the lifted front, so only the flap moves.
+- **Never run a builder against the real products.json**: `saveZones` rewrites it with `tidyJSON` and the diff explodes. Build against `pipeline/entries/<id>.json`, then insert the entry with a python `json.dumps(indent=2, ensure_ascii=False)` round trip.
+- **Cut-outs of maker graphics** (Voltas photos): mask by low saturation on the purple backdrop, close and keep the largest piece (cv2); clean the energy label of its callout dots.
+- Fridge sizes: with the full stock the GLB is about 1.7 MB and the USDZ about 3.3 MB.

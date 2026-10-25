@@ -71,7 +71,7 @@ const F = {
   brownGlass: mat("GlassBrown", 0x4a2a16, { rough: 0.12, opacity: 0.94 }), redGlass: mat("GlassRed", 0x992c20, { rough: 0.15, opacity: 0.92 }),
   waterBottle: mat("WaterBottle", 0xcfe9f7, { rough: 0.1, opacity: 0.55 }), waterCap: mat("WaterCap", 0x2f6fb4, { rough: 0.4 }),
   cola: mat("ColaLiquid", 0x3a1f10, { rough: 0.15, opacity: 0.93 }), colaCap: mat("ColaCap", 0xc42b22, { rough: 0.4 }),
-  canRed: mat("CanRed", 0xb82a20, { metal: 0.25, rough: 0.4 }), canGreen: mat("CanGreen", 0x218a40, { metal: 0.25, rough: 0.4 }), canGold: mat("CanGold", 0xd89a1f, { metal: 0.25, rough: 0.4 }),
+  canRed: mat("CanRed", 0xb82a20, { metal: 0.25, rough: 0.4 }), canGreen: mat("CanGreen", 0x218a40, { metal: 0.25, rough: 0.4 }), canGold: mat("CanGold", 0xd89a1f, { metal: 0.25, rough: 0.4 }), canOrange: mat("CanOrange", 0xe07a12, { metal: 0.25, rough: 0.4 }), canBlack: mat("CanBlack", 0x1a1a1e, { metal: 0.25, rough: 0.4 }), fanta: mat("FantaLiquid", 0xe8820e, { rough: 0.15, opacity: 0.93 }), fantaCap: mat("FantaCap", 0xe07a12, { rough: 0.4 }),
   carrot: mat("Carrot", 0xe8791f, { rough: 0.55 }), drumstick: mat("Drumstick", 0x5e7f3a, { rough: 0.6 }), brinjal: mat("Brinjal", 0x4a2255, { rough: 0.3 }),
   okra: mat("LadiesFinger", 0x6aa23a, { rough: 0.55 }), tomato: mat("Tomato", 0xc9372c, { rough: 0.4 }), chilli: mat("GreenChilli", 0x3f8a2a, { rough: 0.45 }),
   leaf: mat("CurryLeaf", 0x2f7a2d, { rough: 0.6 }), coriander: mat("Coriander", 0x5aa543, { rough: 0.65 }), banana: mat("Banana", 0xe8c93a, { rough: 0.5 }),
@@ -279,9 +279,10 @@ shelf("Shelf2", 0.545);
   s1.add(lockbox("RiceBox", 0.115, 0.09, 0.045, F.coconutFlesh, -0.185, 0.054, z0 + 0.04));
   s1.add(lockbox("ChutneyBox", 0.115, 0.09, 0.045, F.coriander, -0.185, 0, z0 + 0.15));
   s1.add(lockbox("SaladBox", 0.115, 0.09, 0.045, F.tomato, -0.185, 0.054, z0 + 0.15));
-  s1.add(tub("BatterTub", 0.07, 0.095, F.tubWhite, F.lidBlue, "lbl_batter", -0.045, 0, z0 + 0.13));
-  s1.add(tub("CurdTub", 0.06, 0.075, F.tubWhite, F.lidWhite, "lbl_curd", 0.075, 0, z0 + 0.15));
-  s1.add(jar("ChutneyJar", 0.036, 0.085, F.coconutFlesh, F.lidBlue, null, 0.19, 0, z0 + 0.15));
+  s1.add(tub("IdliBatterTub", 0.05, 0.09, F.tubWhite, F.lidBlue, "lbl_idli", -0.08, 0, z0 + 0.13));
+  s1.add(tub("DosaBatterTub", 0.05, 0.09, F.tubWhite, F.lidBlue, "lbl_dosa", 0.015, 0, z0 + 0.13));
+  s1.add(tub("CurdTub", 0.05, 0.075, F.tubWhite, F.lidWhite, "lbl_curd", 0.105, 0, z0 + 0.155));
+  s1.add(jar("ChutneyJar", 0.034, 0.085, F.coconutFlesh, F.lidBlue, null, 0.2, 0, z0 + 0.15));
   s1.add(cyl("SambarVessel", 0.065, 0.06, 0.09, F.steel, 0.07, 0, z0 + 0.02).translateY(0.045));
   s1.add(cyl("SambarSurface", 0.058, 0.058, 0.004, F.soup, 0.07, 0.088, z0 + 0.02));
   s1.add(plane("SambarLabel", 0.07, 0.035, lbl("lbl_sambar"), 0.07, 0.0925, z0 + 0.02).rotateX(-Math.PI / 2));
@@ -402,14 +403,15 @@ const fridgeDoor = doorShell("FridgeDoor", frLow, frTop - frLow, (g) => {
   for (let i = 0; i < 6; i++) g.add(egg("Egg", -0.115 - i * 0.056, eggY + 0.034, -0.038));
   // bottles: two 1 L water bottles, a 2 L cola, a filter-coffee decoction bottle, milk sachets lying beside
   g.add(bottle("Water1", 0.0345, 0.265, F.waterBottle, F.waterCap, -0.1, botY + 0.004, -0.045));
-  g.add(bottle("Water2", 0.0345, 0.265, F.waterBottle, F.waterCap, -0.172, botY + 0.004, -0.045));
   g.add(bottle("Water3", 0.0345, 0.265, F.waterBottle, F.waterCap, -0.1, botY + 0.004, -0.0125));
-  g.add(bottle("Cola2L", 0.046, 0.33, F.cola, F.colaCap, -0.255, botY + 0.004, -0.05));
+  { const c2 = bottle("Cola2L", 0.046, 0.33, F.cola, F.colaCap, -0.255, botY + 0.004, -0.05); c2.add(band("ColaPrint", 0.046, 0.11, Math.PI * 2, lbl("bottle_coke"), 0, 0.125, 0)); g.add(c2); }
+  { const f2 = bottle("Fanta2L", 0.042, 0.30, F.fanta, F.fantaCap, -0.178, botY + 0.004, -0.05); f2.add(band("FantaPrint", 0.042, 0.1, Math.PI * 2, lbl("bottle_fanta"), 0, 0.115, 0)); g.add(f2); }
   { const cf = group("CoffeeBottle", -0.335, botY + 0.004, -0.045); cf.add(cyl("CoffeeGlass", 0.032, 0.032, 0.17, F.brownGlass, 0, 0.085, 0, 14)); cf.add(cyl("CoffeeNeck", 0.016, 0.032, 0.03, F.brownGlass, 0, 0.185, 0, 14)); cf.add(cyl("CoffeeCap", 0.018, 0.018, 0.014, F.goldLid, 0, 0.207, 0, 12)); cf.add(plane("CoffeeLabel", 0.05, 0.075, lbl("lbl_coffee"), 0, 0.09, 0.0325)); g.add(cf); }
   g.add(jar("PickleJar", 0.032, 0.11, F.redGlass, F.goldLid, "lbl_pickle", -0.405, botY + 0.004, -0.045));
   // cans in the lower basket
-  const cans = [F.canRed, F.canGreen, F.canGold, F.canRed, F.canGreen, F.canGold];
-  cans.forEach((m, i) => g.add(can("Can", m, -0.075 - i * 0.075, canY + 0.004, -0.04)));
+  // Coke, Fanta, Thums Up and Sprite cans, each wrapped with its own print
+  const cans = [[F.canRed, "can_coke"], [F.canOrange, "can_fanta"], [F.canBlack, "can_thumsup"], [F.canRed, "can_coke"], [F.canOrange, "can_fanta"], [F.canGreen, "can_sprite"]];
+  cans.forEach(([m, tex], i) => { const c = can("Can", m, -0.075 - i * 0.075, canY + 0.004, -0.04); c.add(band("CanPrint", 0.0333, 0.1, Math.PI * 2, lbl(tex), 0, 0.061, 0)); g.add(c); });
   // a jar of ghee and a milk sachet in the egg basket's end
   g.add(jar("GheeJar", 0.03, 0.075, F.amber, F.goldLid, "lbl_ghee", -0.45, eggY + 0.004, -0.04));
   void sachet;

@@ -1,0 +1,189 @@
+{
+  "products": [
+    {
+      "id": "voltas-183inv-vertis-ai-zest-gold",
+      "brand": "Voltas",
+      "brandLogo": "/logos/voltas.png",
+      "category": "Air conditioner",
+      "model": "183INV Vertis AI Zest Gold",
+      "name": "Voltas 1.5 ton 3-star Vertis AI Zest Gold inverter split AC",
+      "shortName": "1.5 ton Vertis AI Zest Gold AC",
+      "summary": "Swing the flap open to see the air outlet and its vanes, then hang it on your wall at its real size.",
+      "arTip": "Tap the flap under the gold line to open it",
+      "glb": "/models/voltas-183inv-vertis-ai-zest-gold.glb",
+      "thumb": "/photos/voltas-183inv-vertis-ai-zest-gold/0.jpg",
+      "photos": [
+        "/photos/voltas-183inv-vertis-ai-zest-gold/0.jpg",
+        "/photos/voltas-183inv-vertis-ai-zest-gold/1.jpg",
+        "/photos/voltas-183inv-vertis-ai-zest-gold/2.jpg",
+        "/photos/voltas-183inv-vertis-ai-zest-gold/3.jpg"
+      ],
+      "placement": "wall",
+      "arLabel": "View on your wall",
+      "orbit": "-22deg 82deg 128%",
+      "finishes": [
+        {
+          "name": "White and gold",
+          "swatchColor": "#f3f3f4",
+          "usdz": "/models/usdz/voltas-183inv-vertis-ai-zest-gold-white-and-gold.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "louvre",
+          "label": "flap",
+          "node": "Louvre",
+          "axis": "x",
+          "angle": -52,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.4,
+                0.029,
+                0.157
+              ],
+              [
+                0.4,
+                0.082,
+                0.222
+              ]
+            ],
+            "open": [
+              [
+                -0.4,
+                0.03,
+                0.117
+              ],
+              [
+                0.4,
+                0.114,
+                0.199
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "92 cm",
+        "h": "31 cm",
+        "d": "23 cm"
+      },
+      "sizeNote": "Indoor unit. Outdoor unit 83.5 x 55.5 x 29.5 cm",
+      "specs": [
+        [
+          "Capacity",
+          "1.5 ton, 5100 W"
+        ],
+        [
+          "Energy rating",
+          "3 star, ISEER 4.30"
+        ],
+        [
+          "Power use",
+          "918.84 units a year"
+        ],
+        [
+          "Compressor",
+          "Inverter, variable speed"
+        ],
+        [
+          "Smart features",
+          "AI Adaptive Cooling, AI Energy Manager, Geofencing"
+        ],
+        [
+          "Modes",
+          "6 step adjustable mode, Super Silent mode"
+        ],
+        [
+          "Airflow",
+          "4-way swing"
+        ],
+        [
+          "Cleaning",
+          "Ice Wash technology, filter clean indicator"
+        ],
+        [
+          "Filter",
+          "Anti-dust filter with anti-microbial coating"
+        ],
+        [
+          "Coils",
+          "Gold fin evaporator, anti-corrosive gold fin condenser"
+        ],
+        [
+          "Outdoor cooling",
+          "Cools even at 52 degrees C"
+        ],
+        [
+          "Warranty",
+          "1 year product, 10 years compressor"
+        ]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://www.voltas.com",
+      "hotspots": [
+        {
+          "title": "AI Adaptive Cooling",
+          "text": "Senses the room and sets the cooling for you, with Geofencing and an AI Energy Manager.",
+          "pos": [
+            0,
+            0.222,
+            0.226
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        },
+        {
+          "title": "Ice Wash technology",
+          "text": "Freezes and rinses the indoor coil to keep it clean and the air fresh.",
+          "pos": [
+            -0.25,
+            0.2,
+            0.226
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        },
+        {
+          "title": "4-way swing",
+          "text": "The flap and the vertical vanes move the air up, down, left and right.",
+          "pos": [
+            -0.3,
+            0.062,
+            0.2
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "louvre"
+        },
+        {
+          "title": "Gold fin coating",
+          "text": "A gold fin coat on the evaporator and an anti-corrosive gold fin condenser.",
+          "pos": [
+            0.46,
+            0.15,
+            0.11
+          ],
+          "normal": [
+            1,
+            0,
+            0
+          ],
+          "show": "always"
+        }
+      ]
+    }
+  ]
+}

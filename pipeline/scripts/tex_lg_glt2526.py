@@ -145,18 +145,39 @@ def main():
             d.text((size[0] // 2, y * (i + 1)), txt, font=font(px, face), fill=fg, anchor="mm")
         save(im, name, 90)
     label("lbl_curd.jpg", [("CURD", 120, 0), ("fresh set curd", 48, 7)], (240, 244, 250), (28, 78, 150))
-    label("lbl_batter.jpg", [("IDLI", 120, 0), ("DOSA BATTER", 60, 0)], (255, 245, 214), (150, 60, 20))
+    label("lbl_idli.jpg", [("IDLI", 120, 0), ("BATTER", 78, 0)], (255, 245, 214), (150, 60, 20))
+    label("lbl_dosa.jpg", [("DOSA", 120, 0), ("BATTER", 78, 0)], (250, 232, 190), (120, 70, 20))
     label("lbl_ghee.jpg", [("GHEE", 130, 0), ("pure cow ghee", 48, 7)], (255, 236, 160), (110, 60, 10))
     label("lbl_coffee.jpg", [("FILTER", 100, 0), ("COFFEE", 100, 0), ("decoction", 44, 7)], (62, 36, 22), (245, 220, 180), (512, 320))
     label("lbl_pickle.jpg", [("PICKLE", 120, 0), ("mango", 52, 7)], (196, 52, 40), (255, 240, 220))
     label("lbl_milk.jpg", [("MILK", 150, 0), ("toned  500 ml", 50, 7)], (232, 242, 252), (30, 80, 160), (512, 320))
     label("lbl_butter.jpg", [("BUTTER", 90, 0), ("salted", 44, 7)], (255, 218, 80), (140, 30, 20), (400, 200))
     label("lbl_paneer.jpg", [("PANEER", 96, 0)], (250, 250, 244), (70, 110, 70), (400, 200))
-    label("lbl_icecream.jpg", [("ICE CREAM", 90, 0), ("chocolate", 48, 7)], (120, 62, 36), (255, 238, 214), (512, 256))
-    label("lbl_icecream2.jpg", [("ICE CREAM", 90, 0), ("vanilla", 48, 7)], (246, 232, 190), (170, 40, 36), (512, 256))
-    label("lbl_peas.jpg", [("GREEN PEAS", 84, 0), ("frozen", 44, 7)], (58, 150, 70), (255, 255, 255), (400, 300))
-    label("lbl_parotta.jpg", [("PAROTTA", 92, 0), ("frozen", 44, 7)], (232, 160, 70), (90, 36, 10), (400, 300))
+    label("lbl_icecream.jpg", [("ICE CREAM", 70, 0), ("chocolate", 48, 7)], (120, 62, 36), (255, 238, 214), (512, 256))
+    label("lbl_icecream2.jpg", [("ICE CREAM", 70, 0), ("vanilla", 48, 7)], (246, 232, 190), (170, 40, 36), (512, 256))
+    label("lbl_peas.jpg", [("GREEN PEAS", 60, 0), ("frozen", 44, 7)], (58, 150, 70), (255, 255, 255), (400, 300))
+    label("lbl_parotta.jpg", [("PAROTTA", 72, 0), ("frozen", 44, 7)], (232, 160, 70), (90, 36, 10), (400, 300))
     label("lbl_sambar.jpg", [("SAMBAR", 100, 0)], (214, 214, 218), (60, 60, 64), (400, 200))
+    # ── soft-drink cans and 2 L bottles: wraps for the cylinder, the name centred on the front (u = 0.5) ──
+    AV = "/System/Library/Fonts/Avenir Next.ttc"
+    def wrap(name, size, bg, text, fg, face, px, stripes=(), sub=None):
+        im = Image.new("RGB", size, bg)
+        d = ImageDraw.Draw(im)
+        for y0, y1, c in stripes:
+            d.rectangle((0, round(size[1] * y0), size[0], round(size[1] * y1)), fill=c)
+        f = ImageFont.truetype(AV, px, index=face)
+        d.text((size[0] // 2, size[1] // 2), text, font=f, fill=fg, anchor="mm")
+        if sub:
+            d.text((size[0] // 2, round(size[1] * 0.66)), sub, font=ImageFont.truetype(AV, round(px * 0.34), index=0), fill=fg, anchor="mm")
+        save(im, name, 90)
+    for nm, bg, tx, fg, face, st, sub in [
+        ("can_coke", (206, 24, 32), "Coca-Cola", (255, 255, 255), 1, [(0.0, 0.07, (240, 240, 240)), (0.93, 1.0, (240, 240, 240))], None),
+        ("can_fanta", (242, 122, 18), "FANTA", (255, 255, 255), 9, [(0.0, 0.07, (36, 78, 160)), (0.93, 1.0, (36, 78, 160))], "ORANGE"),
+        ("can_thumsup", (24, 24, 30), "THUMS UP", (230, 36, 36), 9, [(0.0, 0.07, (230, 36, 36)), (0.93, 1.0, (230, 36, 36))], None),
+        ("can_sprite", (14, 150, 72), "SPRITE", (255, 255, 255), 9, [(0.0, 0.07, (255, 224, 40)), (0.93, 1.0, (255, 224, 40))], "LEMON-LIME")]:
+        wrap(nm + ".jpg", (1024, 600), bg, tx, fg, face, 120, st, sub)
+    wrap("bottle_coke.jpg", (1024, 400), (206, 24, 32), "Coca-Cola", (255, 255, 255), 1, 110, [], "2.25 L")
+    wrap("bottle_fanta.jpg", (1024, 400), (242, 122, 18), "FANTA", (255, 255, 255), 9, 120, [], "ORANGE  2.25 L")
     # coconut and watermelon skins, vegetables: plain colours in the builder
 
 

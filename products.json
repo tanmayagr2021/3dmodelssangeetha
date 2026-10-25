@@ -495,6 +495,281 @@
       }
     },
     {
+      "id": "lg-glt3426snpz",
+      "brand": "LG",
+      "brandLogo": "/logos/lg.png",
+      "category": "Refrigerator",
+      "model": "GLT3426SNPZ",
+      "name": "LG 343 L double-door refrigerator with Smart Inverter Compressor",
+      "shortName": "343 L double-door refrigerator",
+      "summary": "Open the freezer, slide the ice tray out and open the fridge, look inside, then stand it in your kitchen at its real size.",
+      "arTip": "Tap a door to open it",
+      "glb": "/models/lg-glt3426snpz.glb",
+      "thumb": "/photos/lg-glt3426snpz/0.jpg",
+      "photos": [
+        "/photos/lg-glt3426snpz/0.jpg",
+        "/photos/lg-glt3426snpz/1.jpg",
+        "/photos/lg-glt3426snpz/2.jpg",
+        "/photos/lg-glt3426snpz/3.jpg"
+      ],
+      "placement": "floor",
+      "arLabel": "View in your kitchen",
+      "orbit": "-28deg 78deg 135%",
+      "finishes": [
+        {
+          "name": "Shiny Steel",
+          "swatchColor": "#b4b5b7",
+          "usdz": "/models/usdz/lg-glt3426snpz-shiny-steel.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "freezer",
+          "label": "freezer",
+          "node": "FreezerDoor",
+          "axis": "y",
+          "angle": 135,
+          "zone": {
+            "closed": [
+              [
+                -0.296,
+                1.185,
+                0.24
+              ],
+              [
+                0.3,
+                1.72,
+                0.356
+              ]
+            ],
+            "open": [
+              [
+                0.286,
+                1.185,
+                0.278
+              ],
+              [
+                0.753,
+                1.72,
+                0.746
+              ]
+            ]
+          }
+        },
+        {
+          "key": "icemaker",
+          "label": "ice tray",
+          "node": "IceMaker",
+          "slide": [
+            0,
+            0,
+            0.16
+          ],
+          "needs": "freezer",
+          "zone": {
+            "closed": [
+              [
+                -0.265,
+                1.204,
+                0.07
+              ],
+              [
+                -0.089,
+                1.348,
+                0.279
+              ]
+            ],
+            "open": [
+              [
+                -0.265,
+                1.204,
+                0.23
+              ],
+              [
+                -0.089,
+                1.348,
+                0.439
+              ]
+            ]
+          }
+        },
+        {
+          "key": "fridge",
+          "label": "fridge",
+          "node": "FridgeDoor",
+          "axis": "y",
+          "angle": 135,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.296,
+                0.028,
+                0.213
+              ],
+              [
+                0.3,
+                1.178,
+                0.355
+              ]
+            ],
+            "open": [
+              [
+                0.275,
+                0.028,
+                0.278
+              ],
+              [
+                0.753,
+                1.178,
+                0.756
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "60 cm",
+        "h": "172 cm",
+        "d": "71 cm"
+      },
+      "sizeNote": "Both doors open to about 135 degrees",
+      "specs": [
+        [
+          "Total capacity",
+          "343 L (freezer 81 L, fridge 262 L)"
+        ],
+        [
+          "Type",
+          "Frost free, double door"
+        ],
+        [
+          "Convertible",
+          "Yes"
+        ],
+        [
+          "Energy rating",
+          "2 star, 245 units a year"
+        ],
+        [
+          "Compressor",
+          "Smart Inverter (BLDC), 10 years on the compressor"
+        ],
+        [
+          "Cooling",
+          "Multi Air Flow"
+        ],
+        [
+          "Fresh zones",
+          "Fresh 0 Zone pull-out tray and a Fresh Zone drawer"
+        ],
+        [
+          "Shelves",
+          "3 tempered glass (fridge), 1 (freezer)"
+        ],
+        [
+          "Door baskets",
+          "2 in the freezer, 4 in the fridge, transparent"
+        ],
+        [
+          "Ice maker",
+          "Manual, 1 lever and 2 trays, a moving ice tray"
+        ],
+        [
+          "Control",
+          "Manual, Express Freeze, door alarm"
+        ],
+        [
+          "Display",
+          "Inner dot display (internal LED)"
+        ],
+        [
+          "Handle",
+          "Pocket, black decor"
+        ],
+        [
+          "Light",
+          "Top LED"
+        ],
+        [
+          "Smart",
+          "Smart Diagnosis, Auto Smart Connect"
+        ],
+        [
+          "Weight",
+          "61 kg"
+        ]
+      ],
+      "sangeethaUrl": "https://www.sangeetha.com/product-details/lg-343l-double-door-refrigerator-convertible-smart-diagnosis-multi-air-flow-2-star-or-shiny-steel-glt3426snpz-apzzebn/21040",
+      "source": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt3426snpz/",
+      "hotspots": [
+        {
+          "title": "Convertible",
+          "text": "Convert a section of the freezer to more refrigeration as needed to keep foods fresher for longer.",
+          "pos": [
+            -0.06,
+            1.485,
+            -0.2985
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "freezer"
+        },
+        {
+          "title": "Moving Ice Tray",
+          "text": "The sliding ice tray can be moved to the left or right to position it in your preferred location.",
+          "pos": [
+            -0.18,
+            1.385,
+            0.2945
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "freezer"
+        },
+        {
+          "title": "Multi Air Flow",
+          "text": "Digital sensors constantly monitor conditions inside the refrigerator, and vents are strategically placed to surround your food with cool air.",
+          "pos": [
+            -0.04,
+            0.905,
+            -0.2985
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "fridge"
+        },
+        {
+          "title": "Smart Inverter Compressor",
+          "text": "Adjusts cooling performance efficiently, with a 10-year warranty on the compressor part.",
+          "pos": [
+            0,
+            0.9,
+            0.355
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!fridge"
+        }
+      ],
+      "fit": {
+        "back": 5,
+        "note": "From LG's owner's manual for its double-door range: keep at least 5 cm between the back and the wall. The 343 L model's own door swing is not published; the doors open about 135 degrees in this model."
+      }
+    },
+    {
       "id": "lg-fhp1412z9b",
       "brand": "LG",
       "brandLogo": "/logos/lg.png",
@@ -958,6 +1233,276 @@
       }
     },
     {
+      "id": "bosch-wga1420pin",
+      "brand": "Bosch",
+      "brandLogo": "/logos/bosch.png",
+      "category": "Washing machine",
+      "model": "WGA1420PIN",
+      "name": "Bosch Series 6 front-load 9 kg washing machine with Anti Stain",
+      "shortName": "9 kg Series 6 front-load washer",
+      "summary": "Open the door to see the drum, pull out the detergent drawer and open the pump filter, then place it in your home at its real size.",
+      "arTip": "Tap the door, the drawer or the round flap to open it",
+      "glb": "/models/bosch-wga1420pin.glb",
+      "thumb": "/photos/bosch-wga1420pin/0.jpg",
+      "photos": [
+        "/photos/bosch-wga1420pin/0.jpg",
+        "/photos/bosch-wga1420pin/1.jpg",
+        "/photos/bosch-wga1420pin/2.jpg",
+        "/photos/bosch-wga1420pin/3.jpg"
+      ],
+      "placement": "floor",
+      "arLabel": "View in your home",
+      "orbit": "-26deg 76deg 118%",
+      "finishes": [
+        {
+          "name": "Dark Lake",
+          "swatchColor": "#4a5060",
+          "usdz": "/models/usdz/bosch-wga1420pin-dark-lake.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "drawer",
+          "label": "drawer",
+          "node": "Drawer",
+          "slide": [
+            0,
+            0,
+            0.21
+          ],
+          "zone": {
+            "closed": [
+              [
+                -0.262,
+                0.742,
+                0.081
+              ],
+              [
+                -0.091,
+                0.821,
+                0.303
+              ]
+            ],
+            "open": [
+              [
+                -0.262,
+                0.742,
+                0.291
+              ],
+              [
+                -0.091,
+                0.821,
+                0.513
+              ]
+            ]
+          }
+        },
+        {
+          "key": "door",
+          "label": "door",
+          "node": "Door",
+          "axis": "y",
+          "angle": -110,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.245,
+                0.21,
+                0.205
+              ],
+              [
+                0.245,
+                0.7,
+                0.341
+              ]
+            ],
+            "open": [
+              [
+                -0.474,
+                0.21,
+                0.245
+              ],
+              [
+                -0.212,
+                0.7,
+                0.716
+              ]
+            ]
+          }
+        },
+        {
+          "key": "filter",
+          "label": "pump filter",
+          "node": "FilterFlap",
+          "axis": "x",
+          "angle": 90,
+          "zone": {
+            "closed": [
+              [
+                0.115,
+                0.016,
+                0.295
+              ],
+              [
+                0.27,
+                0.171,
+                0.304
+              ]
+            ],
+            "open": [
+              [
+                0.115,
+                0.008,
+                0.295
+              ],
+              [
+                0.27,
+                0.016,
+                0.45
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "59.8 cm",
+        "h": "84.8 cm",
+        "d": "59 cm"
+      },
+      "sizeNote": "63.6 cm deep with the door, 104.9 cm with the door open at 90 degrees",
+      "specs": [
+        [
+          "Capacity",
+          "9 kg, 53 L drum"
+        ],
+        [
+          "Type",
+          "Front load, freestanding"
+        ],
+        [
+          "Max spin",
+          "1200 rpm"
+        ],
+        [
+          "Motor",
+          "EcoSilence Drive (SilentPowerDrive)"
+        ],
+        [
+          "Anti Stain",
+          "Anti Stain Plus, up to 16 kinds of stain"
+        ],
+        [
+          "Hygiene",
+          "Steam, 99.99% bacterial reduction"
+        ],
+        [
+          "Allergy",
+          "Allergy Plus"
+        ],
+        [
+          "Speed",
+          "SpeedPerfect"
+        ],
+        [
+          "Programmes",
+          "Cottons, Cottons 60° Label, Synthetics, Mix Load, Delicates/Silk, Wool, Quick 15/30 min, Steam/Anti Bacteria, Jeans/Dark Wash, Sportswear, Shirts, Rinse, Spin/Drain, Drum Descale"
+        ],
+        [
+          "Display",
+          "LED display with 7-segment time"
+        ],
+        [
+          "Smart",
+          "Loading sensor, reload function, balance control, water protection"
+        ],
+        [
+          "Noise",
+          "54 dB(A) washing"
+        ],
+        [
+          "Side panels",
+          "Anti-Vibration"
+        ],
+        [
+          "Supply",
+          "220-240 V, 2300 W, 160 cm cord"
+        ],
+        [
+          "Weight",
+          "72.1 kg"
+        ]
+      ],
+      "sangeethaUrl": "https://www.sangeetha.com/product-details/bosch-series-6-front-load-9-kg-washing-machine-or-anti-stain-or-iron-steam-assist-or-blue-or-wga1420pin-wga1420pin/21198",
+      "source": "https://www.bosch-home.in/en/product/washer-dryer/washing-machines/front-loading-washing-machines/WGA1420PIN",
+      "hotspots": [
+        {
+          "title": "Anti-Vibration Side Panels",
+          "text": "Reduce vibrations and ensure greater stability during the washing and spinning process.",
+          "pos": [
+            0.299,
+            0.43,
+            0
+          ],
+          "normal": [
+            1,
+            0,
+            0
+          ],
+          "show": "always"
+        },
+        {
+          "title": "99.99% bacterial reduction",
+          "text": "The Steam / Anti Bacteria programme reduces bacteria by 99.99%.",
+          "pos": [
+            0.14,
+            0.806,
+            0.298
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!door"
+        },
+        {
+          "title": "Anti Stain Plus",
+          "text": "Removes up to 16 kinds of stubborn stains without pre-treatment.",
+          "pos": [
+            0.1016,
+            0.752,
+            0.298
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!door"
+        },
+        {
+          "title": "EcoSilence Drive",
+          "text": "The efficient and highly durable washing machine drive.",
+          "pos": [
+            0,
+            0.455,
+            -0.05
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "door"
+        }
+      ],
+      "fit": {
+        "front": 46,
+        "note": "From Bosch: 63.6 cm deep with the door closed and 104.9 cm with the door open at 90 degrees. Bosch's page and manual publish no side or back gaps; leave room for the hoses and the plug."
+      }
+    },
+    {
       "id": "carrier-19k-xceed-edge-gxi",
       "brand": "Carrier",
       "brandLogo": "/logos/carrier.png",
@@ -1160,6 +1705,191 @@
           "pos": [
             0.4925,
             0.18,
+            0.11
+          ],
+          "normal": [
+            1,
+            0,
+            0
+          ],
+          "show": "always"
+        }
+      ]
+    },
+    {
+      "id": "voltas-183inv-vertis-ai-zest-gold",
+      "brand": "Voltas",
+      "brandLogo": "/logos/voltas.png",
+      "category": "Air conditioner",
+      "model": "183INV Vertis AI Zest Gold",
+      "name": "Voltas 1.5 ton 3-star Vertis AI Zest Gold inverter split AC",
+      "shortName": "1.5 ton Vertis AI Zest Gold AC",
+      "summary": "Swing the flap open to see the air outlet and its vanes, then hang it on your wall at its real size.",
+      "arTip": "Tap the flap under the gold line to open it",
+      "glb": "/models/voltas-183inv-vertis-ai-zest-gold.glb",
+      "thumb": "/photos/voltas-183inv-vertis-ai-zest-gold/0.jpg",
+      "photos": [
+        "/photos/voltas-183inv-vertis-ai-zest-gold/0.jpg",
+        "/photos/voltas-183inv-vertis-ai-zest-gold/1.jpg",
+        "/photos/voltas-183inv-vertis-ai-zest-gold/2.jpg",
+        "/photos/voltas-183inv-vertis-ai-zest-gold/3.jpg"
+      ],
+      "placement": "wall",
+      "arLabel": "View on your wall",
+      "orbit": "-22deg 82deg 128%",
+      "finishes": [
+        {
+          "name": "White and gold",
+          "swatchColor": "#f3f3f4",
+          "usdz": "/models/usdz/voltas-183inv-vertis-ai-zest-gold-white-and-gold.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "louvre",
+          "label": "flap",
+          "node": "Louvre",
+          "axis": "x",
+          "angle": -52,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.4,
+                0.029,
+                0.157
+              ],
+              [
+                0.4,
+                0.082,
+                0.222
+              ]
+            ],
+            "open": [
+              [
+                -0.4,
+                0.03,
+                0.117
+              ],
+              [
+                0.4,
+                0.114,
+                0.199
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "92 cm",
+        "h": "31 cm",
+        "d": "23 cm"
+      },
+      "sizeNote": "Indoor unit. Outdoor unit 83.5 x 55.5 x 29.5 cm",
+      "specs": [
+        [
+          "Capacity",
+          "1.5 ton, 5100 W"
+        ],
+        [
+          "Energy rating",
+          "3 star, ISEER 4.30"
+        ],
+        [
+          "Power use",
+          "918.84 units a year"
+        ],
+        [
+          "Compressor",
+          "Inverter, variable speed"
+        ],
+        [
+          "Smart features",
+          "AI Adaptive Cooling, AI Energy Manager, Geofencing"
+        ],
+        [
+          "Modes",
+          "6 step adjustable mode, Super Silent mode"
+        ],
+        [
+          "Airflow",
+          "4-way swing"
+        ],
+        [
+          "Cleaning",
+          "Ice Wash technology, filter clean indicator"
+        ],
+        [
+          "Filter",
+          "Anti-dust filter with anti-microbial coating"
+        ],
+        [
+          "Coils",
+          "Gold fin evaporator, anti-corrosive gold fin condenser"
+        ],
+        [
+          "Outdoor cooling",
+          "Cools even at 52 degrees C"
+        ],
+        [
+          "Warranty",
+          "1 year product, 10 years compressor"
+        ]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://www.voltas.com",
+      "hotspots": [
+        {
+          "title": "AI Adaptive Cooling",
+          "text": "Senses the room and sets the cooling for you, with Geofencing and an AI Energy Manager.",
+          "pos": [
+            0,
+            0.222,
+            0.226
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        },
+        {
+          "title": "Ice Wash technology",
+          "text": "Freezes and rinses the indoor coil to keep it clean and the air fresh.",
+          "pos": [
+            -0.25,
+            0.2,
+            0.226
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        },
+        {
+          "title": "4-way swing",
+          "text": "The flap and the vertical vanes move the air up, down, left and right.",
+          "pos": [
+            -0.3,
+            0.062,
+            0.2
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "louvre"
+        },
+        {
+          "title": "Gold fin coating",
+          "text": "A gold fin coat on the evaporator and an anti-corrosive gold fin condenser.",
+          "pos": [
+            0.46,
+            0.15,
             0.11
           ],
           "normal": [

@@ -1,0 +1,142 @@
+{
+  "products": [
+    {
+      "id": "lg-glt3426snpz",
+      "brand": "LG",
+      "brandLogo": "/logos/lg.png",
+      "category": "Refrigerator",
+      "model": "GLT3426SNPZ",
+      "name": "LG 343 L double-door refrigerator with Smart Inverter Compressor",
+      "shortName": "343 L double-door refrigerator",
+      "summary": "Open the freezer, slide the ice tray out and open the fridge, look inside, then stand it in your kitchen at its real size.",
+      "arTip": "Tap a door to open it",
+      "glb": "/models/lg-glt3426snpz.glb",
+      "thumb": "/photos/lg-glt3426snpz/0.jpg",
+      "photos": ["/photos/lg-glt3426snpz/0.jpg", "/photos/lg-glt3426snpz/1.jpg", "/photos/lg-glt3426snpz/2.jpg", "/photos/lg-glt3426snpz/3.jpg"],
+      "placement": "floor",
+      "arLabel": "View in your kitchen",
+      "orbit": "-28deg 78deg 135%",
+      "finishes": [
+        {
+          "name": "Shiny Steel",
+          "swatchColor": "#b4b5b7",
+          "usdz": "/models/usdz/lg-glt3426snpz-shiny-steel.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "freezer",
+          "label": "freezer",
+          "node": "FreezerDoor",
+          "axis": "y",
+          "angle": 135,
+          "zone": {
+            "closed": [
+              [-0.296, 1.185, 0.24],
+              [0.3, 1.72, 0.356]
+            ],
+            "open": [
+              [0.286, 1.185, 0.278],
+              [0.753, 1.72, 0.746]
+            ]
+          }
+        },
+        {
+          "key": "icemaker",
+          "label": "ice tray",
+          "node": "IceMaker",
+          "slide": [0, 0, 0.16],
+          "needs": "freezer",
+          "zone": {
+            "closed": [
+              [-0.265, 1.204, 0.07],
+              [-0.089, 1.348, 0.279]
+            ],
+            "open": [
+              [-0.265, 1.204, 0.23],
+              [-0.089, 1.348, 0.439]
+            ]
+          }
+        },
+        {
+          "key": "fridge",
+          "label": "fridge",
+          "node": "FridgeDoor",
+          "axis": "y",
+          "angle": 135,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [-0.296, 0.028, 0.213],
+              [0.3, 1.178, 0.355]
+            ],
+            "open": [
+              [0.275, 0.028, 0.278],
+              [0.753, 1.178, 0.756]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "60 cm",
+        "h": "172 cm",
+        "d": "71 cm"
+      },
+      "sizeNote": "Both doors open to about 135 degrees",
+      "specs": [
+        ["Total capacity", "343 L (freezer 81 L, fridge 262 L)"],
+        ["Type", "Frost free, double door"],
+        ["Convertible", "Yes"],
+        ["Energy rating", "2 star, 245 units a year"],
+        ["Compressor", "Smart Inverter (BLDC), 10 years on the compressor"],
+        ["Cooling", "Multi Air Flow"],
+        ["Fresh zones", "Fresh 0 Zone pull-out tray and a Fresh Zone drawer"],
+        ["Shelves", "3 tempered glass (fridge), 1 (freezer)"],
+        ["Door baskets", "2 in the freezer, 4 in the fridge, transparent"],
+        ["Ice maker", "Manual, 1 lever and 2 trays, a moving ice tray"],
+        ["Control", "Manual, Express Freeze, door alarm"],
+        ["Display", "Inner dot display (internal LED)"],
+        ["Handle", "Pocket, black decor"],
+        ["Light", "Top LED"],
+        ["Smart", "Smart Diagnosis, Auto Smart Connect"],
+        ["Weight", "61 kg"]
+      ],
+      "sangeethaUrl": "https://www.sangeetha.com/product-details/lg-343l-double-door-refrigerator-convertible-smart-diagnosis-multi-air-flow-2-star-or-shiny-steel-glt3426snpz-apzzebn/21040",
+      "source": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt3426snpz/",
+      "hotspots": [
+        {
+          "title": "Convertible",
+          "text": "Convert a section of the freezer to more refrigeration as needed to keep foods fresher for longer.",
+          "pos": [-0.06, 1.485, -0.2985],
+          "normal": [0, 0, 1],
+          "show": "freezer"
+        },
+        {
+          "title": "Moving Ice Tray",
+          "text": "The sliding ice tray can be moved to the left or right to position it in your preferred location.",
+          "pos": [-0.18, 1.385, 0.2945],
+          "normal": [0, 0, 1],
+          "show": "freezer"
+        },
+        {
+          "title": "Multi Air Flow",
+          "text": "Digital sensors constantly monitor conditions inside the refrigerator, and vents are strategically placed to surround your food with cool air.",
+          "pos": [-0.04, 0.905, -0.2985],
+          "normal": [0, 0, 1],
+          "show": "fridge"
+        },
+        {
+          "title": "Smart Inverter Compressor",
+          "text": "Adjusts cooling performance efficiently, with a 10-year warranty on the compressor part.",
+          "pos": [0, 0.9, 0.355],
+          "normal": [0, 0, 1],
+          "show": "!fridge"
+        }
+      ],
+      "fit": {
+        "back": 5,
+        "note": "From LG's owner's manual for its double-door range: keep at least 5 cm between the back and the wall. The 343 L model's own door swing is not published; the doors open about 135 degrees in this model."
+      }
+    }
+  ]
+}

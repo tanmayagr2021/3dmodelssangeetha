@@ -171,20 +171,46 @@ function door(name, y0, h, frontMat, bins) {
   });
   return pivot;
 }
-// what sits in the door bins, so it swings out with the door
+// what sits in the door bins, so it swings out with the door: the cola and Fanta 2.25 L bottles, a bin of Coke, Fanta,
+// Thums Up and Sprite cans, ghee and pickle jars, eggs; frozen peas, parotta and ice cream in the freezer door
+const printMats = {};
+const printMat = (n) => (printMats[n] ||= mat(n, 0xffffff, { rough: 0.5 }));
+const wrap = (name, r, h, tex, x, y, z) => mesh(name, flipV(new THREE.CylinderGeometry(r + 0.0009, r + 0.0009, h, 18, 1, true, -Math.PI, Math.PI * 2)), printMat(tex), x, y, z);
+const cola = mat("ColaLiquid", 0x3a1f10, { rough: 0.15, opacity: 0.93 }), fanta = mat("FantaLiquid", 0xe8820e, { rough: 0.15, opacity: 0.93 });
+const canMats = { can_coke: mat("CanRed", 0xb82a20, { metal: 0.25, rough: 0.4 }), can_fanta: mat("CanOrange", 0xe07a12, { metal: 0.25, rough: 0.4 }), can_thumsup: mat("CanBlack", 0x1a1a1e, { metal: 0.25, rough: 0.4 }), can_sprite: mat("CanGreen", 0x218a40, { metal: 0.25, rough: 0.4 }) };
+const steelTop = mat("CanTop", 0xb9bbc0, { metal: 0.8, rough: 0.3 });
+const gheeGlass = mat("GheeGlass", 0xe0a93a, { rough: 0.15, opacity: 0.85 }), pickleGlass = mat("PickleGlass", 0xb8301f, { rough: 0.15, opacity: 0.88 }), goldLid = mat("JarLid", 0xc9a23a, { metal: 0.4, rough: 0.4 });
 function stock(pivot, name, bins) {
   const z = -0.06;
   if (name === "FridgeDoor") {
-    [-0.47, -0.39, -0.31].forEach((x, i) => pivot.add(bottle(`Bottle${i}`, 0.26, 0.032, i === 1 ? food.juice : food.bottle, x, bins[0] - 0.037, z)));
-    [-0.2, -0.13].forEach((x, i) => pivot.add(bottle(`Juice${i}`, 0.2, 0.03, food.juice, x, bins[0] - 0.037, z)));
-    [-0.45, -0.36, -0.27, -0.18].forEach((x, i) => pivot.add(mesh(`Jar${i}`, new THREE.CylinderGeometry(0.03, 0.03, 0.09, 14), i % 2 ? food.red : food.yellow, x, bins[1] + 0.008, z)));
+    const c2 = bottle("Cola2L", 0.3, 0.04, cola, -0.47, bins[0] - 0.037, z); c2.add(wrap("ColaPrint", 0.04, 0.1, "bottle_coke", 0, 0.115, 0)); pivot.add(c2);
+    const f2 = bottle("Fanta2L", 0.3, 0.04, fanta, -0.385, bins[0] - 0.037, z); f2.add(wrap("FantaPrint", 0.04, 0.1, "bottle_fanta", 0, 0.115, 0)); pivot.add(f2);
+    [-0.31, -0.24].forEach((x, i) => pivot.add(bottle(`Water${i}`, 0.26, 0.032, food.bottle, x, bins[0] - 0.037, z)));
+    [-0.17, -0.1].forEach((x, i) => pivot.add(bottle(`Juice${i}`, 0.2, 0.03, food.juice, x, bins[0] - 0.037, z)));
+    [-0.45, -0.36, -0.27, -0.18].forEach((x, i) => {
+      const j = group(`Jar${i}`, x, bins[1] + 0.008, z);
+      j.add(mesh(`JarGlass${i}`, new THREE.CylinderGeometry(0.03, 0.03, 0.09, 14), i % 2 ? pickleGlass : gheeGlass, 0, 0, 0));
+      j.add(mesh(`JarLid${i}`, new THREE.CylinderGeometry(0.031, 0.031, 0.012, 14), goldLid, 0, 0.051, 0));
+      j.add(wrap(`JarPrint${i}`, 0.03, 0.05, i % 2 ? "lbl_pickle" : "lbl_ghee", 0, 0, 0));
+      pivot.add(j);
+    });
+    Object.keys(canMats).concat(["can_coke", "can_fanta"]).forEach((t, i) => {
+      const c = group("Can", -0.45 + i * 0.075, bins[2] - 0.02, z);
+      c.add(mesh("CanBody", new THREE.CylinderGeometry(0.0333, 0.0333, 0.122, 14), canMats[t], 0, 0.061, 0));
+      c.add(mesh("CanTop", new THREE.CylinderGeometry(0.0285, 0.0333, 0.008, 14), steelTop, 0, 0.126, 0));
+      c.add(wrap("CanPrint", 0.0333, 0.1, t, 0, 0.061, 0));
+      pivot.add(c);
+    });
     for (let i = 0; i < 6; i++) {
       const egg = sphere(`Egg${i}`, 0.022, food.white, -0.48 + i * 0.05, bins[3] - 0.01, z);
       egg.scale.set(1, 1.3, 1);
       pivot.add(egg);
     }
   } else {
-    [-0.44, -0.32, -0.2].forEach((x, i) => pivot.add(box(`Pack${i}`, 0.09, 0.06, 0.06, i % 2 ? food.orange : food.lid, x, bins[0] - 0.005, z)));
+    [["lbl_peas", -0.44], ["lbl_parotta", -0.32], ["lbl_icecream", -0.2]].forEach(([t, x], i) => {
+      pivot.add(box(`Pack${i}`, 0.09, 0.06, 0.06, i % 2 ? food.orange : food.lid, x, bins[0] - 0.005, z));
+      pivot.add(mesh(`PackPrint${i}`, flipV(new THREE.PlaneGeometry(0.084, 0.054)), printMat(t), x, bins[0] - 0.005, z + 0.0306));
+    });
   }
 }
 const fridgeBins = [0.16, 0.42, 0.68, 0.93], freezerBins = [0.14, 0.36];
@@ -204,4 +230,5 @@ await exportGLB(root, clips, OUT, {
   SideBrushed: `${TEX}/samsung/side.jpg`,
   Rear: `${TEX}/samsung/rear.jpg`,
   Bay: `${TEX}/samsung/bay.jpg`,
+  ...Object.fromEntries(Object.keys(printMats).map((n) => [n, `${TEX}/lg_glt3426/${n}.jpg`])),
 });

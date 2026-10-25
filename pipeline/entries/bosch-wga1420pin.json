@@ -1,0 +1,140 @@
+{
+  "products": [
+    {
+      "id": "bosch-wga1420pin",
+      "brand": "Bosch",
+      "brandLogo": "/logos/bosch.png",
+      "category": "Washing machine",
+      "model": "WGA1420PIN",
+      "name": "Bosch Series 6 front-load 9 kg washing machine with Anti Stain",
+      "shortName": "9 kg Series 6 front-load washer",
+      "summary": "Open the door to see the drum, pull out the detergent drawer and open the pump filter, then place it in your home at its real size.",
+      "arTip": "Tap the door, the drawer or the round flap to open it",
+      "glb": "/models/bosch-wga1420pin.glb",
+      "thumb": "/photos/bosch-wga1420pin/0.jpg",
+      "photos": ["/photos/bosch-wga1420pin/0.jpg", "/photos/bosch-wga1420pin/1.jpg", "/photos/bosch-wga1420pin/2.jpg", "/photos/bosch-wga1420pin/3.jpg"],
+      "placement": "floor",
+      "arLabel": "View in your home",
+      "orbit": "-26deg 76deg 118%",
+      "finishes": [
+        {
+          "name": "Dark Lake",
+          "swatchColor": "#4a5060",
+          "usdz": "/models/usdz/bosch-wga1420pin-dark-lake.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "drawer",
+          "label": "drawer",
+          "node": "Drawer",
+          "slide": [0, 0, 0.21],
+          "zone": {
+            "closed": [
+              [-0.262, 0.742, 0.081],
+              [-0.091, 0.821, 0.303]
+            ],
+            "open": [
+              [-0.262, 0.742, 0.291],
+              [-0.091, 0.821, 0.513]
+            ]
+          }
+        },
+        {
+          "key": "door",
+          "label": "door",
+          "node": "Door",
+          "axis": "y",
+          "angle": -110,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [-0.245, 0.21, 0.205],
+              [0.245, 0.7, 0.341]
+            ],
+            "open": [
+              [-0.474, 0.21, 0.245],
+              [-0.212, 0.7, 0.716]
+            ]
+          }
+        },
+        {
+          "key": "filter",
+          "label": "pump filter",
+          "node": "FilterFlap",
+          "axis": "x",
+          "angle": 90,
+          "zone": {
+            "closed": [
+              [0.115, 0.016, 0.295],
+              [0.27, 0.171, 0.304]
+            ],
+            "open": [
+              [0.115, 0.008, 0.295],
+              [0.27, 0.016, 0.45]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "59.8 cm",
+        "h": "84.8 cm",
+        "d": "59 cm"
+      },
+      "sizeNote": "63.6 cm deep with the door, 104.9 cm with the door open at 90 degrees",
+      "specs": [
+        ["Capacity", "9 kg, 53 L drum"],
+        ["Type", "Front load, freestanding"],
+        ["Max spin", "1200 rpm"],
+        ["Motor", "EcoSilence Drive (SilentPowerDrive)"],
+        ["Anti Stain", "Anti Stain Plus, up to 16 kinds of stain"],
+        ["Hygiene", "Steam, 99.99% bacterial reduction"],
+        ["Allergy", "Allergy Plus"],
+        ["Speed", "SpeedPerfect"],
+        ["Programmes", "Cottons, Cottons 60° Label, Synthetics, Mix Load, Delicates/Silk, Wool, Quick 15/30 min, Steam/Anti Bacteria, Jeans/Dark Wash, Sportswear, Shirts, Rinse, Spin/Drain, Drum Descale"],
+        ["Display", "LED display with 7-segment time"],
+        ["Smart", "Loading sensor, reload function, balance control, water protection"],
+        ["Noise", "54 dB(A) washing"],
+        ["Side panels", "Anti-Vibration"],
+        ["Supply", "220-240 V, 2300 W, 160 cm cord"],
+        ["Weight", "72.1 kg"]
+      ],
+      "sangeethaUrl": "https://www.sangeetha.com/product-details/bosch-series-6-front-load-9-kg-washing-machine-or-anti-stain-or-iron-steam-assist-or-blue-or-wga1420pin-wga1420pin/21198",
+      "source": "https://www.bosch-home.in/en/product/washer-dryer/washing-machines/front-loading-washing-machines/WGA1420PIN",
+      "hotspots": [
+        {
+          "title": "Anti-Vibration Side Panels",
+          "text": "Reduce vibrations and ensure greater stability during the washing and spinning process.",
+          "pos": [0.299, 0.43, 0],
+          "normal": [1, 0, 0],
+          "show": "always"
+        },
+        {
+          "title": "99.99% bacterial reduction",
+          "text": "The Steam / Anti Bacteria programme reduces bacteria by 99.99%.",
+          "pos": [0.14, 0.806, 0.298],
+          "normal": [0, 0, 1],
+          "show": "!door"
+        },
+        {
+          "title": "Anti Stain Plus",
+          "text": "Removes up to 16 kinds of stubborn stains without pre-treatment.",
+          "pos": [0.1016, 0.752, 0.298],
+          "normal": [0, 0, 1],
+          "show": "!door"
+        },
+        {
+          "title": "EcoSilence Drive",
+          "text": "The efficient and highly durable washing machine drive.",
+          "pos": [0, 0.455, -0.05],
+          "normal": [0, 0, 1],
+          "show": "door"
+        }
+      ],
+      "fit": {
+        "front": 46,
+        "note": "From Bosch: 63.6 cm deep with the door closed and 104.9 cm with the door open at 90 degrees. Bosch's page and manual publish no side or back gaps; leave room for the hoses and the plug."
+      }
+    }
+  ]
+}
