@@ -8,6 +8,7 @@
 // usage: node make_lg_glt2526.mjs <products.json> <tex dir> <out.glb>
 import fs from "node:fs";
 import { THREE, mat, mesh, box, faced, group, flipV, stateClips, exportGLB, productParts, saveZones } from "./lib.mjs";
+import { LGStock } from "./stock_lg.mjs";
 
 const [PRODUCTS, TEX, OUT] = process.argv.slice(2);
 const ID = "lg-glt2526xwpz";
@@ -84,6 +85,7 @@ const F = {
 };
 const labelMats = {};
 const lbl = (name) => (labelMats[name] ||= mat(name, 0xffffff, { rough: 0.5 }));
+const stock = LGStock({ T3: `${TEX}/lg_glt3426`, TF: `${TEX}/food` });
 
 // ── small builders ──
 const cyl = (name, rt, rb, h, m, x, y, z, seg = 12) => mesh(name, new THREE.CylinderGeometry(rt, rb, h, seg), m, x, y, z);
@@ -226,15 +228,7 @@ cab.add(box("FridgeLed", 0.2, 0.006, 0.016, lightM, 0, gy1 - 0.006, zFront - 0.1
   g.add(box("TfzFrontRail", bw, 0.01, 0.008, glassRim, 0, 0.006, zc + bd / 2));
   cab.add(g);
   // butter, paneer and curd cups in its sections
-  const s = group("TfzStock", 0, 0.871, zc + 0.04);
-  s.add(box("Butter1", 0.09, 0.03, 0.05, F.butter, -0.165, 0.015, -0.03));
-  s.add(box("Butter2", 0.09, 0.03, 0.05, F.butter, -0.165, 0.015, 0.05));
-  s.add(plane("ButterLabel", 0.07, 0.035, lbl("lbl_butter"), -0.165, 0.0305, 0.05).rotateX(-Math.PI / 2));
-  s.add(box("Paneer", 0.1, 0.05, 0.12, F.coconutFlesh, 0.0, 0.025, -0.02));
-  s.add(plane("PaneerLabel", 0.075, 0.04, lbl("lbl_paneer"), 0, 0.0505, -0.02).rotateX(-Math.PI / 2));
-  for (const [cx, cz] of [[0.145, -0.05], [0.185, -0.05], [0.145, 0.02], [0.185, 0.02]]) s.add(cyl("CurdCup", 0.026, 0.021, 0.05, F.cupWhite, cx, 0.025, cz));
-  s.add(box("Cheese", 0.08, 0.035, 0.07, F.cheese, 0.16, 0.0175, 0.1));
-  cab.add(s);
+  stock.fresh0(cab, { y: 0.871, z: zc + 0.04, bx: -0.165, px: 0, cx: 0.145, ex: 0.16, ez: 0.1 });
 }
 // two tempered-glass shelves with white rims, and the Fresh Zone drawer
 function shelf(name, y) {
@@ -263,83 +257,9 @@ shelf("Shelf2", 0.545);
   cab.add(g);
 }
 
-// ── stock on the shelves (south Indian kitchen) ──
-{
-  const s1 = group("Shelf1Stock", 0, 0.747, 0), z0 = zIn1 + 0.17;
-  // steel tiffin carrier: three stacked containers, a frame and clip
-  // clear lock-boxes with food, as on LG's own stocked photo: idlis, rice, chutney, cut fruit
-  function lockbox(name, w, d, h, food, x, y, z) {
-    const g = group(name, x, y, z);
-    g.add(box(name + "Body", w, h, d, clearLight, 0, h / 2, 0));
-    g.add(box(name + "Food", w - 0.012, h * 0.55, d - 0.012, food, 0, h * 0.3, 0));
-    g.add(box(name + "Lid", w + 0.004, 0.008, d + 0.004, F.lidBlue, 0, h + 0.004, 0));
-    return g;
-  }
-  s1.add(lockbox("IdliBox", 0.115, 0.09, 0.045, F.cupWhite, -0.185, 0, z0 + 0.04));
-  s1.add(lockbox("RiceBox", 0.115, 0.09, 0.045, F.coconutFlesh, -0.185, 0.054, z0 + 0.04));
-  s1.add(lockbox("ChutneyBox", 0.115, 0.09, 0.045, F.coriander, -0.185, 0, z0 + 0.15));
-  s1.add(lockbox("SaladBox", 0.115, 0.09, 0.045, F.tomato, -0.185, 0.054, z0 + 0.15));
-  s1.add(tub("IdliBatterTub", 0.05, 0.09, F.tubWhite, F.lidBlue, "lbl_idli", -0.08, 0, z0 + 0.13));
-  s1.add(tub("DosaBatterTub", 0.05, 0.09, F.tubWhite, F.lidBlue, "lbl_dosa", 0.015, 0, z0 + 0.13));
-  s1.add(tub("CurdTub", 0.05, 0.075, F.tubWhite, F.lidWhite, "lbl_curd", 0.105, 0, z0 + 0.155));
-  s1.add(jar("ChutneyJar", 0.034, 0.085, F.coconutFlesh, F.lidBlue, null, 0.2, 0, z0 + 0.15));
-  s1.add(cyl("SambarVessel", 0.065, 0.06, 0.09, F.steel, 0.07, 0, z0 + 0.02).translateY(0.045));
-  s1.add(cyl("SambarSurface", 0.058, 0.058, 0.004, F.soup, 0.07, 0.088, z0 + 0.02));
-  s1.add(plane("SambarLabel", 0.07, 0.035, lbl("lbl_sambar"), 0.07, 0.0925, z0 + 0.02).rotateX(-Math.PI / 2));
-  cab.add(s1);
-  const s2 = group("Shelf2Stock", 0, 0.548, 0);
-  const t = group("Tiffin", 0.17, 0, z0 + 0.1);
-  for (let i = 0; i < 3; i++) { t.add(cyl("TiffinTier", 0.062, 0.062, 0.042, F.steel, 0, 0.017 + i * 0.035, 0, 14)); t.add(cyl("TiffinRim", 0.064, 0.064, 0.004, F.steelDark, 0, 0.035 + i * 0.035, 0, 14)); }
-  t.add(cyl("TiffinKnob", 0.01, 0.01, 0.014, F.steelDark, 0, 0.11, 0));
-  t.add(box("TiffinBarL", 0.004, 0.14, 0.004, F.steelDark, -0.067, 0.07, 0)); t.add(box("TiffinBarR", 0.004, 0.112, 0.004, F.steelDark, 0.067, 0.056, 0));
-  s2.add(t);
-
-  for (const [cx, rot] of [[-0.12, 0], [0.0, Math.PI]]) { // two coconut halves, flesh up
-    const c = group("CoconutHalf", cx, 0, z0 + 0.05); c.rotation.y = rot;
-    c.add(sph("CoconutShell", 0.062, F.coconutShell, 0, 0.0, 0, 1, 0.75, 1, 18));
-    c.add(cyl("CoconutFlesh", 0.054, 0.054, 0.004, F.coconutFlesh, 0, 0.0455, 0, 14));
-    s2.add(c);
-  }
-  { const m = group("WatermelonHalf", -0.2, 0, z0 + 0.17); m.add(sph("MelonRind", 0.07, mat("MelonRind", 0x2f7a3a, { rough: 0.5 }), 0, 0.0, 0, 1, 0.8, 1, 20)); m.add(cyl("MelonFlesh", 0.066, 0.066, 0.004, mat("MelonFlesh", 0xd9344a, { rough: 0.35 }), 0, 0.0555, 0, 14)); s2.add(m); }
-  s2.add(cyl("MilkPot", 0.062, 0.06, 0.09, F.steel, -0.02, 0.045, z0 - 0.01));
-  s2.add(cyl("MilkPotLid", 0.064, 0.064, 0.008, F.steelDark, -0.02, 0.094, z0 - 0.01));
-  s2.add(cyl("MilkPotKnob", 0.01, 0.01, 0.012, F.steelDark, -0.02, 0.104, z0 - 0.01));
-  s2.add(cyl("CurdRiceBowl", 0.07, 0.045, 0.06, F.cupWhite, 0.0, 0.03, z0 + 0.2));
-  s2.add(cyl("CurdRiceFill", 0.062, 0.062, 0.004, F.coconutFlesh, 0.0, 0.062, z0 + 0.2));
-  // a bunch of bananas lying on the shelf
-  for (let i = 0; i < 5; i++) { const b = sph("Banana", 0.018, F.banana, 0.12 + i * 0.012, 0.02 + i * 0.001, z0 + 0.04 + i * 0.016, 3.2, 0.8, 0.8, 10); b.rotation.y = 0.25; b.rotation.z = 0.12 - i * 0.04; s2.add(b); }
-  s2.add(mesh("LemonNet", new THREE.SphereGeometry(0.04, 12, 8), F.lemon, 0.06, 0.03, z0 + 0.2));
-  for (const [lx, lz] of [[0.02, 0.2], [0.09, 0.22], [0.14, 0.2], [0.18, 0.15]]) s2.add(sph("Lemon", 0.022, F.lemon, lx, 0.02, z0 + lz, 1.15, 0.9, 1));
-  cab.add(s2);
-  // Fresh Zone: south Indian vegetables
-  const v = group("FreshZoneStock", 0, 0.219, 0), zv = zIn1 + 0.05;
-  for (let i = 0; i < 5; i++) { const c = cyl("Carrot", 0.0, 0.016, 0.16, F.carrot, -0.17 + i * 0.018, 0.02 + (i % 2) * 0.012, zv + 0.12 + i * 0.01, 10); c.rotation.x = Math.PI / 2; c.rotation.z = 0.05 * (i - 2); v.add(c); }
-  for (let i = 0; i < 4; i++) { const d = cyl("Drumstick", 0.008, 0.008, 0.3, F.drumstick, -0.08 + i * 0.02, 0.02 + (i % 2) * 0.014, zv + 0.15, 8); d.rotation.x = Math.PI / 2; d.rotation.z = 0.03 * (i - 1.5); v.add(d); }
-  for (let i = 0; i < 3; i++) v.add(sph("Brinjal", 0.03, F.brinjal, 0.04 + i * 0.058, 0.032, zv + 0.06 + (i % 2) * 0.05, 1, 1, 1.9));
-  for (let i = 0; i < 9; i++) { const o = cyl("LadiesFinger", 0.0, 0.009, 0.075, F.okra, 0.12 + (i % 3) * 0.018, 0.012 + Math.floor(i / 3) * 0.014, zv + 0.12 + (i % 3) * 0.012, 6); o.rotation.x = Math.PI / 2; o.rotation.z = 0.2; v.add(o); }
-  for (let i = 0; i < 5; i++) v.add(sph("Tomato", 0.026, F.tomato, 0.14 + (i % 3) * 0.05, 0.03, zv + 0.28 + Math.floor(i / 3) * 0.05));
-  for (let i = 0; i < 6; i++) v.add(sph("Onion", 0.03, F.onion, -0.18 + (i % 3) * 0.06, 0.03, zv + 0.3 + Math.floor(i / 3) * 0.055));
-  for (let i = 0; i < 8; i++) { const c = cyl("GreenChilli", 0.0, 0.004, 0.06, F.chilli, -0.02 + i * 0.006, 0.01 + (i % 2) * 0.006, zv + 0.3, 5); c.rotation.x = Math.PI / 2; c.rotation.z = 0.5 - i * 0.12; v.add(c); }
-  for (let i = 0; i < 14; i++) v.add(sph("CurryLeaf", 0.014, F.leaf, 0.1 + (i % 5) * 0.012, 0.045 + (i % 3) * 0.012, zv + 0.12 + Math.floor(i / 5) * 0.014, 1.6, 0.25, 1, 8));
-  for (let i = 0; i < 10; i++) v.add(sph("Coriander", 0.02, F.coriander, -0.2 + (i % 5) * 0.012, 0.045 + (i % 2) * 0.015, zv + 0.05 + Math.floor(i / 5) * 0.02, 1.3, 0.35, 1.3, 8));
-  cab.add(v);
-}
-
-// ── freezer stock ──
-{
-  const f = group("FreezerStock", 0, fy0 + 0.002, 0), zf = zIn1 + 0.17;
-  f.add(tub("IceCreamTub1", 0.07, 0.068, F.icecream, F.icecream, "lbl_icecream", -0.135, 0, zf));
-  f.add(tub("IceCreamTub2", 0.07, 0.068, F.cupWhite, F.cupWhite, "lbl_icecream2", -0.135, 0.082, zf));
-  f.add(box("MeatPack", 0.1, 0.03, 0.13, F.meat, -0.02, 0.015, zIn1 + 0.1));
-  cab.add(f);
-  const top = group("OnFreezerShelf", 0, 1.327, 0);
-  top.add(box("PeasPack", 0.13, 0.035, 0.17, F.chilli, -0.17, 0.0175, zIn1 + 0.15));
-  top.add(plane("PeasLabel", 0.1, 0.075, lbl("lbl_peas"), -0.17, 0.0355, zIn1 + 0.15).rotateX(-Math.PI / 2));
-  top.add(box("ParottaPack", 0.14, 0.04, 0.17, F.butter, -0.03, 0.02, zIn1 + 0.16));
-  top.add(plane("ParottaLabel", 0.11, 0.08, lbl("lbl_parotta"), -0.03, 0.0405, zIn1 + 0.16).rotateX(-Math.PI / 2));
-  top.add(box("CoconutGratedPack", 0.12, 0.034, 0.15, F.coconutPack, 0.12, 0.017, zIn1 + 0.14));
-  cab.add(top);
-}
+// ── stock: vegetarian South Indian food, eggs, juices, water and soft drinks (stock_lg.mjs, food.mjs) ──
+stock.shelves(cab, { zIn1, s1: 0.744, s2: 0.545, s3: null, fz: 0.219, z0: zIn1 + 0.17 });
+stock.freezer(cab, { zIn1, floor: fy0 + 0.002, top: 1.327 });
 
 // ── ice maker: the tray unit and the bucket slide out together (a real part) ──
 const ic = group("IceMaker", icX, 0, icZ);
@@ -380,7 +300,7 @@ const freezerDoor = doorShell("FreezerDoor", fzBot, H - fzBot, (g) => {
   const b1 = basket("FzBasket1", pw - 0.1, 0.07, 0.065, 0.234, true); b1.position.x = -pw / 2; g.add(b1);
   const b2 = basket("FzBasket2", pw - 0.1, 0.07, 0.065, 0.053, true); b2.position.x = -pw / 2; g.add(b2);
   // frozen grated coconut and parotta in the baskets (small packs)
-  for (let i = 0; i < 3; i++) { g.add(box("FzPackA", 0.1, 0.05, 0.03, F.coconutPack, -0.12 - i * 0.12, 0.234 + 0.027, -0.04)); g.add(box("FzPackB", 0.1, 0.05, 0.03, i % 2 ? F.butter : F.chilli, -0.12 - i * 0.12, 0.053 + 0.027, -0.04)); }
+  stock.doorFreezer(g, { n: 3, gap: 0.12, b1: 0.234, b2: 0.053 });
 });
 const fridgeDoor = doorShell("FridgeDoor", frLow, frTop - frLow, (g) => {
   const h = frTop - frLow, lowH = bandBot - frLow, bandH = bandTop - bandBot, lipH = frTop - bandTop;
@@ -398,23 +318,9 @@ const fridgeDoor = doorShell("FridgeDoor", frLow, frTop - frLow, (g) => {
   const bE = basket("EggBasket", pw - 0.1, 0.075, 0.062, eggY, true); bE.position.x = -pw / 2; g.add(bE);
   const bB = basket("BottleBasket", pw - 0.1, 0.095, 0.145, botY, true); bB.position.x = -pw / 2; g.add(bB);
   const bC = basket("CanBasket", pw - 0.1, 0.075, 0.115, canY, true); bC.position.x = -pw / 2; g.add(bC);
-  // eggs: six in the egg basket's cups
+  // eggs in the egg basket's cups, then jars, bottles and cans (stock_lg.mjs)
   g.add(box("EggCupsRib", pw - 0.14, 0.006, 0.05, clearRib, -pw / 2, eggY + 0.006, -0.037));
-  for (let i = 0; i < 6; i++) g.add(egg("Egg", -0.115 - i * 0.056, eggY + 0.034, -0.038));
-  // bottles: two 1 L water bottles, a 2 L cola, a filter-coffee decoction bottle, milk sachets lying beside
-  g.add(bottle("Water1", 0.0345, 0.265, F.waterBottle, F.waterCap, -0.1, botY + 0.004, -0.045));
-  g.add(bottle("Water3", 0.0345, 0.265, F.waterBottle, F.waterCap, -0.1, botY + 0.004, -0.0125));
-  { const c2 = bottle("Cola2L", 0.046, 0.33, F.cola, F.colaCap, -0.255, botY + 0.004, -0.05); c2.add(band("ColaPrint", 0.046, 0.11, Math.PI * 2, lbl("bottle_coke"), 0, 0.125, 0)); g.add(c2); }
-  { const f2 = bottle("Fanta2L", 0.042, 0.30, F.fanta, F.fantaCap, -0.178, botY + 0.004, -0.05); f2.add(band("FantaPrint", 0.042, 0.1, Math.PI * 2, lbl("bottle_fanta"), 0, 0.115, 0)); g.add(f2); }
-  { const cf = group("CoffeeBottle", -0.335, botY + 0.004, -0.045); cf.add(cyl("CoffeeGlass", 0.032, 0.032, 0.17, F.brownGlass, 0, 0.085, 0, 14)); cf.add(cyl("CoffeeNeck", 0.016, 0.032, 0.03, F.brownGlass, 0, 0.185, 0, 14)); cf.add(cyl("CoffeeCap", 0.018, 0.018, 0.014, F.goldLid, 0, 0.207, 0, 12)); cf.add(plane("CoffeeLabel", 0.05, 0.075, lbl("lbl_coffee"), 0, 0.09, 0.0325)); g.add(cf); }
-  g.add(jar("PickleJar", 0.032, 0.11, F.redGlass, F.goldLid, "lbl_pickle", -0.405, botY + 0.004, -0.045));
-  // cans in the lower basket
-  // Coke, Fanta, Thums Up and Sprite cans, each wrapped with its own print
-  const cans = [[F.canRed, "can_coke"], [F.canOrange, "can_fanta"], [F.canBlack, "can_thumsup"], [F.canRed, "can_coke"], [F.canOrange, "can_fanta"], [F.canGreen, "can_sprite"]];
-  cans.forEach(([m, tex], i) => { const c = can("Can", m, -0.075 - i * 0.075, canY + 0.004, -0.04); c.add(band("CanPrint", 0.0333, 0.1, Math.PI * 2, lbl(tex), 0, 0.061, 0)); g.add(c); });
-  // a jar of ghee and a milk sachet in the egg basket's end
-  g.add(jar("GheeJar", 0.03, 0.075, F.amber, F.goldLid, "lbl_ghee", -0.45, eggY + 0.004, -0.04));
-  void sachet;
+  stock.doorFridge(g, { eggY, jarY: null, botY, canY });
 });
 root.add(freezerDoor, fridgeDoor);
 
@@ -425,5 +331,5 @@ const textures = {
   DoorFreezer: `${T}/door_freezer.jpg`, DoorFridge: `${T}/door_fridge.jpg`, SideSteel: `${T}/side.jpg`, SideSteelL: `${T}/side_l.jpg`, RearPlate: `${T}/rear.jpg`,
   LabelBEE: `${T}/label.png`, LgMark: `${T}/lgmark.png`, PrintConvertible: `${T}/print_convertible.png`, KnobFace: `${T}/knob.jpg`, FreshZoneFront: `${T}/fresh_zone.jpg`,
 };
-for (const n of Object.keys(labelMats)) textures[n] = `${T}/${n}.jpg`;
+Object.assign(textures, stock.textures());
 await exportGLB(root, clips, OUT, textures);

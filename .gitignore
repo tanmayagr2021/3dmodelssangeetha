@@ -17,3 +17,6 @@ tools/
 /*.pdf
 /*.xlsx
 /*.glb
+
+# internal context file with prices: never commit
+/INTERN_CONTEXT.md

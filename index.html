@@ -169,7 +169,8 @@
 
 <script type="module">
 import { esc, CATEGORIES, fitCheck } from "/site.js";
-const { products } = await fetch("/products.json").then((r) => r.json());
+// products marked "hidden": true stay in products.json and /models, but are not shown; remove the flag to show one again
+const products = (await fetch("/products.json").then((r) => r.json())).products.filter((p) => !p.hidden);
 const CATS = [["All", null], ...CATEGORIES.map(([value, label]) => [label, value])];
 let cat = null;
 const $ = (id) => document.getElementById(id);

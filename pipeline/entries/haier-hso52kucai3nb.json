@@ -1,0 +1,214 @@
+{
+  "products": [
+    {
+      "id": "haier-hso52kucai3nb",
+      "brand": "Haier",
+      "brandLogo": "/logos/haier.png",
+      "category": "Air conditioner",
+      "model": "HSO52KU-CAI3NB-I",
+      "name": "Haier 1.5 ton 3-star Kinouchi Ultra AI Smart inverter split AC",
+      "shortName": "1.5 ton Kinouchi Ultra AC",
+      "summary": "Swing the louvre open, lift the front panel to see the filter, then hang it on your wall at its real size.",
+      "arTip": "Tap the louvre or the front panel to open it",
+      "glb": "/models/haier-hso52kucai3nb.glb",
+      "thumb": "/photos/haier-hso52kucai3nb/0.jpg",
+      "photos": [
+        "/photos/haier-hso52kucai3nb/0.jpg",
+        "/photos/haier-hso52kucai3nb/1.jpg",
+        "/photos/haier-hso52kucai3nb/2.jpg",
+        "/photos/haier-hso52kucai3nb/3.jpg"
+      ],
+      "placement": "wall",
+      "arLabel": "View on your wall",
+      "orbit": "-22deg 82deg 128%",
+      "finishes": [
+        {
+          "name": "White and gold",
+          "swatchColor": "#f3f3f4",
+          "usdz": "/models/usdz/haier-hso52kucai3nb-white-and-gold.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "panel",
+          "label": "front panel",
+          "node": "FrontPanel",
+          "axis": "x",
+          "angle": -60,
+          "zone": {
+            "closed": [
+              [
+                -0.454,
+                0.065,
+                0.1
+              ],
+              [
+                0.454,
+                0.306,
+                0.223
+              ]
+            ],
+            "open": [
+              [
+                -0.454,
+                0.189,
+                0.097
+              ],
+              [
+                0.454,
+                0.411,
+                0.366
+              ]
+            ]
+          }
+        },
+        {
+          "key": "louvre",
+          "label": "louvre",
+          "node": "Louvre",
+          "axis": "x",
+          "angle": -50,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.39,
+                0.014,
+                0.153
+              ],
+              [
+                0.39,
+                0.062,
+                0.218
+              ]
+            ],
+            "open": [
+              [
+                -0.39,
+                0.014,
+                0.118
+              ],
+              [
+                0.39,
+                0.095,
+                0.197
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "91.6 cm",
+        "h": "30.6 cm",
+        "d": "22.3 cm"
+      },
+      "sizeNote": "Indoor unit, the size of Haier's Kinouchi Ultra range. Outdoor unit 86 x 34.5 x 55 cm",
+      "specs": [
+        [
+          "Capacity",
+          "1.5 ton, 5.13 kW"
+        ],
+        [
+          "Energy rating",
+          "3 star"
+        ],
+        [
+          "Series",
+          "Kinouchi Ultra, AI Smart"
+        ],
+        [
+          "Inverter",
+          "Hexa inverter"
+        ],
+        [
+          "Cooling",
+          "Supersonic cooling in 10 seconds"
+        ],
+        [
+          "Cleaning",
+          "Frost Self Clean"
+        ],
+        [
+          "Modes",
+          "7-in-1 Intelli Convertible"
+        ],
+        [
+          "Outdoor cooling",
+          "Works up to 60 degrees C outdoors"
+        ],
+        [
+          "Coil",
+          "100% grooved copper"
+        ],
+        [
+          "Refrigerant",
+          "R32"
+        ]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://www.haier.com/in/air-conditioners/",
+      "hotspots": [
+        {
+          "title": "Supersonic Cooling",
+          "text": "Cools the room in just 10 seconds with heavy-duty performance.",
+          "pos": [
+            0.2,
+            0.235,
+            0.222
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!panel"
+        },
+        {
+          "title": "Frost Self Clean",
+          "text": "A complete indoor wet wash of the AC by frost, in about 21 minutes.",
+          "pos": [
+            -0.28,
+            0.17,
+            0.22
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!panel"
+        },
+        {
+          "title": "Air purifying filter",
+          "text": "The inlet grille lifts to reach the air purifying filter for easy cleaning.",
+          "pos": [
+            -0.2,
+            0.2,
+            0.15
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "panel"
+        },
+        {
+          "title": "7-in-1 Intelli Convertible",
+          "text": "Seven modes let you match the cooling to the room and the load.",
+          "pos": [
+            0.31,
+            0.145,
+            0.22
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        }
+      ]
+    }
+  ]
+}

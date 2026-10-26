@@ -1,0 +1,142 @@
+{
+  "products": [
+    {
+      "id": "lg-glt4626tmpz",
+      "brand": "LG",
+      "brandLogo": "/logos/lg.png",
+      "category": "Refrigerator",
+      "model": "GLT4626TMPZ",
+      "name": "LG 466 L double-door refrigerator with Hygiene Fresh and Door Cooling+",
+      "shortName": "466 L double-door refrigerator",
+      "summary": "Open the freezer, slide the ice tray out and open the fridge, look inside, then stand it in your kitchen at its real size.",
+      "arTip": "Tap a door to open it",
+      "glb": "/models/lg-glt4626tmpz.glb",
+      "thumb": "/photos/lg-glt4626tmpz/0.jpg",
+      "photos": ["/photos/lg-glt4626tmpz/0.jpg", "/photos/lg-glt4626tmpz/1.jpg", "/photos/lg-glt4626tmpz/2.jpg", "/photos/lg-glt4626tmpz/3.jpg"],
+      "placement": "floor",
+      "arLabel": "View in your kitchen",
+      "orbit": "-28deg 78deg 140%",
+      "finishes": [
+        {
+          "name": "Shiny Steel",
+          "swatchColor": "#b4b5b7",
+          "usdz": "/models/usdz/lg-glt4626tmpz-shiny-steel.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "freezer",
+          "label": "freezer",
+          "node": "FreezerDoor",
+          "axis": "y",
+          "angle": 135,
+          "zone": {
+            "closed": [
+              [-0.346, 1.32, 0.222],
+              [0.35, 1.845, 0.363]
+            ],
+            "open": [
+              [0.336, 1.32, 0.286],
+              [0.874, 1.845, 0.824]
+            ]
+          }
+        },
+        {
+          "key": "icemaker",
+          "label": "ice tray",
+          "node": "IceMaker",
+          "slide": [0, 0, 0.16],
+          "needs": "freezer",
+          "zone": {
+            "closed": [
+              [-0.194, 1.387, 0.077],
+              [-0.013, 1.531, 0.286]
+            ],
+            "open": [
+              [-0.194, 1.387, 0.237],
+              [-0.013, 1.531, 0.446]
+            ]
+          }
+        },
+        {
+          "key": "fridge",
+          "label": "fridge",
+          "node": "FridgeDoor",
+          "axis": "y",
+          "angle": 135,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [-0.346, 0.045, 0.221],
+              [0.35, 1.312, 0.363]
+            ],
+            "open": [
+              [0.325, 0.045, 0.286],
+              [0.874, 1.312, 0.834]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "70 cm",
+        "h": "184.5 cm",
+        "d": "72.5 cm"
+      },
+      "sizeNote": "Both doors open to about 135 degrees",
+      "specs": [
+        ["Total capacity", "466 L (freezer 103 L, fridge 363 L)"],
+        ["Type", "Frost free, top-mount double door"],
+        ["Convertible", "Yes"],
+        ["Energy rating", "2 star, 261 units a year"],
+        ["Compressor", "Smart Inverter (BLDC), 10 years on the compressor"],
+        ["Cooling", "Door Cooling+, Multi Air Flow"],
+        ["Fresh zones", "Fresh 0 Zone pull-out tray and a Fresh Zone drawer"],
+        ["Freshness", "Hygiene Fresh"],
+        ["Shelves", "3 tempered glass (fridge), 1 (freezer)"],
+        ["Door baskets", "2 in the freezer, 4 in the fridge, transparent"],
+        ["Ice maker", "Manual, 1 lever and 2 trays, a moving ice tray"],
+        ["Control", "External LED display, Express Freeze, door alarm"],
+        ["Handle", "Horizontal pocket"],
+        ["Light", "Top LED"],
+        ["Smart", "ThinQ (Wi-Fi), Smart Diagnosis"],
+        ["Weight", "80 kg"]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt4626tmpz/",
+      "hotspots": [
+        {
+          "title": "Convertible",
+          "text": "Convert a section of the freezer to more refrigeration as needed to keep foods fresher for longer.",
+          "pos": [0.015, 1.608, -0.29],
+          "normal": [0, 0, 1],
+          "show": "freezer"
+        },
+        {
+          "title": "Moving Ice Tray",
+          "text": "The sliding ice tray can be moved to the left or right to position it in your preferred location.",
+          "pos": [-0.104, 1.5, 0.2805],
+          "normal": [0, 0, 1],
+          "show": "freezer"
+        },
+        {
+          "title": "Hygiene Fresh",
+          "text": "Up to 99.99% reduction in activity of bacteria, to keep your food fresher in a cleaner environment.",
+          "pos": [0.015, 0.98, -0.29],
+          "normal": [0, 0, 1],
+          "show": "fridge"
+        },
+        {
+          "title": "Door Cooling+",
+          "text": "Food stays fresh and drinks get ice cold on any shelf with even and faster cooling.",
+          "pos": [0, 0.8, 0.3625],
+          "normal": [0, 0, 1],
+          "show": "!fridge"
+        }
+      ],
+      "fit": {
+        "back": 5,
+        "note": "From LG's owner's manual for its double-door range: keep at least 5 cm between the back and the wall. The 466 L model's own door swing is not published; the doors open about 135 degrees in this model."
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@
 // recessed handles on the left edge, the BEE label on the freezer door.
 // usage: node make_samsung_rt34.mjs <products.json> <tex dir> <out.glb>
 import fs from "node:fs";
+import { LGStock } from "./stock_lg.mjs";
 import { THREE, mat, mesh, box, faced, group, stateClips, exportGLB, productParts, saveZones } from "./lib.mjs";
 
 const [PRODUCTS, TEX, OUT] = process.argv.slice(2);
@@ -118,39 +119,16 @@ cab.add(panel);
 cab.add(box("FridgeVents", 0.16, 0.5, 0.01, trim, 0, 0.7, zBack + wall + 0.005));
 cab.add(box("FreezerVents", 0.16, 0.2, 0.01, trim, 0, yFreezer + 0.3, zBack + wall + 0.005));
 
-// ── groceries, as in Samsung's own photos: fruit in the crisper, food on the shelves ──
-const food = {
-  red: mat("FoodRed", 0xc8352b, { rough: 0.45 }), orange: mat("FoodOrange", 0xe8891f, { rough: 0.5 }),
-  green: mat("FoodGreen", 0x5f9a35, { rough: 0.6 }), leaf: mat("FoodLeaf", 0x87b84a, { rough: 0.7 }),
-  yellow: mat("FoodYellow", 0xe9c53a, { rough: 0.5 }), white: mat("FoodWhite", 0xf3efe6, { rough: 0.55 }),
-  bottle: mat("FoodBottle", 0x9ed3e8, { rough: 0.1, opacity: 0.6 }), juice: mat("FoodJuice", 0xf0a12a, { rough: 0.25, opacity: 0.85 }),
-  cap: mat("FoodCap", 0x2f6fb4, { rough: 0.4 }), tub: mat("FoodTub", 0xf6f6f2, { rough: 0.5 }), lid: mat("FoodLid", 0x4aa0d8, { rough: 0.4 }),
-};
-const sphere = (name, r, m, x, y, z) => mesh(name, new THREE.SphereGeometry(r, 14, 10), m, x, y, z);
-const bottle = (name, h, r, body, x, y, z) => {
-  const g = group(name, x, y, z);
-  g.add(mesh(name + "Body", new THREE.CylinderGeometry(r, r, h * 0.78, 14), body, 0, h * 0.39, 0));
-  g.add(mesh(name + "Neck", new THREE.CylinderGeometry(r * 0.45, r, h * 0.16, 14), body, 0, h * 0.86, 0));
-  g.add(mesh(name + "Cap", new THREE.CylinderGeometry(r * 0.42, r * 0.42, h * 0.06, 12), food.cap, 0, h * 0.97, 0));
-  return g;
-};
-const tub = (name, w, h, d, x, y, z) => { const g = group(name, x, y, z); g.add(box(name + "Tub", w, h, d, food.tub, 0, h / 2, 0)); g.add(box(name + "Lid", w + 0.004, 0.012, d + 0.004, food.lid, 0, h + 0.006, 0)); return g; };
-const crispY = floorTop + 0.045, crispZ = inZc + 0.05;
-[[-0.2, food.red], [-0.12, food.orange], [-0.04, food.green], [0.05, food.red], [0.13, food.yellow], [0.2, food.orange]].forEach(([x, m], i) => cab.add(sphere("Fruit" + i, 0.036, m, x, crispY, crispZ + (i % 2) * 0.07)));
-cab.add(sphere("Cabbage", 0.065, food.leaf, -0.15, crispY + 0.03, crispZ - 0.12));
-cab.add(sphere("Lettuce", 0.06, food.leaf, 0.14, crispY + 0.025, crispZ - 0.13));
-cab.add(tub("Tub1", 0.18, 0.07, 0.13, -0.12, 0.564, inZ + 0.05));
-cab.add(tub("Tub2", 0.14, 0.09, 0.12, 0.13, 0.564, inZ - 0.03));
-cab.add(tub("Tub3", 0.2, 0.06, 0.15, -0.05, 0.824, inZ + 0.02));
-cab.add(mesh("Bowl", new THREE.CylinderGeometry(0.075, 0.05, 0.06, 20), food.white, 0.16, 0.854, inZ + 0.05));
-cab.add(sphere("Salad", 0.06, food.leaf, 0.16, 0.88, inZ + 0.05));
-cab.add(tub("IceCream", 0.16, 0.08, 0.12, -0.1, yFreezer + 0.245, inZ + 0.04));
-cab.add(tub("FrozenBox", 0.14, 0.05, 0.16, 0.12, yFreezer + 0.245, inZ));
+// ── groceries (stock_lg.mjs, food.mjs): vegetarian South Indian food, eggs, juices, water and soft drinks ──
+const stock = LGStock({ T3: `${TEX}/lg_glt3426`, TF: `${TEX}/food` });
+const zBackIn = inZ - inD / 2;
+stock.shelves(cab, { zIn1: zBackIn, s1: 0.82, s2: 0.56, s3: null, fz: floorTop + 0.01, vz0: inZc - inDc / 2 + 0.05, vk: (inDc - 0.08) / 0.56 });
 
 // ── freezer inside: one shelf and the twist ice maker ──
 cab.add(box("FreezerShelf", inW, 0.01, inD, frosted, 0, yFreezer + 0.24, inZ));
 cab.add(box("IceMaker", 0.3, 0.05, 0.14, liner, -0.08, H - wall - 0.04, zBack + wall + 0.12));
 cab.add(box("IceTray", 0.28, 0.02, 0.12, trim, -0.08, H - wall - 0.075, zBack + wall + 0.12));
+stock.freezer(cab, { zIn1: zBackIn, floor: yFreezer + 0.002, top: yFreezer + 0.245 });
 
 // ── doors: hinged on the right; the photo-textured front, dark edges, a recessed handle on the left ──
 function door(name, y0, h, frontMat, bins) {
@@ -171,53 +149,16 @@ function door(name, y0, h, frontMat, bins) {
   });
   return pivot;
 }
-// what sits in the door bins, so it swings out with the door: the cola and Fanta 2.25 L bottles, a bin of Coke, Fanta,
-// Thums Up and Sprite cans, ghee and pickle jars, eggs; frozen peas, parotta and ice cream in the freezer door
-const printMats = {};
-const printMat = (n) => (printMats[n] ||= mat(n, 0xffffff, { rough: 0.5 }));
-const wrap = (name, r, h, tex, x, y, z) => mesh(name, flipV(new THREE.CylinderGeometry(r + 0.0009, r + 0.0009, h, 18, 1, true, -Math.PI, Math.PI * 2)), printMat(tex), x, y, z);
-const cola = mat("ColaLiquid", 0x3a1f10, { rough: 0.15, opacity: 0.93 }), fanta = mat("FantaLiquid", 0xe8820e, { rough: 0.15, opacity: 0.93 });
-const canMats = { can_coke: mat("CanRed", 0xb82a20, { metal: 0.25, rough: 0.4 }), can_fanta: mat("CanOrange", 0xe07a12, { metal: 0.25, rough: 0.4 }), can_thumsup: mat("CanBlack", 0x1a1a1e, { metal: 0.25, rough: 0.4 }), can_sprite: mat("CanGreen", 0x218a40, { metal: 0.25, rough: 0.4 }) };
-const steelTop = mat("CanTop", 0xb9bbc0, { metal: 0.8, rough: 0.3 });
-const gheeGlass = mat("GheeGlass", 0xe0a93a, { rough: 0.15, opacity: 0.85 }), pickleGlass = mat("PickleGlass", 0xb8301f, { rough: 0.15, opacity: 0.88 }), goldLid = mat("JarLid", 0xc9a23a, { metal: 0.4, rough: 0.4 });
-function stock(pivot, name, bins) {
-  const z = -0.06;
-  if (name === "FridgeDoor") {
-    const c2 = bottle("Cola2L", 0.3, 0.04, cola, -0.47, bins[0] - 0.037, z); c2.add(wrap("ColaPrint", 0.04, 0.1, "bottle_coke", 0, 0.115, 0)); pivot.add(c2);
-    const f2 = bottle("Fanta2L", 0.3, 0.04, fanta, -0.385, bins[0] - 0.037, z); f2.add(wrap("FantaPrint", 0.04, 0.1, "bottle_fanta", 0, 0.115, 0)); pivot.add(f2);
-    [-0.31, -0.24].forEach((x, i) => pivot.add(bottle(`Water${i}`, 0.26, 0.032, food.bottle, x, bins[0] - 0.037, z)));
-    [-0.17, -0.1].forEach((x, i) => pivot.add(bottle(`Juice${i}`, 0.2, 0.03, food.juice, x, bins[0] - 0.037, z)));
-    [-0.45, -0.36, -0.27, -0.18].forEach((x, i) => {
-      const j = group(`Jar${i}`, x, bins[1] + 0.008, z);
-      j.add(mesh(`JarGlass${i}`, new THREE.CylinderGeometry(0.03, 0.03, 0.09, 14), i % 2 ? pickleGlass : gheeGlass, 0, 0, 0));
-      j.add(mesh(`JarLid${i}`, new THREE.CylinderGeometry(0.031, 0.031, 0.012, 14), goldLid, 0, 0.051, 0));
-      j.add(wrap(`JarPrint${i}`, 0.03, 0.05, i % 2 ? "lbl_pickle" : "lbl_ghee", 0, 0, 0));
-      pivot.add(j);
-    });
-    Object.keys(canMats).concat(["can_coke", "can_fanta"]).forEach((t, i) => {
-      const c = group("Can", -0.45 + i * 0.075, bins[2] - 0.02, z);
-      c.add(mesh("CanBody", new THREE.CylinderGeometry(0.0333, 0.0333, 0.122, 14), canMats[t], 0, 0.061, 0));
-      c.add(mesh("CanTop", new THREE.CylinderGeometry(0.0285, 0.0333, 0.008, 14), steelTop, 0, 0.126, 0));
-      c.add(wrap("CanPrint", 0.0333, 0.1, t, 0, 0.061, 0));
-      pivot.add(c);
-    });
-    for (let i = 0; i < 6; i++) {
-      const egg = sphere(`Egg${i}`, 0.022, food.white, -0.48 + i * 0.05, bins[3] - 0.01, z);
-      egg.scale.set(1, 1.3, 1);
-      pivot.add(egg);
-    }
-  } else {
-    [["lbl_peas", -0.44], ["lbl_parotta", -0.32], ["lbl_icecream", -0.2]].forEach(([t, x], i) => {
-      pivot.add(box(`Pack${i}`, 0.09, 0.06, 0.06, i % 2 ? food.orange : food.lid, x, bins[0] - 0.005, z));
-      pivot.add(mesh(`PackPrint${i}`, flipV(new THREE.PlaneGeometry(0.084, 0.054)), printMat(t), x, bins[0] - 0.005, z + 0.0306));
-    });
-  }
+// what sits in the door bins, so it swings out with the door
+function stockDoor(pivot, name, bins) {
+  if (name === "FridgeDoor") stock.doorFridge(pivot, { eggY: bins[3] - 0.04, jarY: bins[1] - 0.04, botY: bins[0] - 0.04, canY: bins[2] - 0.04 });
+  else stock.doorFreezer(pivot, { b1: bins[1] - 0.04, b2: bins[0] - 0.04, n: 4, gap: 0.13 });
 }
 const fridgeBins = [0.16, 0.42, 0.68, 0.93], freezerBins = [0.14, 0.36];
 const fridgeDoor = door("FridgeDoor", doorBottom, fridgeH, fridgeFront, fridgeBins);
 const freezerDoor = door("FreezerDoor", yFreezer, freezerH, freezerFront, freezerBins);
-stock(fridgeDoor, "FridgeDoor", fridgeBins);
-stock(freezerDoor, "FreezerDoor", freezerBins);
+stockDoor(fridgeDoor, "FridgeDoor", fridgeBins);
+stockDoor(freezerDoor, "FreezerDoor", freezerBins);
 root.add(fridgeDoor, freezerDoor);
 
 const parts = productParts(PRODUCTS, ID);
@@ -230,5 +171,5 @@ await exportGLB(root, clips, OUT, {
   SideBrushed: `${TEX}/samsung/side.jpg`,
   Rear: `${TEX}/samsung/rear.jpg`,
   Bay: `${TEX}/samsung/bay.jpg`,
-  ...Object.fromEntries(Object.keys(printMats).map((n) => [n, `${TEX}/lg_glt3426/${n}.jpg`])),
+  ...stock.textures(),
 });

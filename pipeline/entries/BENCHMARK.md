@@ -65,7 +65,8 @@ appliance has them, the interior decorated, Indian (south Indian) contents, evid
 - Refrigerators are stocked for the Indian, and especially south Indian, kitchen: an egg tray with eggs in the egg bin (the 6- or 12-slot tray);
   curd/dahi tubs and a steel tiffin; idli and dosa batter in a tub; coconut chutney pot; filter-coffee decoction bottle; milk sachets; buttermilk
   packets; ghee and pickle jars; fresh curry leaves, coriander, green chillies, drumsticks, brinjal, ladies' finger, tomato, onion, banana, coconut halves;
-  water bottles (1 L and 2 L), soft-drink cans, fruit in the crisper; ice-cream tubs and frozen parathas, peas and meat packs in the freezer.
+  water bottles (1 L and 2 L), soft-drink cans, fruit in the crisper; ice-cream tubs and frozen parathas, peas, corn and mixed-vegetable packs in the freezer.
+  **Vegetarian only, plus eggs: no meat, fish or poultry anywhere in the stock, and no photo of any in the product pictures.** Juices, water and soft drinks are fine.
   Anything that shows in the maker's own stocked photo is kept where the photo puts it.
 - If the product makes ice (a dispenser or a twist/slide tray), that part works: the tray slides or the maker is a visible, animated part, with ice cubes in it.
 - Washing machines: the drum with its real hole or diamond pattern, the pulsator or the lifters, the filter, the detergent drawer or box with its real
@@ -118,3 +119,10 @@ and any figure marked ESTIMATED. Higher-resolution sources do not exist for most
 - **Never run a builder against the real products.json**: `saveZones` rewrites it with `tidyJSON` and the diff explodes. Build against `pipeline/entries/<id>.json`, then insert the entry with a python `json.dumps(indent=2, ensure_ascii=False)` round trip.
 - **Cut-outs of maker graphics** (Voltas photos): mask by low saturation on the purple backdrop, close and keep the largest piece (cv2); clean the energy label of its callout dots.
 - Fridge sizes: with the full stock the GLB is about 1.7 MB and the USDZ about 3.3 MB.
+
+## 8. Realistic stock and "Organise" (26 Oct 2026)
+- **The stock must look real, not like toys.** All fridge food comes from `pipeline/build3d/food.mjs` (lumpy noise-shaped tomatoes, onions, potatoes, apples, oranges, lemons, bananas, carrots, brinjals, capsicums, okra, drumsticks, chillies, coriander and curry leaves, cabbage, cauliflower, grapes, coconut halves, watermelon, eggs; lathe-turned cans and PET bottles; juice cartons and milk sachets) with skins from `pipeline/scripts/tex_food.py`. The LG and Samsung fridges share the layouts in `stock_lg.mjs`; only the shelf and basket heights are parameters.
+- **Tag every stock item** (`userData.stock = true`, done by the food builders and by `stock_lg.mjs`'s own tubs, jars and blocks). The product page (`organise.js`) finds those nodes, starts the fridge **empty**, and the "Fill the fridge" button opens the doors and flies each item in from a pile in front. Anything not tagged stays in the empty fridge, so no loose old items.
+- **Size cost:** realistic stock adds about 1 MB to the GLB (about 2.5 to 2.8 MB) and more to the Apple file. Segment counts are already low; do not add more detail without cutting elsewhere.
+- **Never pass the real `products.json` to a builder** (`saveZones` rewrites it). The Samsung builder has no entry file: give it a copy.
+- In AR, Apple Quick Look and Scene Viewer the fridge is shown full; only the web 3D view starts empty.

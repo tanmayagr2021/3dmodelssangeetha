@@ -99,15 +99,37 @@
   .progress i { display: block; height: 100%; width: 0; background: var(--copper-dk); transition: width .2s; }
   .progress.done { opacity: 0; }
 
-  /* feature hotspots */
-  .hs { --s: 30px; width: var(--s); height: var(--s); padding: 0; border: 0; border-radius: 50%; background: transparent; display: grid; place-items: center; transition: opacity .3s, transform .2s; }
-  .hs i { width: 22px; height: 22px; border-radius: 50%; background: var(--copper); border: 2.5px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.35); display: grid; place-items: center; color: var(--navy); font-style: normal; font-size: 15px; font-weight: 700; line-height: 1; }
-  .hs::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--copper); opacity: 0; animation: ping 2.4s ease-out infinite; }
-  .hs:hover i, .hs[aria-pressed="true"] i { background: var(--navy); color: var(--copper); }
-  .hs[aria-pressed="true"] { transform: scale(1.15); }
+  /* feature callouts: a small dot on the model, a label in the margin, a line between them */
+  .hs { --s: 22px; width: var(--s); height: var(--s); padding: 0; border: 0; border-radius: 50%; background: transparent; display: grid; place-items: center; transition: opacity .3s, transform .2s; }
+  .hs i { width: 12px; height: 12px; border-radius: 50%; background: var(--navy); border: 2.5px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.45); transition: background .2s, transform .2s; }
+  .hs::before { content: ""; position: absolute; inset: 1px; border-radius: 50%; border: 2px solid var(--copper); opacity: 0; animation: ping 2.4s ease-out infinite; }
+  .hs:hover i, .hs[aria-pressed="true"] i { background: var(--copper); transform: scale(1.3); }
   .hs.off, model-viewer.no-hs .hs { opacity: 0 !important; pointer-events: none; }
-  .hs:not([data-visible]) { opacity: .25; }
-  @keyframes ping { 0% { transform: scale(.6); opacity: .9; } 70%, 100% { transform: scale(1.5); opacity: 0; } }
+  @keyframes ping { 0% { transform: scale(.7); opacity: .9; } 70%, 100% { transform: scale(1.6); opacity: 0; } }
+  .feat-layer { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+  .feat-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .feat-lines path { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .55s ease, opacity .25s; }
+  .feat-lines .case { stroke: rgba(255,255,255,.92); stroke-width: 4; }
+  .feat-lines .core { stroke: var(--navy); stroke-width: 1.6; }
+  .feat-lines .on { stroke-dashoffset: 0; }
+  .feat-lines .active.core { stroke: var(--copper-dk); stroke-width: 2.2; }
+  .flab { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 8px; max-width: 210px; padding: 5px 12px 5px 5px; border: 1px solid var(--hair); border-radius: 999px; background: rgba(253,252,249,.97); box-shadow: 0 4px 14px rgba(14,14,15,.14); font: 600 13px/1.2 var(--sans); color: var(--navy); text-align: left; pointer-events: auto; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s, border-color .2s; will-change: left, top; }
+  .flab.on { opacity: 1; transform: none; }
+  .flab:hover, .flab[aria-pressed="true"] { border-color: var(--copper-dk); }
+  .flab[aria-pressed="true"] { background: var(--navy); color: var(--paper); }
+  .flab b { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--copper); color: var(--navy); display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+  .flab span { overflow: hidden; }
+  .flab em { display: block; margin-top: 2px; font: 500 11.5px/1.2 var(--sans); font-style: normal; color: var(--copper-dk); }
+  .flab em:empty { display: none; }
+  .flab.dim { background: rgba(253,252,249,.88); color: var(--slate); }
+  .flab.dim b { background: #E6E6E9; color: var(--slate); }
+  .flab.num { padding: 5px; }
+  .flab.num span { display: none; }
+  .feat-btn { position: absolute; right: 20px; top: 20px; z-index: 6; display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 11px 18px 11px 14px; font: 600 14px var(--sans); color: var(--navy); }
+  .feat-btn svg { width: 18px; height: 18px; color: var(--copper-dk); flex: none; }
+  .feat-btn[aria-pressed="true"] { background: var(--navy); color: var(--paper); }
+  .feat-btn[aria-pressed="true"] svg { color: var(--copper); }
+  @media (prefers-reduced-motion: reduce) { .flab, .feat-lines path, .hs::before { transition: none; animation: none; } }
   .fcard { position: absolute; left: 20px; bottom: 92px; width: min(360px, calc(100% - 40px)); border-radius: 18px; padding: 16px 16px 14px 18px; z-index: 6; transition: opacity .25s, transform .25s; }
   .fcard.gone { opacity: 0; transform: translateY(8px); pointer-events: none; }
   .fcard .top { display: flex; align-items: flex-start; gap: 10px; }
@@ -348,6 +370,9 @@
       <button class="fit-tag hide" slot="hotspot-fit-tag" id="fitTag" data-position="0 0 0" data-normal="0 0 1" tabindex="-1"></button>
     </model-viewer>
 
+    <div class="feat-layer" id="featLayer" aria-hidden="false"><svg class="feat-lines" id="featLines" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg></div>
+    <button class="feat-btn glass hide" id="btnShowFeat" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Show features</span></button>
+
     <div class="hint glass" id="hint"></div>
 
     <div class="controls glass" role="toolbar" aria-label="View controls">
@@ -355,7 +380,6 @@
       <button id="btnZoomOut" title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
       <hr>
       <button id="btnDims" title="Show dimensions" aria-label="Show dimensions" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4z"/><path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2M4.5 13.5l2 2"/></svg></button>
-      <button id="btnFeatures" class="hide" title="Hide features" aria-label="Show features" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></button>
       <button id="btnReset" title="Reset view" aria-label="Reset view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
       <button id="btnFullscreen" title="Full screen" aria-label="Full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     </div>
@@ -471,6 +495,7 @@
 <script type="module">
 import { esc, cm, partAt, hotspotShown, fitCheck } from "/site.js";
 import { initRoom } from "/room.js";
+import { initOrganise } from "/organise.js";
 const $ = (id) => document.getElementById(id);
 const mv = $("viewer");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -516,7 +541,7 @@ const I = {
 // ── which product: /p/<id>, or ?id=<id> ──
 const id = decodeURIComponent((location.pathname.match(/\/p\/([^/]+)/) || [])[1] || new URLSearchParams(location.search).get("id") || "");
 const catalogue = await fetch("/products.json").then((r) => r.json());
-const product = catalogue.products.find((p) => p.id === id);
+const product = catalogue.products.find((p) => p.id === id && !p.hidden); // hidden products are not shown (see products.json)
 if (!product) {
   $("main").outerHTML = `<div class="missing"><h1>We couldn’t find that product</h1><p class="blurb">The link may be old, or the model isn’t in the catalogue yet.</p><a href="/">See all products</a></div>`;
   throw new Error("unknown product " + id);
@@ -689,6 +714,10 @@ function renderParts() {
 }
 renderParts();
 
+// a fridge starts empty; "Fill the fridge" flies the items into their places (organise.js)
+window.__organise = null;
+queueMicrotask(() => { window.__organise = initOrganise({ mv, product, state, togglePart, bar: $("parts") }); });
+
 // the model carries one clip per change of state, named S<bits>_<bits>
 const stateKey = () => parts.map((p) => (state[p.key] ? 1 : 0)).join("");
 const swingsWide = parts.some((p) => p.axis === "y");
@@ -806,23 +835,46 @@ mv.addEventListener("camera-change", (e) => {
   if (e.detail.source === "user-interaction") $("hint").classList.add("gone");
 });
 
-// ── feature hotspots: a dot on the model opens a short card; Next walks through them,
-// opening or closing whatever each one needs and turning the camera to face it ──
+// ── feature callouts: "Show features" puts a numbered label in the margin for each feature, with a line to its
+// spot on the product. A label (or its dot) opens a short card; Next walks through them, opening or closing
+// whatever each one needs and turning the camera to face it ──
 const hotspots = product.hotspots || [];
-let featuresOn = true, featureIndex = -1, touring = false;
+let featuresOn = false, featureIndex = -1, touring = false, featRaf = 0;
+mv.classList.add("no-hs");
+const svgNS = "http://www.w3.org/2000/svg";
 const hsEls = hotspots.map((h, i) => {
   const b = document.createElement("button");
   b.className = "hs off";
   b.slot = `hotspot-f${i}`;
   b.dataset.position = h.pos.map((n) => `${n}m`).join(" ");
   b.dataset.normal = h.normal.join(" ");
-  b.setAttribute("aria-label", `Feature: ${h.title}`);
+  b.setAttribute("aria-label", `Feature ${i + 1}: ${h.title}`);
   b.setAttribute("aria-pressed", "false");
-  b.innerHTML = `<i>${I.plus}</i>`;
-  b.querySelector("svg").style.cssText = "width:13px;height:13px";
+  b.innerHTML = "<i></i>";
   b.addEventListener("click", () => (featureIndex === i ? closeFeature() : showFeature(i)));
   mv.appendChild(b);
   return b;
+});
+const labEls = hotspots.map((h, i) => {
+  const b = document.createElement("button");
+  b.className = "flab";
+  b.setAttribute("aria-pressed", "false");
+  b.setAttribute("aria-label", `Feature ${i + 1}: ${h.title}`);
+  b.innerHTML = `<b>${i + 1}</b><span>${esc(h.title)}<em></em></span>`;
+  b.addEventListener("click", () => (featureIndex === i ? closeFeature() : showFeature(i, { tour: true })));
+  $("featLayer").appendChild(b);
+  return b;
+});
+const linePaths = hotspots.map(() => {
+  const g = document.createElementNS(svgNS, "g");
+  for (const c of ["case", "core"]) {
+    const p = document.createElementNS(svgNS, "path");
+    p.setAttribute("class", c);
+    p.setAttribute("pathLength", "1");
+    g.appendChild(p);
+  }
+  $("featLines").appendChild(g);
+  return g.querySelectorAll("path");
 });
 $("flist").innerHTML = hotspots.map((h, i) => `<button data-i="${i}"><b>${esc(h.title)}</b><span>${esc(h.text)}</span></button>`).join("");
 $("flist").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
@@ -830,8 +882,93 @@ $("flist").querySelectorAll("button").forEach((b) => b.addEventListener("click",
   showFeature(+b.dataset.i, { tour: true });
 }));
 $("featureBox").classList.toggle("hide", !hotspots.length);
-$("btnFeatures").classList.toggle("hide", !hotspots.length);
+$("btnShowFeat").classList.toggle("hide", !hotspots.length);
 $("fcClose").innerHTML = I.close;
+
+const featVisible = (i) => !hsEls[i].classList.contains("off");
+// Lays the labels out down the left and right margins (the side their spot is nearer to), in the order of
+// their spots from top to bottom, each at least a label's height apart, and draws a line from each to its spot.
+// A feature whose spot is hidden right now (behind a closed door, or on the far side) keeps its label, dimmed,
+// with what to do; tapping it does that for you. On a narrow stage the labels shrink to their numbers.
+const need = (h, facing) => {
+  const sh = h.show && h.show !== "always" ? h.show : null;
+  if (sh) {
+    const key = sh.replace("!", ""), part = parts.find((p) => p.key === key), name = (part?.label || key).toLowerCase();
+    if (key in state && state[key] === sh.startsWith("!")) return sh.startsWith("!") ? `Close the ${name}` : `Open the ${name}`;
+  }
+  return facing ? "" : "Turn to see";
+};
+function layoutFeatures() {
+  featRaf = 0;
+  if (!featuresOn) return;
+  const W = mv.clientWidth, Hh = mv.clientHeight;
+  const narrow = W < 540;
+  const left = 16, right = W - (narrow ? 70 : 84);       // the zoom and reset buttons sit down the right edge
+  const top = 72, bottom = Hh - 104, labH = narrow ? 34 : 46;
+  const rows = [];
+  hotspots.forEach((h, i) => {
+    const q = mv.queryHotspot(`hotspot-f${i}`);
+    const inView = q && q.canvasPosition.x > 0 && q.canvasPosition.x < W && q.canvasPosition.y > 0 && q.canvasPosition.y < Hh;
+    const hidden = !featVisible(i) || !q || !q.facingCamera || !inView;
+    const note = hidden ? need(h, featVisible(i) && q && q.facingCamera) || "Turn to see" : "";
+    labEls[i].classList.toggle("num", narrow);
+    labEls[i].classList.toggle("dim", hidden);
+    const sub = labEls[i].querySelector("em");
+    if (sub.textContent !== note) sub.textContent = note;
+    rows.push({ i, hidden, x: hidden ? NaN : q.canvasPosition.x, y: hidden ? NaN : q.canvasPosition.y });
+    if (hidden) linePaths[i].forEach((p) => p.classList.remove("on"));
+  });
+  const live = rows.filter((r) => !r.hidden), away = rows.filter((r) => r.hidden);
+  const sides = { L: [], R: [] };
+  live.forEach((r) => sides[r.x < W / 2 ? "L" : "R"].push(r));
+  // hidden ones fill the emptier margin, below the others, so nothing crosses the product
+  for (const r of away) {
+    const side = sides.L.length <= sides.R.length ? "L" : "R";
+    r.y = Math.max(top, ...sides[side].map((o) => o.y)) + labH + 8;
+    sides[side].push(r);
+  }
+  for (const side of ["L", "R"]) {
+    const list = sides[side].sort((a, b) => a.y - b.y);
+    let prev = top - labH - 6;
+    for (const r of list) { r.ly = Math.max(r.y - labH / 2, prev + labH + 6, top); prev = r.ly; }
+    for (let k = list.length - 1, lim = Math.max(top, bottom - labH); k >= 0; k--) { list[k].ly = Math.min(list[k].ly, lim); lim = list[k].ly - labH - 6; }
+    for (const r of list) {
+      const el = labEls[r.i];
+      el.style.visibility = "visible";
+      const w = el.offsetWidth, h = el.offsetHeight;
+      const lx = side === "L" ? left : right - w;
+      el.style.left = `${lx}px`; el.style.top = `${r.ly}px`;
+      if (r.hidden) continue;
+      const ax = side === "L" ? lx + w : lx, ay = r.ly + h / 2;
+      // a short level run out of the label, then straight to the spot
+      const bx = ax + (side === "L" ? 14 : -14);
+      const d = `M${ax} ${ay} L${bx} ${ay} L${r.x} ${r.y}`;
+      linePaths[r.i].forEach((p) => p.setAttribute("d", d));
+      linePaths[r.i].forEach((p) => p.classList.add("on"));
+    }
+  }
+  for (const el of labEls) if (!el.classList.contains("on")) requestAnimationFrame(() => el.classList.add("on"));
+  linePaths.forEach((ps, i) => ps.forEach((p) => p.classList.toggle("active", i === featureIndex)));
+  featRaf = requestAnimationFrame(layoutFeatures);
+}
+function setFeatures(on) {
+  featuresOn = on;
+  mv.classList.toggle("no-hs", !on);
+  $("btnShowFeat").setAttribute("aria-pressed", String(on));
+  $("btnShowFeat").querySelector("span").textContent = on ? "Hide features" : "Show features";
+  if (on) {
+    $("hint").classList.add("gone");
+    labEls.forEach((el, i) => { el.style.transitionDelay = `${i * 70}ms`; linePaths[i].forEach((p) => (p.style.transitionDelay = `${i * 70}ms`)); });
+    if (!featRaf) featRaf = requestAnimationFrame(layoutFeatures);
+  } else {
+    closeFeature();
+    cancelAnimationFrame(featRaf); featRaf = 0;
+    labEls.forEach((el) => { el.classList.remove("on"); el.style.visibility = "hidden"; });
+    linePaths.forEach((ps) => ps.forEach((p) => p.classList.remove("on")));
+  }
+}
+labEls.forEach((el) => (el.style.visibility = "hidden"));
+$("btnShowFeat").addEventListener("click", () => setFeatures(!featuresOn));
 
 let hsTimer = null;
 // hide at once what the new door state hides; show what it reveals once the door has moved
@@ -848,6 +985,7 @@ function renderHotspots(delay = 0) {
 async function showFeature(i, { tour = false } = {}) {
   const h = hotspots[i];
   if (!h) return;
+  if (!featuresOn) setFeatures(true);
   const need = h.show && h.show !== "always" ? h.show : null;
   if (need) {
     const key = need.replace("!", ""), wantOpen = !need.startsWith("!");
@@ -859,6 +997,7 @@ async function showFeature(i, { tour = false } = {}) {
   }
   featureIndex = i;
   hsEls.forEach((b, j) => b.setAttribute("aria-pressed", String(j === i)));
+  labEls.forEach((b, j) => b.setAttribute("aria-pressed", String(j === i)));
   $("fcCount").textContent = `Feature ${i + 1} of ${hotspots.length}`;
   $("fcTitle").textContent = h.title;
   $("fcText").textContent = h.text;
@@ -880,6 +1019,7 @@ function closeFeature() {
   if (featureIndex < 0) return;
   featureIndex = -1;
   hsEls.forEach((b) => b.setAttribute("aria-pressed", "false"));
+  labEls.forEach((b) => b.setAttribute("aria-pressed", "false"));
   $("fcard").classList.add("gone");
   $("fcard").setAttribute("aria-hidden", "true");
   if (touring) { touring = false; mv.cameraTarget = "auto"; mv.cameraOrbit = orbit(); }
@@ -888,13 +1028,6 @@ const stepFeature = (d) => (hotspots.length < 2 ? closeFeature() : showFeature((
 $("fcNext").addEventListener("click", () => stepFeature(1));
 $("fcPrev").addEventListener("click", () => stepFeature(-1));
 $("fcClose").addEventListener("click", closeFeature);
-$("btnFeatures").addEventListener("click", () => {
-  featuresOn = !featuresOn;
-  mv.classList.toggle("no-hs", !featuresOn);
-  $("btnFeatures").setAttribute("aria-pressed", String(featuresOn));
-  $("btnFeatures").title = featuresOn ? "Hide features" : "Show features";
-  if (!featuresOn) closeFeature();
-});
 
 // ── will it fit: the shopper's space against the size plus the maker's gaps, drawn in 3D
 // around the product ──

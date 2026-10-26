@@ -178,6 +178,8 @@ def main():
     label("lbl_icecream2.jpg", [("ICE CREAM", 70, 0), ("vanilla", 48, 7)], (246, 232, 190), (170, 40, 36), (512, 256))
     label("lbl_peas.jpg", [("GREEN PEAS", 60, 0), ("frozen", 44, 7)], (58, 150, 70), (255, 255, 255), (400, 300))
     label("lbl_parotta.jpg", [("PAROTTA", 72, 0), ("frozen", 44, 7)], (232, 160, 70), (90, 36, 10), (400, 300))
+    label("lbl_mixveg.jpg", [("MIXED VEG", 66, 0), ("frozen", 44, 7)], (232, 112, 40), (255, 255, 255), (400, 300))
+    label("lbl_corn.jpg", [("SWEET CORN", 60, 0), ("frozen", 44, 7)], (244, 200, 40), (90, 60, 10), (400, 300))
     label("lbl_sambar.jpg", [("SAMBAR", 100, 0)], (214, 214, 218), (60, 60, 64), (400, 200))
     # ── soft-drink cans and 2 L bottles: wraps for the cylinder, the name centred on the front (u = 0.5) ──
     AV = "/System/Library/Fonts/Avenir Next.ttc"

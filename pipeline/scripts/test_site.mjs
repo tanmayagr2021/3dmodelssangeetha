@@ -10,7 +10,7 @@ const log = (...a) => { const s = a.join(" "); report.push(s); console.log(s); }
 const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1";
 const ANDROID = "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36";
 // ONLY=<id> checks one product page; PORT picks the browser's debugging port
-const ids = (await (await fetch(`${base}/products.json`)).json()).products.map((p) => p.id).filter((id) => !process.env.ONLY || id === process.env.ONLY);
+const ids = (await (await fetch(`${base}/products.json`)).json()).products.filter((p) => !p.hidden).map((p) => p.id).filter((id) => !process.env.ONLY || id === process.env.ONLY);
 
 const b = await launch({ profile: `${out}/prof`, port: +(process.env.PORT || 9452) });
 

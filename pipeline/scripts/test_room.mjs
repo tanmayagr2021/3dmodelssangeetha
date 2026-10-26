@@ -40,7 +40,7 @@ const drawnSize = () => b.evalJS(`(async()=>{const m=document.querySelector('.ro
 await b.go(`${base}/`);
 await sleep(1500);
 const catalogue = JSON.parse(await b.evalJS("fetch('/products.json').then((r) => r.text())"));
-for (const p of catalogue.products) {
+for (const p of catalogue.products.filter((p) => !p.hidden)) {
   console.log(`[${p.id}]`);
   const wall = p.placement === "wall";
   const Hm = parseFloat(p.size.h) / 100, Wm = parseFloat(p.size.w) / 100;

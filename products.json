@@ -2,6 +2,7 @@
   "products": [
     {
       "id": "samsung-rt34hg5a42bxhl",
+      "hidden": true,
       "brand": "Samsung",
       "brandLogo": "/logos/samsung.png",
       "category": "Refrigerator",
@@ -496,6 +497,7 @@
     },
     {
       "id": "lg-glt3426snpz",
+      "hidden": true,
       "brand": "LG",
       "brandLogo": "/logos/lg.png",
       "category": "Refrigerator",
@@ -767,6 +769,281 @@
       "fit": {
         "back": 5,
         "note": "From LG's owner's manual for its double-door range: keep at least 5 cm between the back and the wall. The 343 L model's own door swing is not published; the doors open about 135 degrees in this model."
+      }
+    },
+    {
+      "id": "lg-glt4626tmpz",
+      "brand": "LG",
+      "brandLogo": "/logos/lg.png",
+      "category": "Refrigerator",
+      "model": "GLT4626TMPZ",
+      "name": "LG 466 L double-door refrigerator with Hygiene Fresh and Door Cooling+",
+      "shortName": "466 L double-door refrigerator",
+      "summary": "Open the freezer, slide the ice tray out and open the fridge, look inside, then stand it in your kitchen at its real size.",
+      "arTip": "Tap a door to open it",
+      "glb": "/models/lg-glt4626tmpz.glb",
+      "thumb": "/photos/lg-glt4626tmpz/0.jpg",
+      "photos": [
+        "/photos/lg-glt4626tmpz/0.jpg",
+        "/photos/lg-glt4626tmpz/1.jpg",
+        "/photos/lg-glt4626tmpz/2.jpg",
+        "/photos/lg-glt4626tmpz/3.jpg"
+      ],
+      "placement": "floor",
+      "arLabel": "View in your kitchen",
+      "orbit": "-28deg 78deg 140%",
+      "finishes": [
+        {
+          "name": "Shiny Steel",
+          "swatchColor": "#b4b5b7",
+          "usdz": "/models/usdz/lg-glt4626tmpz-shiny-steel.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "freezer",
+          "label": "freezer",
+          "node": "FreezerDoor",
+          "axis": "y",
+          "angle": 135,
+          "zone": {
+            "closed": [
+              [
+                -0.346,
+                1.32,
+                0.247
+              ],
+              [
+                0.35,
+                1.845,
+                0.363
+              ]
+            ],
+            "open": [
+              [
+                0.336,
+                1.32,
+                0.286
+              ],
+              [
+                0.874,
+                1.845,
+                0.824
+              ]
+            ]
+          }
+        },
+        {
+          "key": "icemaker",
+          "label": "ice tray",
+          "node": "IceMaker",
+          "slide": [
+            0,
+            0,
+            0.16
+          ],
+          "needs": "freezer",
+          "zone": {
+            "closed": [
+              [
+                -0.194,
+                1.387,
+                0.077
+              ],
+              [
+                -0.013,
+                1.531,
+                0.286
+              ]
+            ],
+            "open": [
+              [
+                -0.194,
+                1.387,
+                0.237
+              ],
+              [
+                -0.013,
+                1.531,
+                0.446
+              ]
+            ]
+          }
+        },
+        {
+          "key": "fridge",
+          "label": "fridge",
+          "node": "FridgeDoor",
+          "axis": "y",
+          "angle": 135,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.346,
+                0.045,
+                0.221
+              ],
+              [
+                0.35,
+                1.312,
+                0.363
+              ]
+            ],
+            "open": [
+              [
+                0.325,
+                0.045,
+                0.286
+              ],
+              [
+                0.874,
+                1.312,
+                0.834
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "70 cm",
+        "h": "184.5 cm",
+        "d": "72.5 cm"
+      },
+      "sizeNote": "Both doors open to about 135 degrees",
+      "specs": [
+        [
+          "Total capacity",
+          "466 L (freezer 103 L, fridge 363 L)"
+        ],
+        [
+          "Type",
+          "Frost free, top-mount double door"
+        ],
+        [
+          "Convertible",
+          "Yes"
+        ],
+        [
+          "Energy rating",
+          "2 star, 261 units a year"
+        ],
+        [
+          "Compressor",
+          "Smart Inverter (BLDC), 10 years on the compressor"
+        ],
+        [
+          "Cooling",
+          "Door Cooling+, Multi Air Flow"
+        ],
+        [
+          "Fresh zones",
+          "Fresh 0 Zone pull-out tray and a Fresh Zone drawer"
+        ],
+        [
+          "Freshness",
+          "Hygiene Fresh"
+        ],
+        [
+          "Shelves",
+          "3 tempered glass (fridge), 1 (freezer)"
+        ],
+        [
+          "Door baskets",
+          "2 in the freezer, 4 in the fridge, transparent"
+        ],
+        [
+          "Ice maker",
+          "Manual, 1 lever and 2 trays, a moving ice tray"
+        ],
+        [
+          "Control",
+          "External LED display, Express Freeze, door alarm"
+        ],
+        [
+          "Handle",
+          "Horizontal pocket"
+        ],
+        [
+          "Light",
+          "Top LED"
+        ],
+        [
+          "Smart",
+          "ThinQ (Wi-Fi), Smart Diagnosis"
+        ],
+        [
+          "Weight",
+          "80 kg"
+        ]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://www.lg.com/in/refrigerators/double-door-refrigerators/glt4626tmpz/",
+      "hotspots": [
+        {
+          "title": "Convertible",
+          "text": "Convert a section of the freezer to more refrigeration as needed to keep foods fresher for longer.",
+          "pos": [
+            0.015,
+            1.608,
+            -0.29
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "freezer"
+        },
+        {
+          "title": "Moving Ice Tray",
+          "text": "The sliding ice tray can be moved to the left or right to position it in your preferred location.",
+          "pos": [
+            -0.104,
+            1.5,
+            0.2805
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "freezer"
+        },
+        {
+          "title": "Hygiene Fresh",
+          "text": "Up to 99.99% reduction in activity of bacteria, to keep your food fresher in a cleaner environment.",
+          "pos": [
+            0.015,
+            0.98,
+            -0.29
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "fridge"
+        },
+        {
+          "title": "Door Cooling+",
+          "text": "Food stays fresh and drinks get ice cold on any shelf with even and faster cooling.",
+          "pos": [
+            0,
+            0.8,
+            0.3625
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!fridge"
+        }
+      ],
+      "fit": {
+        "back": 5,
+        "note": "From LG's owner's manual for its double-door range: keep at least 5 cm between the back and the wall. The 466 L model's own door swing is not published; the doors open about 135 degrees in this model."
       }
     },
     {
@@ -1234,6 +1511,7 @@
     },
     {
       "id": "bosch-wga1420pin",
+      "hidden": true,
       "brand": "Bosch",
       "brandLogo": "/logos/bosch.png",
       "category": "Washing machine",
@@ -1503,7 +1781,281 @@
       }
     },
     {
+      "id": "lg-fhb1208z2m",
+      "brand": "LG",
+      "brandLogo": "/logos/lg.png",
+      "category": "Washing machine",
+      "model": "FHB1208Z2M",
+      "name": "LG 8 kg front-load washing machine with Inverter Direct Drive and Steam",
+      "shortName": "8 kg front-load washer",
+      "summary": "Open the door to see the drum, slide out the detergent drawer and open the pump-filter cover, then place it in your home at its real size.",
+      "arTip": "Tap the door, the drawer or the small cover at the bottom right to open it",
+      "glb": "/models/lg-fhb1208z2m.glb",
+      "thumb": "/photos/lg-fhb1208z2m/0.jpg",
+      "photos": [
+        "/photos/lg-fhb1208z2m/0.jpg",
+        "/photos/lg-fhb1208z2m/1.jpg",
+        "/photos/lg-fhb1208z2m/2.jpg",
+        "/photos/lg-fhb1208z2m/3.jpg"
+      ],
+      "placement": "floor",
+      "arLabel": "View in your home",
+      "orbit": "-26deg 76deg 118%",
+      "finishes": [
+        {
+          "name": "Middle Black",
+          "swatchColor": "#3c3c3e",
+          "usdz": "/models/usdz/lg-fhb1208z2m-middle-black.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "drawer",
+          "label": "drawer",
+          "node": "Drawer",
+          "slide": [
+            0,
+            0,
+            0.2
+          ],
+          "zone": {
+            "closed": [
+              [
+                -0.3,
+                0.761,
+                0.043
+              ],
+              [
+                -0.088,
+                0.85,
+                0.275
+              ]
+            ],
+            "open": [
+              [
+                -0.3,
+                0.761,
+                0.243
+              ],
+              [
+                -0.088,
+                0.85,
+                0.475
+              ]
+            ]
+          }
+        },
+        {
+          "key": "door",
+          "label": "door",
+          "node": "Door",
+          "axis": "y",
+          "angle": -100,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.248,
+                0.244,
+                0.207
+              ],
+              [
+                0.248,
+                0.74,
+                0.315
+              ]
+            ],
+            "open": [
+              [
+                -0.389,
+                0.244,
+                0.246
+              ],
+              [
+                -0.215,
+                0.74,
+                0.739
+              ]
+            ]
+          }
+        },
+        {
+          "key": "filter",
+          "label": "pump filter cover",
+          "node": "FilterFlap",
+          "axis": "x",
+          "angle": 95,
+          "zone": {
+            "closed": [
+              [
+                0.121,
+                0.072,
+                0.275
+              ],
+              [
+                0.265,
+                0.17,
+                0.281
+              ]
+            ],
+            "open": [
+              [
+                0.121,
+                0.059,
+                0.275
+              ],
+              [
+                0.265,
+                0.072,
+                0.373
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "60 cm",
+        "h": "85 cm",
+        "d": "55 cm"
+      },
+      "sizeNote": "59 cm deep with the door, 103 cm with the door open at 90 degrees",
+      "fit": {
+        "front": 48,
+        "sides": 2,
+        "back": 10,
+        "top": 0.5,
+        "note": "From LG's owner's manual: at least 2 cm at each side, 10 cm behind for the hoses, 0.5 cm above, and 103 cm of depth in total with the door open at 90 degrees."
+      },
+      "specs": [
+        [
+          "Capacity",
+          "8 kg"
+        ],
+        [
+          "Type",
+          "Front load, freestanding"
+        ],
+        [
+          "Max spin",
+          "1200 rpm (1200 / 1000 / 800 / 600 / 400 / no spin)"
+        ],
+        [
+          "Motor",
+          "Inverter Direct Drive, 6 Motion Direct Drive"
+        ],
+        [
+          "Drum",
+          "Stainless steel, embossed"
+        ],
+        [
+          "Energy",
+          "5 star, 0.07 kWh/kg/cycle"
+        ],
+        [
+          "Steam",
+          "Steam with Allergy Care"
+        ],
+        [
+          "Programmes",
+          "Cotton, Cotton+, Mixed Fabric, Quick 30, Allergy Care, Activewear, Hand/Wool, Delicates, Tub Clean, Rinse+Spin"
+        ],
+        [
+          "Display",
+          "Dial, touch buttons and LED display"
+        ],
+        [
+          "Delay timer",
+          "3 to 19 hours"
+        ],
+        [
+          "Water",
+          "Cold fill, automatic water level"
+        ],
+        [
+          "Smart",
+          "Smart Diagnosis, LoadSense, foam detection"
+        ],
+        [
+          "Supply",
+          "230 V, 50 Hz"
+        ],
+        [
+          "Weight",
+          "57 kg"
+        ],
+        [
+          "Warranty",
+          "10 years on the motor (LG)"
+        ]
+      ],
+      "sangeethaUrl": "https://www.sangeetha.com/product-details/lg-8-kg-front-load-washing-machine-or-inverter-direct-drive-or-ai-dd-or-middle-black-fhb1208z2mambqeil/21215",
+      "source": "https://www.lg.com/in/laundry/front-loading-washing-machines/fhb1208z2m/",
+      "hotspots": [
+        {
+          "title": "6 Motion Direct Drive",
+          "text": "Six wash motions, each made for a different fabric, for a better wash with less vibration and less noise.",
+          "pos": [
+            -0.13,
+            0.67,
+            0.33
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!door"
+        },
+        {
+          "title": "Inverter Direct Drive",
+          "text": "The motor drives the drum directly. LG gives a 10 year warranty on the motor.",
+          "pos": [
+            0.249,
+            0.746,
+            0.277
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        },
+        {
+          "title": "Steam with Allergy Care",
+          "text": "Steam cycles reduce germs and allergens; the Allergy Care programme is approved by the British Allergy Foundation.",
+          "pos": [
+            -0.043,
+            0.7863,
+            0.277
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        },
+        {
+          "title": "Smart Diagnosis",
+          "text": "Quickly troubleshoot the machine with Smart Diagnosis.",
+          "pos": [
+            0.249,
+            0.8,
+            0.277
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "always"
+        }
+      ]
+    },
+    {
       "id": "carrier-19k-xceed-edge-gxi",
+      "hidden": true,
       "brand": "Carrier",
       "brandLogo": "/logos/carrier.png",
       "category": "Air conditioner",
@@ -1896,6 +2448,216 @@
             1,
             0,
             0
+          ],
+          "show": "always"
+        }
+      ]
+    },
+    {
+      "id": "haier-hso52kucai3nb",
+      "brand": "Haier",
+      "brandLogo": "/logos/haier.png",
+      "category": "Air conditioner",
+      "model": "HSO52KU-CAI3NB-I",
+      "name": "Haier 1.5 ton 3-star Kinouchi Ultra AI Smart inverter split AC",
+      "shortName": "1.5 ton Kinouchi Ultra AC",
+      "summary": "Swing the louvre open, lift the front panel to see the filter, then hang it on your wall at its real size.",
+      "arTip": "Tap the louvre or the front panel to open it",
+      "glb": "/models/haier-hso52kucai3nb.glb",
+      "thumb": "/photos/haier-hso52kucai3nb/0.jpg",
+      "photos": [
+        "/photos/haier-hso52kucai3nb/0.jpg",
+        "/photos/haier-hso52kucai3nb/1.jpg",
+        "/photos/haier-hso52kucai3nb/2.jpg",
+        "/photos/haier-hso52kucai3nb/3.jpg"
+      ],
+      "placement": "wall",
+      "arLabel": "View on your wall",
+      "orbit": "-22deg 82deg 128%",
+      "finishes": [
+        {
+          "name": "White and gold",
+          "swatchColor": "#f3f3f4",
+          "usdz": "/models/usdz/haier-hso52kucai3nb-white-and-gold.usdz"
+        }
+      ],
+      "parts": [
+        {
+          "key": "panel",
+          "label": "front panel",
+          "node": "FrontPanel",
+          "axis": "x",
+          "angle": -60,
+          "zone": {
+            "closed": [
+              [
+                -0.454,
+                0.065,
+                0.1
+              ],
+              [
+                0.454,
+                0.306,
+                0.223
+              ]
+            ],
+            "open": [
+              [
+                -0.454,
+                0.189,
+                0.097
+              ],
+              [
+                0.454,
+                0.411,
+                0.366
+              ]
+            ]
+          }
+        },
+        {
+          "key": "louvre",
+          "label": "louvre",
+          "node": "Louvre",
+          "axis": "x",
+          "angle": -50,
+          "hint": true,
+          "zone": {
+            "closed": [
+              [
+                -0.39,
+                0.014,
+                0.153
+              ],
+              [
+                0.39,
+                0.062,
+                0.218
+              ]
+            ],
+            "open": [
+              [
+                -0.39,
+                0.014,
+                0.118
+              ],
+              [
+                0.39,
+                0.095,
+                0.197
+              ]
+            ]
+          }
+        }
+      ],
+      "size": {
+        "w": "91.6 cm",
+        "h": "30.6 cm",
+        "d": "22.3 cm"
+      },
+      "sizeNote": "Indoor unit, the size of Haier's Kinouchi Ultra range. Outdoor unit 86 x 34.5 x 55 cm",
+      "specs": [
+        [
+          "Capacity",
+          "1.5 ton, 5.13 kW"
+        ],
+        [
+          "Energy rating",
+          "3 star"
+        ],
+        [
+          "Series",
+          "Kinouchi Ultra, AI Smart"
+        ],
+        [
+          "Inverter",
+          "Hexa inverter"
+        ],
+        [
+          "Cooling",
+          "Supersonic cooling in 10 seconds"
+        ],
+        [
+          "Cleaning",
+          "Frost Self Clean"
+        ],
+        [
+          "Modes",
+          "7-in-1 Intelli Convertible"
+        ],
+        [
+          "Outdoor cooling",
+          "Works up to 60 degrees C outdoors"
+        ],
+        [
+          "Coil",
+          "100% grooved copper"
+        ],
+        [
+          "Refrigerant",
+          "R32"
+        ]
+      ],
+      "sangeethaUrl": null,
+      "source": "https://www.haier.com/in/air-conditioners/",
+      "hotspots": [
+        {
+          "title": "Supersonic Cooling",
+          "text": "Cools the room in just 10 seconds with heavy-duty performance.",
+          "pos": [
+            0.2,
+            0.235,
+            0.222
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!panel"
+        },
+        {
+          "title": "Frost Self Clean",
+          "text": "A complete indoor wet wash of the AC by frost, in about 21 minutes.",
+          "pos": [
+            -0.28,
+            0.17,
+            0.22
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "!panel"
+        },
+        {
+          "title": "Air purifying filter",
+          "text": "The inlet grille lifts to reach the air purifying filter for easy cleaning.",
+          "pos": [
+            -0.2,
+            0.2,
+            0.15
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "show": "panel"
+        },
+        {
+          "title": "7-in-1 Intelli Convertible",
+          "text": "Seven modes let you match the cooling to the room and the load.",
+          "pos": [
+            0.31,
+            0.145,
+            0.22
+          ],
+          "normal": [
+            0,
+            0,
+            1
           ],
           "show": "always"
         }

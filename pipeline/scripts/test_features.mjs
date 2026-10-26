@@ -11,7 +11,7 @@ const report = [];
 const log = (...a) => { const s = a.join(" "); report.push(s); console.log(s); };
 const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1";
 const MAC = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
-const products = (await (await fetch(`${base}/products.json`)).json()).products.filter((p) => !process.env.ONLY || p.id === process.env.ONLY);
+const products = (await (await fetch(`${base}/products.json`)).json()).products.filter((p) => !p.hidden && (!process.env.ONLY || p.id === process.env.ONLY));
 const b = await launch({ profile: `${out}/prof`, port: +(process.env.PORT || 9455) });
 let fails = 0;
 const check = (ok, what) => { if (!ok) fails++; log(`  ${ok ? "ok  " : "FAIL"} ${what}`); };
