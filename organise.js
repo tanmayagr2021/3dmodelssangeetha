@@ -106,6 +106,24 @@ export function initOrganise({ mv, product, state, togglePart, bar, toast }) {
     running = false;
   }
 
+  // a customer who opens the doors on an empty fridge is told what to press, once: the button pulses and a toast says so
+  let nudged = false;
+  const nudgeTimer = setInterval(() => {
+    if (nudged || !items || full || running) return;
+    if (!Object.values(state).some(Boolean)) return;
+    nudged = true;
+    clearInterval(nudgeTimer);
+    btn?.classList.add("pulse");
+    toast?.("Tap “Fill the fridge” to stock it");
+    setTimeout(() => btn?.classList.remove("pulse"), 6000);
+  }, 700);
+  if (!document.getElementById("organise-style")) {
+    const st = document.createElement("style");
+    st.id = "organise-style";
+    st.textContent = "#part-organise.pulse { animation: orgpulse 1.2s ease-in-out 5; } @keyframes orgpulse { 0%,100% { box-shadow: 0 0 0 0 rgba(224,122,18,.0); } 50% { box-shadow: 0 0 0 6px rgba(224,122,18,.45); } }";
+    document.head.appendChild(st);
+  }
+
   // in AR the fridge is shown full
   mv.addEventListener("ar-status", (e) => { if (items && e.detail?.status === "session-started" && !full) setFull(true); });
   if (mv.loaded) setup(); else mv.addEventListener("load", setup, { once: true });

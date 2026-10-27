@@ -1,0 +1,1202 @@
+{
+ "amul_butter": {
+  "file": "amul_butter.jpg",
+  "kind": "flat",
+  "barcode": "8901262010016",
+  "px": [
+   768,
+   554
+  ],
+  "aspect": 1.386,
+  "real_size_mm": [
+   85,
+   55,
+   32
+  ],
+  "notes": "100 g salted butter wrapper, top face",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   0.985
+  ],
+  "brand": "Amul",
+  "product": "Amul Pasteurized Butter",
+  "quantity": "100.0 g",
+  "source_url": "https://world.openfoodfacts.org/product/8901262010016",
+  "photographers": [
+   "openfoodfacts-contributors",
+   "mrudultora",
+   "kiliweb"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_cheese_slices": {
+  "file": "amul_cheese_slices.jpg",
+  "kind": "flat",
+  "barcode": "8901262020015",
+  "px": [
+   768,
+   748
+  ],
+  "aspect": 1.027,
+  "real_size_mm": [
+   150,
+   150,
+   30
+  ],
+  "notes": "200 g slices pack front",
+  "crop_box": [
+   0.03,
+   0.02,
+   0.97,
+   0.97
+  ],
+  "brand": "Amul",
+  "product": "Cheese slices",
+  "quantity": "200 g",
+  "source_url": "https://world.openfoodfacts.org/product/8901262020015",
+  "photographers": [
+   "matiz",
+   "mudskipper875"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_paneer": {
+  "file": "amul_paneer.jpg",
+  "kind": "flat",
+  "barcode": "8901262180016",
+  "px": [
+   480,
+   768
+  ],
+  "aspect": 0.625,
+  "real_size_mm": [
+   150,
+   190,
+   35
+  ],
+  "notes": "200 g malai paneer pouch, hand cropped out",
+  "crop_box": [
+   0.2,
+   0.01,
+   0.98,
+   0.99
+  ],
+  "brand": "Amul",
+  "product": "Malai Paneer",
+  "quantity": "200 g",
+  "source_url": "https://world.openfoodfacts.org/product/8901262180016",
+  "photographers": [
+   "foodless"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_taaza_carton": {
+  "file": "amul_taaza_carton.jpg",
+  "kind": "flat",
+  "barcode": "8901262150217",
+  "px": [
+   412,
+   768
+  ],
+  "aspect": 0.536,
+  "real_size_mm": [
+   64,
+   150,
+   40
+  ],
+  "notes": "Amul Taaza 500 ml Tetra pack front",
+  "crop_box": [
+   0.1,
+   0.0,
+   0.83,
+   0.995
+  ],
+  "brand": "Amul",
+  "product": "Amul Taaza milk 500ml",
+  "quantity": "500ml",
+  "source_url": "https://world.openfoodfacts.org/product/8901262150217",
+  "photographers": [
+   "krishanti",
+   "foodless"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_taaza_pouch": {
+  "file": "amul_taaza_pouch.jpg",
+  "kind": "flat",
+  "barcode": "8901262260121",
+  "px": [
+   768,
+   739
+  ],
+  "aspect": 1.039,
+  "real_size_mm": [
+   150,
+   160,
+   30
+  ],
+  "notes": "Amul Taaza milk pouch",
+  "crop_box": [
+   0.02,
+   0.05,
+   0.98,
+   0.98
+  ],
+  "brand": "Amul, Amul taaza",
+  "product": "Amul Taaza Milky Milk",
+  "quantity": "500 ml",
+  "source_url": "https://world.openfoodfacts.org/product/8901262260121",
+  "photographers": [
+   "shivangi-motwani",
+   "openfoodfacts-contributors",
+   "jayeshchauhan"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "nandini_toned_milk": {
+  "file": "nandini_toned_milk.jpg",
+  "kind": "flat",
+  "barcode": "8906036670014",
+  "px": [
+   768,
+   714
+  ],
+  "aspect": 1.076,
+  "real_size_mm": [
+   150,
+   160,
+   30
+  ],
+  "notes": "Nandini pasteurised toned milk 500 ml pouch (Kannada and English)",
+  "crop_box": [
+   0.03,
+   0.06,
+   0.98,
+   0.97
+  ],
+  "brand": "Nandini",
+  "product": "Pasteurised Toned Milk",
+  "quantity": "500 ml",
+  "source_url": "https://world.openfoodfacts.org/product/8906036670014",
+  "photographers": [
+   "chunkieramos"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "aavin_milk": {
+  "file": "aavin_milk.jpg",
+  "kind": "flat",
+  "barcode": "8904011301601",
+  "px": [
+   732,
+   768
+  ],
+  "aspect": 0.953,
+  "real_size_mm": [
+   150,
+   160,
+   30
+  ],
+  "notes": "Aavin premium milk pouch (Tamil and English)",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "Aavin",
+  "product": "Pasteurised Full Cream Milk",
+  "quantity": "500 ml",
+  "source_url": "https://world.openfoodfacts.org/product/8904011301601",
+  "photographers": [
+   "mudskipper875"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_masti_buttermilk": {
+  "file": "amul_masti_buttermilk.jpg",
+  "kind": "flat",
+  "barcode": "8901262200196",
+  "px": [
+   326,
+   768
+  ],
+  "aspect": 0.424,
+  "real_size_mm": [
+   52,
+   105,
+   36
+  ],
+  "notes": "Amul Masti spiced buttermilk 200 ml carton",
+  "crop_box": [
+   0.24,
+   0.0,
+   0.615,
+   0.985
+  ],
+  "brand": "Amul",
+  "product": "Amul Masti Spiced Buttermilk 200ml",
+  "quantity": "200mL",
+  "source_url": "https://world.openfoodfacts.org/product/8901262200196",
+  "photographers": [
+   "openfoodfacts-contributors",
+   "kiliweb",
+   "foodless"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "nandini_curd_pouch": {
+  "file": "nandini_curd_pouch.jpg",
+  "kind": "flat",
+  "barcode": "8906036670212",
+  "px": [
+   754,
+   768
+  ],
+  "aspect": 0.982,
+  "real_size_mm": [
+   150,
+   160,
+   30
+  ],
+  "notes": "Nandini curd pouch (Kannada: mosaru)",
+  "crop_box": [
+   0.02,
+   0.03,
+   0.99,
+   0.985
+  ],
+  "brand": "Nandini",
+  "product": "Curd",
+  "quantity": "500 g",
+  "source_url": "https://world.openfoodfacts.org/product/8906036670212",
+  "photographers": [
+   "chunkieramos"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_masti_dahi_pouch": {
+  "file": "amul_masti_dahi_pouch.jpg",
+  "kind": "flat",
+  "barcode": "8901262200677",
+  "px": [
+   610,
+   768
+  ],
+  "aspect": 0.794,
+  "real_size_mm": [
+   110,
+   160,
+   30
+  ],
+  "notes": "Amul Masti dahi pouch",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   0.9
+  ],
+  "brand": "Amul",
+  "product": "amul masti dahi",
+  "quantity": "1 kg",
+  "source_url": "https://world.openfoodfacts.org/product/8901262200677",
+  "photographers": [
+   "openfoodfacts-contributors"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_curd_pouch": {
+  "file": "amul_curd_pouch.jpg",
+  "kind": "flat",
+  "barcode": "8901262202428",
+  "px": [
+   528,
+   768
+  ],
+  "aspect": 0.688,
+  "real_size_mm": [
+   120,
+   160,
+   30
+  ],
+  "notes": "Amul curd pouch",
+  "crop_box": [
+   0.02,
+   0.04,
+   0.99,
+   0.98
+  ],
+  "brand": "Amul",
+  "product": "Curd",
+  "quantity": "1 kg",
+  "source_url": "https://world.openfoodfacts.org/product/8901262202428",
+  "photographers": [
+   "chunkieramos"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "heritage_curd": {
+  "file": "heritage_curd.jpg",
+  "kind": "flat",
+  "barcode": "8904089975339",
+  "px": [
+   768,
+   394
+  ],
+  "aspect": 1.949,
+  "real_size_mm": [
+   160,
+   90,
+   25
+  ],
+  "notes": "Heritage total curd pouch (Telugu and English)",
+  "crop_box": [
+   0.0,
+   0.03,
+   1.0,
+   0.92
+  ],
+  "brand": "Heritage",
+  "product": "Total Curd",
+  "quantity": "140 g",
+  "source_url": "https://world.openfoodfacts.org/product/8904089975339",
+  "photographers": [
+   "chunkieramos"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_masti_dahi_lid": {
+  "file": "amul_masti_dahi_lid.jpg",
+  "kind": "lid",
+  "barcode": "8901262201124",
+  "px": [
+   496,
+   512
+  ],
+  "aspect": 0.969,
+  "real_size_mm": [
+   100,
+   100,
+   0
+  ],
+  "notes": "Amul Masti dahi cup lid, top view, circular",
+  "crop_box": [
+   0.02,
+   0.02,
+   0.98,
+   0.98
+  ],
+  "brand": "Amul",
+  "product": "Amul Masti Dahi",
+  "quantity": "85 g",
+  "source_url": "https://world.openfoodfacts.org/product/8901262201124",
+  "photographers": [
+   "kumr"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "id_batter": {
+  "file": "id_batter.jpg",
+  "kind": "flat",
+  "barcode": "8906020580015",
+  "px": [
+   768,
+   480
+  ],
+  "aspect": 1.6,
+  "real_size_mm": [
+   220,
+   160,
+   40
+  ],
+  "notes": "iD Idly & Dosa batter 1 kg pouch",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   0.87
+  ],
+  "brand": "iD",
+  "product": "Idly & Dosa Batter",
+  "quantity": "1kg",
+  "source_url": "https://world.openfoodfacts.org/product/8906020580015",
+  "photographers": [
+   "swarnimagupta",
+   "chunkieramos",
+   "krishanti"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "real_mixed_fruit": {
+  "file": "real_mixed_fruit.jpg",
+  "kind": "flat",
+  "barcode": "4796008920049",
+  "px": [
+   289,
+   768
+  ],
+  "aspect": 0.376,
+  "real_size_mm": [
+   64,
+   190,
+   40
+  ],
+  "notes": "Real mixed fruit juice 1 L carton (source photo is small)",
+  "crop_box": [
+   0.0,
+   0.0,
+   0.94,
+   1.0
+  ],
+  "brand": "Real",
+  "product": "Real Mixed fruit juice",
+  "quantity": "1l",
+  "source_url": "https://world.openfoodfacts.org/product/4796008920049",
+  "photographers": [
+   "openfoodfacts-contributors",
+   "kiliweb"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "real_mango": {
+  "file": "real_mango.jpg",
+  "kind": "flat",
+  "barcode": "8901207004391",
+  "px": [
+   276,
+   768
+  ],
+  "aspect": 0.359,
+  "real_size_mm": [
+   64,
+   190,
+   40
+  ],
+  "notes": "Real Fruit Power mango 1 L carton",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "Dabur",
+  "product": "Real Fruit Power Mango",
+  "quantity": "1 L",
+  "source_url": "https://world.openfoodfacts.org/product/8901207004391",
+  "photographers": [
+   "aayushsrathore"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_ghee_pouch": {
+  "file": "amul_ghee_pouch.jpg",
+  "kind": "flat",
+  "barcode": "8901262030366",
+  "px": [
+   576,
+   768
+  ],
+  "aspect": 0.75,
+  "real_size_mm": [
+   120,
+   170,
+   35
+  ],
+  "notes": "Amul pure ghee pouch",
+  "crop_box": [
+   0.02,
+   0.02,
+   0.98,
+   0.98
+  ],
+  "brand": "AMUL",
+  "product": "AMUL PURE GHEE",
+  "quantity": "1L",
+  "source_url": "https://world.openfoodfacts.org/product/8901262030366",
+  "photographers": [
+   "smoothie-app",
+   "pratikpatel"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "nandini_ghee_pouch": {
+  "file": "nandini_ghee_pouch.jpg",
+  "kind": "flat",
+  "barcode": "8906036670885",
+  "px": [
+   490,
+   768
+  ],
+  "aspect": 0.638,
+  "real_size_mm": [
+   110,
+   190,
+   35
+  ],
+  "notes": "Nandini pure ghee pouch (Kannada: shuddha tuppa)",
+  "crop_box": [
+   0.0,
+   0.0,
+   0.93,
+   1.0
+  ],
+  "brand": "Nandini",
+  "product": "Pure Ghee",
+  "quantity": "1 l (905 g)",
+  "source_url": "https://world.openfoodfacts.org/product/8906036670885",
+  "photographers": [
+   "chunkieramos"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "aavin_ghee_jar": {
+  "file": "aavin_ghee_jar.jpg",
+  "kind": "wrap",
+  "barcode": "8904011311044",
+  "px": [
+   768,
+   508
+  ],
+  "aspect": 1.512,
+  "real_size_mm": [
+   95,
+   45,
+   95
+  ],
+  "notes": "Aavin ghee jar label, jar photographed straight on",
+  "crop_box": [
+   0.06,
+   0.4,
+   0.96,
+   0.78
+  ],
+  "brand": "Aavin",
+  "product": "Ghee",
+  "quantity": "500 ml",
+  "source_url": "https://world.openfoodfacts.org/product/8904011311044",
+  "photographers": [
+   "mudskipper875"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "mothers_mango_pickle": {
+  "file": "mothers_mango_pickle.jpg",
+  "kind": "wrap",
+  "barcode": "8906001055440",
+  "px": [
+   768,
+   732
+  ],
+  "aspect": 1.049,
+  "real_size_mm": [
+   95,
+   55,
+   95
+  ],
+  "notes": "Mother's Recipe mango pickle jar label (Arabic edition for export, text partly Arabic)",
+  "crop_box": [
+   0.14,
+   0.18,
+   0.84,
+   0.68
+  ],
+  "brand": "Mother's Recipe",
+  "product": "Mango Pickle Mild",
+  "quantity": null,
+  "source_url": "https://world.openfoodfacts.org/product/8906001055440",
+  "photographers": [
+   "openfoodfacts-contributors"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "sakthi_sambar_powder": {
+  "file": "sakthi_sambar_powder.jpg",
+  "kind": "flat",
+  "barcode": "8906002080328",
+  "px": [
+   516,
+   768
+  ],
+  "aspect": 0.672,
+  "real_size_mm": [
+   90,
+   130,
+   20
+  ],
+  "notes": "Sakthi sambar powder 100 g pack (Tamil Nadu)",
+  "crop_box": [
+   0.0,
+   0.0,
+   0.95,
+   1.0
+  ],
+  "brand": "Sakthi",
+  "product": "Sambar Powder",
+  "quantity": "100g",
+  "source_url": "https://world.openfoodfacts.org/product/8906002080328",
+  "photographers": [
+   "shanu79"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_vanilla_magic_lid": {
+  "file": "amul_vanilla_magic_lid.jpg",
+  "kind": "flat",
+  "barcode": "8901262173490",
+  "px": [
+   768,
+   735
+  ],
+  "aspect": 1.045,
+  "real_size_mm": [
+   160,
+   160,
+   0
+  ],
+  "notes": "Amul Vanilla Magic tub lid, top view",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "Amul",
+  "product": "Vanilla ice cream",
+  "quantity": null,
+  "source_url": "https://world.openfoodfacts.org/product/8901262173490",
+  "photographers": [
+   "macrofactor",
+   "swas"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "amul_rajbhog_lid": {
+  "file": "amul_rajbhog_lid.jpg",
+  "kind": "flat",
+  "barcode": "8901262173599",
+  "px": [
+   768,
+   576
+  ],
+  "aspect": 1.333,
+  "real_size_mm": [
+   160,
+   160,
+   0
+  ],
+  "notes": "Amul Rajbhog tub lid, top view",
+  "crop_box": [
+   0.0,
+   0.0,
+   0.98,
+   0.98
+  ],
+  "brand": "Amul",
+  "product": "Amul Rajbhog",
+  "quantity": "1L/540 g",
+  "source_url": "https://world.openfoodfacts.org/product/8901262173599",
+  "photographers": [
+   "peekabo"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "viswas_parotta": {
+  "file": "viswas_parotta.jpg",
+  "kind": "flat",
+  "barcode": "8908000274570",
+  "px": [
+   768,
+   560
+  ],
+  "aspect": 1.371,
+  "real_size_mm": [
+   190,
+   160,
+   30
+  ],
+  "notes": "Viswas Malabar porotta 6 pieces pack",
+  "crop_box": [
+   0.0,
+   0.02,
+   1.0,
+   0.89
+  ],
+  "brand": "Viswas",
+  "product": "Malabar porotta",
+  "quantity": null,
+  "source_url": "https://world.openfoodfacts.org/product/8908000274570",
+  "photographers": [
+   "kiliweb"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "nitya_parotta": {
+  "file": "nitya_parotta.jpg",
+  "kind": "flat",
+  "barcode": "8906069491433",
+  "px": [
+   768,
+   756
+  ],
+  "aspect": 1.016,
+  "real_size_mm": [
+   190,
+   190,
+   30
+  ],
+  "notes": "Nitya Malabar parotta pack, hand at the top cropped",
+  "crop_box": [
+   0.02,
+   0.07,
+   0.98,
+   0.99
+  ],
+  "brand": "Nitya",
+  "product": "Malabar Parotta",
+  "quantity": "1kg (10 servings)",
+  "source_url": "https://world.openfoodfacts.org/product/8906069491433",
+  "photographers": [
+   "jessebot"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "fresho_green_peas": {
+  "file": "fresho_green_peas.jpg",
+  "kind": "flat",
+  "barcode": "8904256714099",
+  "px": [
+   463,
+   768
+  ],
+  "aspect": 0.603,
+  "real_size_mm": [
+   120,
+   190,
+   30
+  ],
+  "notes": "Fresho frozen green peas 500 g (source photo is small)",
+  "crop_box": [
+   0.03,
+   0.0,
+   0.92,
+   1.0
+  ],
+  "brand": "Big basket",
+  "product": "Fresho Frozen Green pea",
+  "quantity": "500g",
+  "source_url": "https://world.openfoodfacts.org/product/8904256714099",
+  "photographers": [
+   "itsumit"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "thumsup_can": {
+  "file": "thumsup_can.jpg",
+  "kind": "wrap",
+  "barcode": "8901764041259",
+  "px": [
+   316,
+   768
+  ],
+  "aspect": 0.411,
+  "real_size_mm": [
+   66,
+   115,
+   66
+  ],
+  "notes": "Thums Up slim can body",
+  "crop_box": [
+   0.0,
+   0.14,
+   0.8,
+   0.86
+  ],
+  "brand": "Coca Cola",
+  "product": "Thums Up 300ml can",
+  "quantity": "1",
+  "source_url": "https://world.openfoodfacts.org/product/8901764041259",
+  "photographers": [
+   "openfoodfacts-contributors",
+   "kiliweb",
+   "macrofactor"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "coke_label": {
+  "file": "coke_label.jpg",
+  "kind": "wrap",
+  "barcode": "5449000030245",
+  "px": [
+   768,
+   712
+  ],
+  "aspect": 1.079,
+  "real_size_mm": [
+   95,
+   60,
+   95
+  ],
+  "notes": "Coca-Cola Original Taste PET label (global design); also used on the can",
+  "crop_box": [
+   0.24,
+   0.4,
+   0.7,
+   0.72
+  ],
+  "brand": "Coca Cola, كوكا كولا",
+  "product": "Original Taste Coca Cola",
+  "quantity": "750 ml",
+  "source_url": "https://world.openfoodfacts.org/product/5449000030245",
+  "photographers": [
+   "tacinte",
+   "openfoodfacts-contributors",
+   "kiliweb"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "fanta_label": {
+  "file": "fanta_label.jpg",
+  "kind": "wrap",
+  "barcode": "8901764022272",
+  "px": [
+   595,
+   768
+  ],
+  "aspect": 0.775,
+  "real_size_mm": [
+   100,
+   60,
+   100
+  ],
+  "notes": "Fanta orange 750 ml PET label; also used on the can",
+  "crop_box": [
+   0.08,
+   0.6,
+   0.94,
+   0.9
+  ],
+  "brand": "The Coca-cola company",
+  "product": "Fanta Orange Flv 750ml",
+  "quantity": "24",
+  "source_url": "https://world.openfoodfacts.org/product/8901764022272",
+  "photographers": [
+   "kiliweb",
+   "chunkieramos"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "sprite_label": {
+  "file": "sprite_label.jpg",
+  "kind": "wrap",
+  "barcode": "8901764032905",
+  "px": [
+   768,
+   613
+  ],
+  "aspect": 1.253,
+  "real_size_mm": [
+   110,
+   90,
+   110
+  ],
+  "notes": "Sprite 2.25 L PET label",
+  "crop_box": [
+   0.05,
+   0.25,
+   0.95,
+   0.8
+  ],
+  "brand": "Coca cola, Sprite",
+  "product": "Sprite",
+  "quantity": "2.25l",
+  "source_url": "https://world.openfoodfacts.org/product/8901764032905",
+  "photographers": [
+   "openfoodfacts-contributors",
+   "smoothie-app",
+   "chandufooder"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "thumsup_label": {
+  "file": "thumsup_label.jpg",
+  "kind": "wrap",
+  "barcode": "8901764042904",
+  "px": [
+   768,
+   638
+  ],
+  "aspect": 1.204,
+  "real_size_mm": [
+   95,
+   75,
+   95
+  ],
+  "notes": "Thums Up PET label",
+  "crop_box": [
+   0.26,
+   0.22,
+   0.74,
+   0.52
+  ],
+  "brand": "Coca-Cola",
+  "product": "Thumsup",
+  "quantity": "1 litter",
+  "source_url": "https://world.openfoodfacts.org/product/8901764042904",
+  "photographers": [
+   "openfoodfacts-contributors",
+   "smoothie-app",
+   "onfroy69"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "maaza_label": {
+  "file": "maaza_label.jpg",
+  "kind": "wrap",
+  "barcode": "8901764092107",
+  "px": [
+   768,
+   340
+  ],
+  "aspect": 2.259,
+  "real_size_mm": [
+   95,
+   80,
+   95
+  ],
+  "notes": "Maaza mango 1.5 L PET label, bottle held sideways",
+  "crop_box": [
+   0.0,
+   0.22,
+   0.98,
+   0.86
+  ],
+  "brand": null,
+  "product": "Maaza 1.5L",
+  "quantity": null,
+  "source_url": "https://world.openfoodfacts.org/product/8901764092107",
+  "photographers": [
+   "openfoodfacts-contributors"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "bisleri_label": {
+  "file": "bisleri_label.jpg",
+  "kind": "wrap",
+  "barcode": "8906017290040",
+  "px": [
+   768,
+   518
+  ],
+  "aspect": 1.483,
+  "real_size_mm": [
+   65,
+   65,
+   65
+  ],
+  "notes": "Bisleri 1 L label",
+  "crop_box": [
+   0.05,
+   0.4,
+   0.95,
+   0.6
+  ],
+  "brand": "Bisleri",
+  "product": "Bisleri 1ltr MADE IN INDIA",
+  "quantity": "1",
+  "source_url": "https://world.openfoodfacts.org/product/8906017290040",
+  "photographers": [
+   "kiliweb",
+   "mg-lsj",
+   "chandufooder"
+  ],
+  "license": "CC-BY-SA (Open Food Facts contributors)"
+ },
+ "nandana_logo": {
+  "file": "nandana_logo.jpg",
+  "kind": "flat",
+  "barcode": null,
+  "px": [
+   768,
+   439
+  ],
+  "aspect": 1.749,
+  "real_size_mm": [
+   160,
+   91,
+   0
+  ],
+  "notes": "The official logo on the brand red (official spelling: Nandhana Palace). Logo art, not a pack photograph.",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "Nandhana Palace",
+  "product": "Logo",
+  "quantity": "takeaway pack",
+  "source_url": "https://nandhanarestaurants.com/ (wp-content/uploads/2023/03/nandhana-logo-red-bg.jpeg)",
+  "photographers": [
+   "the brand's own website"
+  ],
+  "license": "License: logos and packaging are trademarks of their owners; shown with the owner's permission for the client's demo (the owner of the client company owns both brands, as told to us by the user).",
+  "name": "nandana_logo"
+ },
+ "nandana_box_front": {
+  "file": "nandana_box_front.jpg",
+  "kind": "flat",
+  "barcode": null,
+  "px": [
+   1024,
+   640
+  ],
+  "aspect": 1.6,
+  "real_size_mm": [
+   150,
+   94,
+   30
+  ],
+  "notes": "LOGO LABEL, not a photographed pack: the official wordmark recoloured brand red on white paper with the two printed lines of the real takeaway tub ('add spice to your life', 'ANDHRA SPECIALITY RESTAURANT'), laid out as in the official photo of that tub (nandhanarestaurants.com/wp-content/uploads/2023/04/Hyderabadi-Biryani-Family-Pack-scaled-1-771x1024.jpg, which shows food and so is not used). Sizes estimated.",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "Nandhana Palace",
+  "product": "Takeaway tub / bag front (logo label)",
+  "quantity": "takeaway pack",
+  "source_url": "https://nandhanarestaurants.com/",
+  "photographers": [
+   "the brand's own website"
+  ],
+  "license": "License: logos and packaging are trademarks of their owners; shown with the owner's permission for the client's demo (the owner of the client company owns both brands, as told to us by the user).",
+  "name": "nandana_box_front"
+ },
+ "nandana_tub_wrap": {
+  "file": "nandana_tub_wrap.jpg",
+  "kind": "wrap",
+  "barcode": null,
+  "px": [
+   1024,
+   512
+  ],
+  "aspect": 2.0,
+  "real_size_mm": [
+   105,
+   52,
+   105
+  ],
+  "notes": "LOGO LABEL for a round white paper tub, same design as nandana_box_front, for wrapping over about 150 degrees. Re-created from the logo; tub size estimated from the official photo.",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "Nandhana Palace",
+  "product": "Takeaway tub (logo label)",
+  "quantity": "takeaway pack",
+  "source_url": "https://nandhanarestaurants.com/",
+  "photographers": [
+   "the brand's own website"
+  ],
+  "license": "License: logos and packaging are trademarks of their owners; shown with the owner's permission for the client's demo (the owner of the client company owns both brands, as told to us by the user).",
+  "name": "nandana_tub_wrap"
+ },
+ "rnr_logo": {
+  "file": "rnr_logo.jpg",
+  "kind": "flat",
+  "barcode": null,
+  "px": [
+   768,
+   767
+  ],
+  "aspect": 1.001,
+  "real_size_mm": [
+   100,
+   100,
+   0
+  ],
+  "notes": "The official gold RNR logo on white (the site's 'RNR gold logo'). Logo art, not a pack photograph.",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "RNR Biryani",
+  "product": "Logo",
+  "quantity": "takeaway pack",
+  "source_url": "https://rnrbiryani.com/ (wp-content/uploads/2022/12/RNR-gold-logo.jpg)",
+  "photographers": [
+   "the brand's own website"
+  ],
+  "license": "License: logos and packaging are trademarks of their owners; shown with the owner's permission for the client's demo (the owner of the client company owns both brands, as told to us by the user).",
+  "name": "rnr_logo"
+ },
+ "rnr_box_front": {
+  "file": "rnr_box_front.jpg",
+  "kind": "flat",
+  "barcode": null,
+  "px": [
+   746,
+   802
+  ],
+  "aspect": 0.93,
+  "real_size_mm": [
+   150,
+   161,
+   60
+  ],
+  "notes": "The brand's own navy and gold mark with 'TASTE OF 1953' (rnrbiryani.com/wp-content/uploads/2021/05/DonneBiriyaniRicee.png), the art printed on its navy takeaway tin and box in the official photos. Official art, upscaled 2x; use for a flat front panel.",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "RNR Biryani",
+  "product": "Takeaway tin / box front (official brand art)",
+  "quantity": "takeaway pack",
+  "source_url": "https://rnrbiryani.com/",
+  "photographers": [
+   "the brand's own website"
+  ],
+  "license": "License: logos and packaging are trademarks of their owners; shown with the owner's permission for the client's demo (the owner of the client company owns both brands, as told to us by the user).",
+  "name": "rnr_box_front"
+ },
+ "rnr_tin_lid": {
+  "file": "rnr_tin_lid.jpg",
+  "kind": "lid",
+  "barcode": null,
+  "px": [
+   1024,
+   1024
+  ],
+  "aspect": 1.0,
+  "real_size_mm": [
+   150,
+   150,
+   0
+  ],
+  "notes": "The navy tin lid: the official mark and RNR / TASTE OF 1953 wordmark cut from the art above and set mark-left, text-right as on the real lid in the official photos (rnrbiryani.com/wp-content/uploads/2022/12/Donne-Veg-Biryani-HomeScroll3.jpg shows the closed lid; that photo shows food so it is not used). Re-arranged official art, not a photograph. Tin size estimated.",
+  "crop_box": [
+   0.0,
+   0.0,
+   1.0,
+   1.0
+  ],
+  "brand": "RNR Biryani",
+  "product": "Takeaway tin lid (re-arranged official art)",
+  "quantity": "takeaway pack",
+  "source_url": "https://rnrbiryani.com/",
+  "photographers": [
+   "the brand's own website"
+  ],
+  "license": "License: logos and packaging are trademarks of their owners; shown with the owner's permission for the client's demo (the owner of the client company owns both brands, as told to us by the user).",
+  "name": "rnr_tin_lid"
+ }
+}

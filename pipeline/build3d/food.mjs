@@ -4,6 +4,8 @@
 // Shapes are lumpy rather than perfect (seeded noise), and skins are noise textures from tex_food.py.
 // usage: import { Food } from "./food.mjs";  const food = Food(); ... food.tomato("Tomato", x, y, z) ...
 //        exportGLB(..., { ...food.textures(T + "/food") })   // T = the textures dir; only materials used are listed
+import fs from "node:fs";
+import path from "node:path";
 import { THREE, mat, mesh, group, flipV } from "./lib.mjs";
 
 const hash = (x, y, z) => { const h = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453; return h - Math.floor(h); };
@@ -18,7 +20,7 @@ function vnoise(x, y, z) {
     L(L(hash(xi, yi, zi + 1), hash(xi + 1, yi, zi + 1), u), L(hash(xi, yi + 1, zi + 1), hash(xi + 1, yi + 1, zi + 1), u), v), w);
 }
 
-export function Food() {
+export function Food({ brandDir = null } = {}) {
   const used = new Map();   // material name -> texture file, for the materials this fridge actually uses
   const M = (key, color, o = {}, tex = null) => { const m = mat("fd_" + key, color, o); if (tex) used.set("fd_" + key, tex); return m; };
   const cache = {};
@@ -209,7 +211,7 @@ export function Food() {
   function herb(name, x, y, z, kind = "coriander", seed = 1) {
     const g = group(name);
     const r = rnd(seed * 97 + 13);
-    const leafM = C(kind === "coriander" ? "leafcor" : "leafcur", kind === "coriander" ? 0x6ab04c : 0x2f7a2d, { rough: 0.6, side: THREE.DoubleSide }, "leaf.jpg");
+    const leafM = C(kind === "coriander" ? "leafcor" : "leafcur", kind === "coriander" ? 0x6ab04c : 0x2f7a2d, { rough: 0.6, side: THREE.DoubleSide }, kind === "coriander" ? "leaf.jpg" : "leaf_curry.jpg");
     const stems = kind === "coriander" ? 9 : 5;
     for (let s = 0; s < stems; s++) {
       const a = (s / stems) * Math.PI * 2, tilt = 0.25 + r() * 0.5;
@@ -235,6 +237,7 @@ export function Food() {
       const t = i / 29, ring = Math.floor(Math.sqrt(i * 2));
       const a = i * 2.4, rad = (1 - t) * 0.026;
       const m = mesh("Grape", geo, gm, Math.cos(a) * rad, 0.07 - t * 0.062 + r() * 0.004, Math.sin(a) * rad);
+      m.rotation.set(r() * 3, r() * 3, r() * 3);
       g.add(m); void ring;
     }
     g.add(mesh("Stalk", new THREE.CylinderGeometry(0.0018, 0.0024, 0.03, 5), C("grapestalk", 0x6a5a30, { rough: 0.8 }), 0, 0.083, 0));
@@ -247,7 +250,7 @@ export function Food() {
   }
   function cauliflower(name, x, y, z, seed = 1) {
     const g = group(name);
-    g.add(mesh("Curd", blob(0.058, seed, { sy: 0.9, lump: 0.11, freq: 4.6, seg: 16 }), C("cauliflower", 0xffffff, { rough: 0.9 }, "cauliflower.jpg"), 0, 0.058, 0.0));
+    g.add(mesh("Curd", blob(0.058, seed, { sy: 0.9, lump: 0.16, freq: 6.2, seg: 16 }), C("cauliflower", 0xffffff, { rough: 0.9 }, "cauliflower.jpg"), 0, 0.058, 0.0));
     const lm = C("calyxdbl", 0x4f8a2e, { rough: 0.6, side: THREE.DoubleSide });
     for (let i = 0; i < 6; i++) { const lf = leaf(0.07, 0.03, lm); lf.position.set(0, 0.012, 0); lf.rotation.set(-1.0 + (i % 2) * 0.25, i * 1.047, 0); g.add(lf); }
     return tag(at(g, x, y, z, seed));
@@ -280,35 +283,34 @@ export function Food() {
   }
 
   // ── drinks and packs ──
-  function can(name, bodyColor, x, y, z, labelM = null) {
+  function can(name, bodyColor, x, y, z, labelM = null, labelArc = Math.PI * 2, labelH = 0.092) {
     const g = group(name);
     const r = 0.033;
     const body = lathe([[0.0001, 0], [0.026, 0], [0.029, 0.004], [r, 0.01], [r, 0.108], [0.03, 0.115], [0.0275, 0.119], [0.0285, 0.1205], [0.0285, 0.1225]], 24);
     g.add(mesh("CanBody", body, C("can" + bodyColor.toString(16), bodyColor, { metal: 0.5, rough: 0.35 }), 0, 0, 0));
     g.add(mesh("CanTop", new THREE.CircleGeometry(0.0272, 20), C("canalu", 0xc9ccd0, { metal: 0.9, rough: 0.3 }), 0, 0.1208, 0).rotateX(-Math.PI / 2));
     g.add(mesh("PullTab", new THREE.BoxGeometry(0.014, 0.0008, 0.009), C("canalu", 0xc9ccd0, { metal: 0.9, rough: 0.3 }), 0, 0.122, 0));
-    if (labelM) g.add(mesh("CanPrint", flipUV(new THREE.CylinderGeometry(r + 0.0004, r + 0.0004, 0.092, 16, 1, true, -Math.PI, Math.PI * 2)), labelM, 0, 0.058, 0));
+    if (labelM) g.add(mesh("CanPrint", flipUV(new THREE.CylinderGeometry(r + 0.0004, r + 0.0004, labelH, 16, 1, true, -labelArc / 2, labelArc)), labelM, 0, 0.011 + labelH / 2, 0));
     return tag(at(g, x, y, z));
   }
   function flipUV(geo) { const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setY(i, 1 - uv.getY(i)); return geo; }
-  function petBottle(name, r, h, liquidColor, capColor, x, y, z, labelM = null, labelH = 0.09, opacity = 0.7) {
+  function petBottle(name, r, h, liquidColor, capColor, x, y, z, labelM = null, labelH = 0.09, opacity = 0.7, labelArc = Math.PI * 2, labelY = 0.092) {
     const g = group(name);
     const s = h / 0.26;
     const prof = [[0.0001, 0.002], [r * 0.55, 0.0], [r * 0.9, 0.004 * s], [r, 0.012 * s], [r, 0.150 * s], [r * 0.94, 0.172 * s], [r * 0.70, 0.205 * s], [r * 0.45, 0.228 * s], [r * 0.36, 0.236 * s], [r * 0.36, 0.2395 * s], [r * 0.42, 0.241 * s], [r * 0.42, 0.244 * s], [r * 0.36, 0.2455 * s], [r * 0.36, 0.250 * s]];
     g.add(mesh("Bottle", lathe(prof, 24), C("pet" + liquidColor.toString(16), liquidColor, { rough: 0.08, opacity }), 0, 0, 0));
     g.add(mesh("Cap", new THREE.CylinderGeometry(r * 0.4, r * 0.4, 0.018 * s, 14), C("petcap" + capColor.toString(16), capColor, { rough: 0.4 }), 0, 0.2605 * s, 0));
-    if (labelM) g.add(mesh("Label", flipUV(new THREE.CylinderGeometry(r + 0.0006, r + 0.0006, labelH, 16, 1, true, -Math.PI, Math.PI * 2)), labelM, 0, 0.092 * s, 0));
+    if (labelM) g.add(mesh("Label", flipUV(new THREE.CylinderGeometry(r + 0.0006, r + 0.0006, labelH, 16, 1, true, -labelArc / 2, labelArc)), labelM, 0, labelY * s, 0));
     return tag(at(g, x, y, z));
   }
-  function carton(name, texFile, x, y, z, seed = 1) {
+  // a Tetra Brik style carton; W x D is its footprint, H its height (metres). The print is on the front and back faces.
+  function carton(name, texFile, x, y, z, seed = 1, { W = 0.064, H = 0.19, D = 0.04 } = {}) {
     const g = group(name);
-    const W = 0.07, H = 0.195, D = 0.064;
-    const side = C("carton_" + texFile, 0xffffff, { rough: 0.4 }, texFile);
+    const face = C("carton_" + texFile, 0xffffff, { rough: 0.4 }, texFile);
     const plain = C("cartonplain", 0xf2f2ee, { rough: 0.5 });
-    const geo = flipV(new THREE.BoxGeometry(W, H, D));
-    g.add(mesh("Pack", geo, [side, side, plain, plain, side, side], 0, H / 2, 0));
-    g.add(mesh("TopFin", new THREE.BoxGeometry(W * 0.9, 0.004, 0.006), plain, 0, H + 0.002, 0));
-    g.add(mesh("Cap", new THREE.CylinderGeometry(0.0085, 0.0085, 0.009, 12), C("cartoncap", 0xe8e8e4, { rough: 0.4 }), 0.02, H + 0.0035, 0.012));
+    g.add(mesh("Pack", flipV(new THREE.BoxGeometry(W, H, D)), [plain, plain, plain, plain, face, face], 0, H / 2, 0));
+    g.add(mesh("TopFin", new THREE.BoxGeometry(W * 0.9, 0.004, 0.005), plain, 0, H + 0.002, 0));
+    g.add(mesh("Cap", new THREE.CylinderGeometry(0.0075, 0.0075, 0.008, 12), C("cartoncap", 0xe8e8e4, { rough: 0.4 }), W * 0.28, H + 0.0035, D * 0.2));
     return tag(at(g, x, y, z, seed * 0.1));
   }
   // a sealed pillow pack: lying flat (milk, buttermilk) or standing up facing +z (frozen vegetables)
@@ -343,6 +345,6 @@ export function Food() {
   return {
     tomato, onion, potato, apple, orange, lemon, banana, bananaBunch, carrot, brinjal, capsicum, okra, drumstick, chilli, herb,
     grapes, cabbage, cauliflower, coconutHalf, melonHalf, egg, can, petBottle, carton, sachet, tag,
-    textures: (dir) => Object.fromEntries([...used].map(([k, f]) => [k, `${dir}/${f}`])),
+    textures: (dir) => Object.fromEntries([...used].map(([k, f]) => [k, brandDir && fs.existsSync(path.join(brandDir, f)) ? `${brandDir}/${f}` : `${dir}/${f}`])),
   };
 }

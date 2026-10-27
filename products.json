@@ -493,11 +493,11 @@
         "front": 36,
         "back": 5,
         "note": "From LG's owner's manual: keep at least 5 cm between the back and the wall. The manual gives 99.9 cm total depth with a door open, which is 36 cm in front of the fridge."
-      }
+      },
+      "hidden": true
     },
     {
       "id": "lg-glt3426snpz",
-      "hidden": true,
       "brand": "LG",
       "brandLogo": "/logos/lg.png",
       "category": "Refrigerator",
@@ -617,7 +617,7 @@
             ],
             "open": [
               [
-                0.275,
+                0.27,
                 0.028,
                 0.278
               ],
@@ -1044,7 +1044,8 @@
       "fit": {
         "back": 5,
         "note": "From LG's owner's manual for its double-door range: keep at least 5 cm between the back and the wall. The 466 L model's own door swing is not published; the doors open about 135 degrees in this model."
-      }
+      },
+      "hidden": true
     },
     {
       "id": "lg-fhp1412z9b",
@@ -1507,7 +1508,8 @@
         "back": 10,
         "top": 34,
         "note": "From Samsung's user manual: keep the machine 10 cm from the adjacent wall. The lid swings up and back: with it open, this model is about 132 cm tall (the opening angle is estimated), so keep 34 cm free above it."
-      }
+      },
+      "hidden": true
     },
     {
       "id": "bosch-wga1420pin",
@@ -2051,7 +2053,8 @@
           ],
           "show": "always"
         }
-      ]
+      ],
+      "hidden": true
     },
     {
       "id": "carrier-19k-xceed-edge-gxi",
@@ -2451,7 +2454,8 @@
           ],
           "show": "always"
         }
-      ]
+      ],
+      "hidden": true
     },
     {
       "id": "haier-hso52kucai3nb",

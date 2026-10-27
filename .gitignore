@@ -20,3 +20,10 @@ tools/
 
 # internal context file with prices: never commit
 /INTERN_CONTEXT.md
+
+# client documents with prices: never commit
+/present/
+
+# raw downloaded originals (large, re-fetchable with the tex scripts)
+/pipeline/sources/photos/brands/
+/pipeline/sources/photos/produce/

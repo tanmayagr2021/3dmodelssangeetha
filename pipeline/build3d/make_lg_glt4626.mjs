@@ -87,7 +87,7 @@ const F = {
 };
 const labelMats = {};
 const lbl = (name) => (labelMats[name] ||= mat(name, 0xffffff, { rough: 0.5 }));
-const stock = LGStock({ T3: `${TEX}/lg_glt3426`, TF: `${TEX}/food` });
+const stock = LGStock({ T3: `${TEX}/lg_glt3426`, TF: `${TEX}/food`, BR: `${TEX}/brands`, BRT: `${TEX}/brands/small` });
 
 // ── small builders ──
 const cyl = (name, rt, rb, h, m, x, y, z, seg = 12) => mesh(name, new THREE.CylinderGeometry(rt, rb, h, seg), m, x, y, z);
@@ -264,7 +264,7 @@ shelf("Shelf3", 0.501);
 }
 
 // ── stock: vegetarian South Indian food, eggs, juices, water and soft drinks (stock_lg.mjs, food.mjs) ──
-stock.shelves(cab, { zIn1, s1: 0.894, s2: 0.723, s3: 0.501, fz: 0.109 });
+stock.shelves(cab, { zIn1, inW, inD, s1: 0.894, s2: 0.723, s3: 0.501, fz: 0.109 });
 stock.freezer(cab, { zIn1, floor: fy0 + 0.002, top: 1.541 });
 
 // ── ice maker: the tray unit and the bucket slide out together (a real part) ──

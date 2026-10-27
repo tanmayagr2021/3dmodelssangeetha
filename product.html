@@ -716,7 +716,7 @@ renderParts();
 
 // a fridge starts empty; "Fill the fridge" flies the items into their places (organise.js)
 window.__organise = null;
-queueMicrotask(() => { window.__organise = initOrganise({ mv, product, state, togglePart, bar: $("parts") }); });
+queueMicrotask(() => { window.__organise = initOrganise({ mv, product, state, togglePart, bar: $("parts"), toast }); });
 
 // the model carries one clip per change of state, named S<bits>_<bits>
 const stateKey = () => parts.map((p) => (state[p.key] ? 1 : 0)).join("");
