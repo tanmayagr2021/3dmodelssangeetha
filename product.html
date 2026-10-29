@@ -751,7 +751,9 @@ queueMicrotask(() => { window.__organise = initOrganise({ mv, product, state, to
 
 // the model carries one clip per change of state, named S<bits>_<bits>
 const stateKey = () => parts.map((p) => (state[p.key] ? 1 : 0)).join("");
-const swingsWide = parts.some((p) => p.axis === "y");
+// a part that swings 90 degrees or more (side doors, a top-loader's lid) reaches well outside the closed
+// outline, so the camera steps back while it is open
+const swingsWide = parts.some((p) => p.axis && Math.abs(p.angle) >= 90);
 let busy = false;
 async function togglePart(key, { instant = false } = {}) {
   if (busy || !(key in state)) return;
@@ -873,8 +875,11 @@ $("btnZoomOut").addEventListener("click", () => zoomBy(1 / 0.75));
 // instead of turning it. Now a two-finger swipe turns it, a pinch zooms toward the pointer, and a
 // mouse wheel zooms too. A trackpad shows itself by sideways movement or by its fine steps
 // (Chrome and Safari report wheelDeltaY = -3 x deltaY for it); once seen, the gesture stays a trackpad one.
+// A mouse wheel on a Mac also reports -3 x, but Chrome and Safari move it in exact steps of 4.000244140625
+// (mapbox-gl tells the two apart the same way), so that is checked first; each click is one zoom step.
 let padUntil = 0;
-const fromPad = (e) => e.deltaX !== 0 || (e.wheelDeltaY ? e.wheelDeltaY === -3 * e.deltaY : e.deltaMode === 0 && !Number.isInteger(e.deltaY));
+const macWheel = (e) => e.deltaX === 0 && e.deltaY !== 0 && Math.abs(e.deltaY % 4.000244140625) < 1e-6;
+const fromPad = (e) => !macWheel(e) && (e.deltaX !== 0 || (e.wheelDeltaY ? e.wheelDeltaY === -3 * e.deltaY : e.deltaMode === 0 && !Number.isInteger(e.deltaY)));
 mv.addEventListener("wheel", (e) => {
   if (arActive) return;
   e.preventDefault();
@@ -885,6 +890,7 @@ mv.addEventListener("wheel", (e) => {
     padUntil = now + 300;
     return turnBy(e.deltaX * 0.006, e.deltaY * 0.004);
   }
+  if (macWheel(e)) return zoomBy(e.deltaY > 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY);
   zoomBy(Math.exp((e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY) * 0.0015), e.clientX, e.clientY);
 }, { capture: true, passive: false });
 // Safari on a Mac reports a trackpad pinch as gesture events, not as a wheel
@@ -893,9 +899,12 @@ if (platform === "desktop") {
   mv.addEventListener("gesturestart", (e) => { e.preventDefault(); lastScale = 1; });
   mv.addEventListener("gesturechange", (e) => { e.preventDefault(); zoomBy(lastScale / e.scale, e.clientX, e.clientY); lastScale = e.scale; });
 }
-// keys: arrows turn, + and - zoom, 0 puts the view back
+// keys: arrows turn, + and - zoom, 0 puts the view back. Only while the viewer has the customer's
+// attention: after a click or Tab into the side panel, the arrows scroll the panel as usual.
+let keysToViewer = true;
+for (const t of ["pointerdown", "focusin"]) document.addEventListener(t, (e) => { keysToViewer = !!e.target.closest?.(".stage"); }, true);
 document.addEventListener("keydown", (e) => {
-  if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || arActive) return;
+  if (!keysToViewer || e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || arActive) return;
   // not while a dialog is showing (the AR sheet, the photo tool)
   if (e.target.closest?.("input, textarea, select, [contenteditable]") || [...document.querySelectorAll("[aria-modal='true']")].some((d) => d.getClientRects().length)) return;
   const step = rad(10);

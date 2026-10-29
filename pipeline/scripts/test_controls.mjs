@@ -56,6 +56,13 @@ for (const id of ids) {
   c = await cam();
   check(c.r > home.r && near(c.fov, home.fov, 0.1) && sameTarget(c, home), `zooming all the way out stops at a limit (${c.r.toFixed(2)} m) and is centred again`);
 
+  // one click of a Mac mouse wheel (Chrome and Safari send exactly 4.000244140625) is one zoom step, not a turn
+  await reset();
+  await sleep(400);
+  await wheel(0, -4.000244140625);
+  c = await cam();
+  check(c.r < home.r * 0.92 && near(c.theta, home.theta, 0.5) && near(c.phi, home.phi, 0.5), `a Mac mouse-wheel click zooms one step (${home.r.toFixed(2)} -> ${c.r.toFixed(2)} m), no turn`);
+
   await reset();
   const views = {};
   for (const v of ["front", "side", "back", "top"]) {
@@ -82,6 +89,17 @@ for (const id of ids) {
   await b.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: r.x + 40, y: r.y + r.height - 40, button: "left", clickCount: 1 });
   c = await cam();
   check(near(c.r, home.r, 0.01) && sameTarget(c, home), "a click on the background leaves the camera where it is");
+
+  // after a click in the side panel the arrow keys scroll it, and leave the model alone
+  const a = JSON.parse(await b.evalJS("JSON.stringify(document.querySelector('aside').getBoundingClientRect())"));
+  await b.send("Input.dispatchMouseEvent", { type: "mousePressed", x: a.x + 12, y: a.y + a.height / 2, button: "left", clickCount: 1 });
+  await b.send("Input.dispatchMouseEvent", { type: "mouseReleased", x: a.x + 12, y: a.y + a.height / 2, button: "left", clickCount: 1 });
+  const top0 = await b.evalJS("document.querySelector('aside').scrollTop");
+  await key("ArrowDown", "ArrowDown", 40);
+  await key("ArrowDown", "ArrowDown", 40);
+  c = await cam();
+  const top1 = await b.evalJS("document.querySelector('aside').scrollTop");
+  check(near(c.phi, home.phi, 0.5) && top1 > top0, `after a click in the side panel, arrows scroll it (${top0} -> ${top1} px) and the model stays`);
 
   const errors = b.logs.filter((l) => /EXC|error/i.test(l));
   check(errors.length === 0, `no console errors${errors.length ? ": " + errors.join(" | ") : ""}`);
