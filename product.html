@@ -85,7 +85,7 @@
   .controls hr { width: 22px; border: 0; border-top: 1px solid var(--hair); margin: 4px auto; }
   .controls .view { font: 600 11px var(--sans); letter-spacing: .2px; }
 
-  .hint { position: absolute; left: 20px; top: 20px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--slate); padding: 9px 14px 9px 10px; border-radius: 999px; z-index: 5; transition: opacity .5s; }
+  .hint { position: absolute; left: 20px; top: 20px; max-width: calc(100% - 230px); text-wrap: balance; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--slate); padding: 9px 14px 9px 10px; border-radius: 999px; z-index: 5; transition: opacity .5s; }
   .hint svg { width: 18px; height: 18px; color: var(--copper-dk); flex: none; }
   .hint.gone { opacity: 0; pointer-events: none; }
 
@@ -193,9 +193,17 @@
   .ar-finishes { display: flex; gap: 8px; background: rgba(253,252,249,.94); padding: 6px; border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
   .ar-finishes button { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; padding: 0; background-size: cover; background-position: center; }
   .ar-finishes button[aria-pressed="true"] { border-color: var(--navy); box-shadow: inset 0 0 0 2px #fff; }
-  .ar-parts { display: flex; gap: 10px; }
-  .ar-parts button { border: 0; border-radius: 999px; background: var(--navy); color: var(--paper); padding: 15px 22px; font-size: 16px; font-weight: 600; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+  .ar-parts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 0 12px; }
+  .ar-parts button { border: 0; border-radius: 999px; background: var(--navy); color: var(--paper); padding: 14px 20px; font-size: 16px; font-weight: 600; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
   .ar-parts button[aria-pressed="true"] { background: var(--paper); color: var(--navy); }
+  /* Android: point the dot at the floor, Place here, and it stays (see "the product stands where you point") */
+  .ar-aim, .ar-place, .ar-move { display: none; }
+  .ar-ui.aiming .ar-aim { display: block; position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(0,0,0,.4), inset 0 0 0 1.5px rgba(0,0,0,.4); }
+  .ar-ui.aiming .ar-aim::after { content: ""; position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1.5px rgba(0,0,0,.4); }
+  .ar-ui.aiming .ar-place { display: block; border: 0; border-radius: 999px; background: var(--copper); color: var(--navy); padding: 18px 40px; font-size: 19px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,.3); transition: opacity .2s; }
+  .ar-ui.aiming .ar-place:disabled { opacity: .5; }
+  .ar-ui.aiming .ar-finishes, .ar-ui.aiming .ar-parts { display: none; }
+  .ar-ui.placed .ar-move { display: block; border: 0; border-radius: 999px; background: rgba(253,252,249,.94); color: var(--navy); padding: 11px 18px; font-size: 15px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
 
   /* side panel */
   aside { background: var(--card); border-left: 1px solid var(--hair); padding: 34px 36px 30px; display: flex; flex-direction: column; gap: 26px; overflow-y: auto; }
@@ -278,6 +286,10 @@
   .g-row .ic svg { width: 21px; height: 21px; color: var(--navy); }
   .g-row b { display: block; font-size: 15px; font-weight: 600; }
   .g-row span { display: block; font-size: 14px; color: var(--slate); margin-top: 1px; }
+  .g-steps { margin-top: 18px; }
+  .g-row.step { align-items: flex-start; padding: 9px 0; }
+  .g-row.step .ic { width: 34px; height: 34px; border-radius: 50%; background: var(--copper); color: var(--navy); font-size: 17px; font-weight: 700; }
+  .g-row.step b { font-size: 16px; margin-top: 6px; }
   .g-row.key .ic { background: var(--copper-bg); }
   .g-row.key .ic svg { color: var(--copper-dk); }
   .g-note { display: flex; gap: 10px; margin: 16px 0 6px; padding: 12px 14px; border-radius: 12px; background: #F5F5F6; font-size: 13.5px; line-height: 1.5; color: var(--slate); }
@@ -363,7 +375,10 @@
 
       <div class="ar-ui hide" id="arUi">
         <div class="ar-status" id="arStatus"></div>
+        <div class="ar-aim" aria-hidden="true"></div>
         <div class="ar-bottom">
+          <button class="ar-place" id="arPlace" type="button" disabled>Place here</button>
+          <button class="ar-move" id="arMove" type="button">Move to another spot</button>
           <div class="ar-finishes hide" id="arFinishes"></div>
           <div class="ar-parts" id="arParts"></div>
         </div>
@@ -683,7 +698,7 @@ if (product.sizeNote) { $("sizeNote").textContent = `${product.sizeNote}. Placed
   $("needList").classList.toggle("hide", !rows.length);
   $("needNote").textContent = f.note || `${product.brand} doesn’t publish installation gaps for this ${onWall ? "unit" : "model"}, so only its size is checked. Leave a little room for air.`;
 }
-const turnHint = platform === "desktop" ? "Drag or swipe to turn · Pinch or scroll to zoom" : "Drag to turn";
+const turnHint = platform === "desktop" ? "Drag or swipe to turn · Pinch or scroll to zoom · Double-click to look closer" : "Drag to turn · Double-tap to look closer";
 $("hint").innerHTML = `${I.tap}<span>${parts.length ? `${turnHint} · ${product.arTip}` : turnHint}</span>`;
 if (headsetVR) $("btnVR").classList.remove("hide");
 if (platform === "desktop") $("arNote").querySelector("span").textContent = "Real size · On a phone or headset · No app";
@@ -782,19 +797,28 @@ async function togglePart(key, { instant = false } = {}) {
 }
 
 // tap the product (a tap, not a drag) to open or close the part under your finger;
-// inside Android AR too, where model-viewer raycasts from the phone's camera
-let press = null;
+// inside Android AR too, where model-viewer raycasts from the phone's camera.
+// Two quick taps (a double-click) look closely at that spot instead (closeUp, below), so outside AR a
+// single tap waits a moment to see whether a second one follows.
+const DOUBLE_MS = 320;
+let press = null, lastTap = null;
 mv.addEventListener("pointerdown", (e) => (press = { x: e.clientX, y: e.clientY, t: Date.now() }));
 mv.addEventListener("pointerup", (e) => {
-  if (!press || !parts.length) return;
+  if (!press) return;
   const moved = Math.hypot(e.clientX - press.x, e.clientY - press.y);
   const quick = Date.now() - press.t < 450;
   press = null;
   if (moved > 6 || !quick || e.target.closest?.("button")) return;
-  const hit = mv.positionAndNormalFromPoint(e.clientX, e.clientY);
-  if (!hit) return;
-  const key = partAt(product, state, hit.position);
-  if (key) togglePart(key);
+  const x = e.clientX, y = e.clientY, now = Date.now();
+  if (!arActive && lastTap && now - lastTap.t < DOUBLE_MS && Math.hypot(x - lastTap.x, y - lastTap.y) < 30) {
+    clearTimeout(lastTap.timer);
+    lastTap = null;
+    return closeUp(x, y);
+  }
+  const hit = mv.positionAndNormalFromPoint(x, y);
+  const key = hit && parts.length ? partAt(product, state, hit.position) : null;
+  if (arActive) { if (pin.mode === "aim") placeHere(); else if (key && now - pin.placedAt > 600) togglePart(key); return; } // not the second tap of a double-tap that placed it
+  lastTap = { x, y, t: now, timer: setTimeout(() => { lastTap = null; if (key) togglePart(key); }, DOUBLE_MS) };
 });
 
 // ── camera ──
@@ -824,7 +848,7 @@ mv.addEventListener("load", () => {
   // the same limits model-viewer itself uses: 2.2 x the bounding sphere, up to 300% of the start distance
   const d = mv.getDimensions();
   minRadius = 2.2 * Math.hypot(d.x, d.y, d.z) / 2;
-  mv.minCameraOrbit = `auto auto ${minRadius}m`;
+  mv.minCameraOrbit = `auto 0deg ${minRadius}m`;   // 0deg: a close-up can look straight down on a top panel
   requestAnimationFrame(() => {
     const o = mv.getCameraOrbit(), t = mv.getCameraTarget();
     baseFov = mv.getFieldOfView();
@@ -867,6 +891,33 @@ function zoomBy(f, x, y) {
     : home && span > before && before < home.span ? [home.target, Math.min(1, (span - before) / (home.span - before))] : [null, 0];
   if (to) for (const a of ["x", "y", "z"]) g.target[a] += (to[a] - g.target[a]) * k;
   applyGoal(g);
+}
+// A double-click (double-tap) on the product: the camera flies to that spot and faces it head-on, so the
+// customer sees a panel straight from the front without zooming and tilting. On the outside of the
+// product it faces the nearest side (front, side, back or top), so a curved or angled panel is still
+// seen square; inside (a shelf, the drum) it keeps its direction, because another way in could be blocked
+// by a wall. About 20 cm of the panel fills the view. A double-click on the background shows the whole product.
+const CLOSE_SPAN = 0.2;
+function closeUp(x, y) {
+  const hit = mv.positionAndNormalFromPoint(x, y);
+  if (!hit) return $("btnReset").click();
+  const p = hit.position, n = hit.normal, c = mv.getBoundingBoxCenter(), d = mv.getDimensions();
+  const g = readGoal();
+  const axis = ["x", "y", "z"].reduce((a, b) => (Math.abs(n[b]) > Math.abs(n[a]) ? b : a));
+  const sign = Math.sign(n[axis]);
+  const face = c[axis] + sign * d[axis] / 2;
+  if (!(axis === "y" && sign < 0) && Math.abs(p[axis] - face) < 0.08) {
+    if (axis === "y") g.phi = 0.02;
+    else { g.phi = Math.PI / 2; g.theta = axis === "z" ? (sign > 0 ? 0 : Math.PI) : sign * Math.PI / 2; }
+    // the shortest way round to that side
+    const now = mv.getCameraOrbit().theta;
+    g.theta += Math.round((now - g.theta) / (2 * Math.PI)) * 2 * Math.PI;
+  }
+  g.target = { x: p.x, y: p.y, z: p.z };
+  g.radius = minRadius;
+  g.fov = Math.min(baseFov, Math.max(MIN_FOV, deg(2 * Math.atan(CLOSE_SPAN / 2 / minRadius))));
+  applyGoal(g);
+  $("hint").classList.add("gone");
 }
 $("btnZoomIn").addEventListener("click", () => zoomBy(0.75));
 $("btnZoomOut").addEventListener("click", () => zoomBy(1 / 0.75));
@@ -1358,19 +1409,119 @@ mv.addEventListener("ar-status", (e) => {
   mv.classList.toggle("no-hs", arActive || !featuresOn);
   if (arActive) closeFeature();
   renderParts();
-  if (s === "session-started") { placedOnce = false; arStatus(onWall ? "Point at the wall and move your phone slowly" : "Point at the floor and move your phone slowly"); }
-  if (s === "object-placed" && !placedOnce) { placedOnce = true; arStatus(parts.length ? `${product.arTip}\nDrag it to move · Twist two fingers to turn` : "Drag it to move · Twist two fingers to turn", 6500); }
+  if (s === "session-started") {
+    placedOnce = false;
+    if (onWall || !startPin()) arStatus(onWall ? "Point at the wall and move your phone slowly" : "Point at the floor and move your phone slowly");
+  }
+  if (s === "object-placed" && pin.mode === "placed") arStatus(`It stays on this spot, at real size.${parts.length ? `\n${product.arTip}` : ""}`, 6500);
+  else if (s === "object-placed" && !placedOnce) { placedOnce = true; arStatus(parts.length ? `${product.arTip}\nDrag it to move · Twist two fingers to turn` : "Drag it to move · Twist two fingers to turn", 6500); }
+  if (s === "not-presenting" || s === "failed") stopPin();
   if (s === "failed") toast("AR couldn’t start on this phone. Try Chrome with Google Play Services for AR.");
 });
 mv.addEventListener("ar-tracking", (e) => {
   if (!arActive) return;
   if (e.detail.status === "not-tracking") arStatus("Move your phone slowly so it can see the room");
-  else if (placedOnce) arStatus("");
+  else if (pin.mode === "aim") pinUI();
+  else if (placedOnce || pin.mode === "placed") arStatus("");
 });
+
+// ── Android: the product stands where you point, and stays there ──
+// model-viewer drops the product about 2 m in front of the phone, wherever that is, and one finger
+// can slide it anywhere. In the shop the staff point at a spot and it has to stand on exactly that spot,
+// so floor placement is taken over: its real footprint follows the dot in the middle of the screen,
+// Place here (or a tap) stands it on that spot facing the phone, and after that one finger can't slide it
+// or spin it away; a two-finger twist still turns it where it stands. Move to another spot starts again.
+// This reaches into model-viewer 4.0.0's AR renderer (the version is pinned at the top). If those
+// parts are ever missing, model-viewer's own placement runs instead.
+const symbolOf = (o, name) => { for (; o; o = Object.getPrototypeOf(o)) { const s = Object.getOwnPropertySymbols(o).find((x) => x.description === name); if (s) return s; } };
+const pin = { R: null, mode: "off", src: null, seen: -Infinity, ready: false, spot: null, placedAt: 0 };
+function hookAR() {
+  if (pin.R) return pin.R;
+  const R = mv[symbolOf(mv, "renderer")]?.arRenderer;
+  if (!R || !R.goalPosition || ![R.moveToFloor, R.processInput, R.getHitPoint].every((f) => typeof f === "function")) return null;
+  const stockMove = R.moveToFloor, stockInput = R.processInput;
+  R.moveToFloor = function (frame) { return pin.mode === "off" ? stockMove.call(this, frame) : aimFrame(frame); };
+  R.processInput = function (frame) { if (pin.mode !== "off") this.isTranslating = this.isRotating = false; return stockInput.call(this, frame); };
+  return (pin.R = R);
+}
+function startPin() {
+  const R = hookAR(), scene = R?.presentedScene, session = R?.currentSession;
+  if (!scene?.model || !R.placementBox || !session) return false;
+  // stand it by the middle of its footprint, not by whatever spot the 3D view was zoomed in on
+  const c = mv.getBoundingBoxCenter();
+  scene.setTarget(c.x, c.y, c.z);
+  pin.src = null;
+  session.requestReferenceSpace("viewer")
+    .then((space) => session.requestHitTestSource({ space })) // straight out of the middle of the screen
+    .then((src) => { if (R.currentSession === session) pin.src = src; else src.cancel(); })
+    .catch((err) => console.warn("AR hit test", err));
+  aim();
+  return true;
+}
+function aim() {
+  const R = pin.R, scene = R.presentedScene;
+  pin.mode = "aim"; pin.seen = -Infinity; pin.ready = false;
+  scene.model.visible = false; // only its footprint shows until it's placed
+  scene.setShadowIntensity(0.01);
+  pinUI();
+}
+function aimFrame(frame) {
+  const R = pin.R, box = R.placementBox;
+  if (pin.mode === "placed") { // hold it on its spot, whatever a touch does (model-viewer lowers it 1 mm per touch)
+    R.goalPosition.copy(pin.spot);
+    box.show = false; // a touch would show the outline, which says "drag me"
+    return;
+  }
+  R.placementComplete = true; // keeps model-viewer from hiding the outline or turning on the shadow by itself
+  let p = null;
+  for (const h of pin.src ? frame.getHitTestResults(pin.src) : []) if ((p = R.getHitPoint(h))) break;
+  if (p) {
+    const cam = R.presentedScene.getCamera().position;
+    R.goalPosition.copy(p);
+    R.goalYaw = Math.atan2(cam.x - p.x, cam.z - p.z); // front towards the phone
+    pin.seen = performance.now();
+  }
+  const ready = performance.now() - pin.seen < 700; // ride out a dropped frame or two
+  box.show = ready;
+  if (ready !== pin.ready) { pin.ready = ready; pinUI(); }
+}
+function placeHere() {
+  const R = pin.R, scene = R?.presentedScene;
+  if (pin.mode !== "aim" || !pin.ready || !scene) return;
+  pin.spot = R.goalPosition.clone();
+  scene.pivot.position.copy(pin.spot); // straight onto the spot, no glide
+  scene.yaw = R.goalYaw;
+  R.placementBox.offsetHeight = 0;
+  scene.setShadowOffset(0);
+  R.placementBox.show = false;
+  scene.model.visible = true;
+  scene.setShadowIntensity(0.8); // model-viewer's own AR shadow strength
+  pin.mode = "placed";
+  pin.placedAt = Date.now();
+  pinUI();
+  R.dispatchEvent({ type: "status", status: "object-placed" });
+}
+function stopPin() {
+  pin.mode = "off"; pin.src = null; pin.ready = false;
+  const scene = mv[symbolOf(mv, "scene")];
+  if (scene?.model) scene.model.visible = true;
+  pinUI();
+}
+function pinUI() {
+  $("arUi").classList.toggle("aiming", pin.mode === "aim");
+  $("arUi").classList.toggle("placed", pin.mode === "placed");
+  $("arPlace").disabled = !pin.ready;
+  if (pin.mode === "aim") arStatus(pin.ready ? "The outline is its real size on the floor.\nTap Place here." : "Point the dot at the floor where it should stand.\nMove the phone slowly.");
+}
+$("arPlace").addEventListener("click", placeHere);
+$("arMove").addEventListener("click", () => pin.mode === "placed" && aim());
+// a tap on these buttons is not also a touch on the AR scene
+$("arUi").addEventListener("beforexrselect", (e) => e.preventDefault());
 
 // ── the guide shown before AR ──
 const GUIDE_KEY = "ar-guide-skip";
 const skipGuide = () => { try { return localStorage.getItem(GUIDE_KEY) === "1"; } catch { return false; } };
+const step = (n, title, text) => `<div class="g-row step"><div class="ic">${n}</div><div><b>${esc(title)}</b><span>${esc(text)}</span></div></div>`;
 const row = (icon, title, text, key = false) => `<div class="g-row${key ? " key" : ""}"><div class="ic">${icon}</div><div><b>${esc(title)}</b><span>${esc(text)}</span></div></div>`;
 const openTitle = parts.length ? `Open the ${parts.map((p) => p.label).join(" or ")}` : "";
 function qrSvg(size = 4) {
@@ -1383,18 +1534,25 @@ function qrSvg(size = 4) {
 function guide() {
   const name = `${product.brand} ${product.shortName}`;
   const size = `${parseFloat(product.size.w)} cm wide, ${parseFloat(product.size.h)} cm high, ${parseFloat(product.size.d)} cm deep`;
-  const placeFloor = { icon: I.floor, text: `Point the middle of your screen at the spot on the floor where it should stand, and move the phone slowly. It lands on that spot at its real size: ${size}. Drag it with one finger to fine-tune.` };
   const placeWall = { icon: I.wall, text: `Point the middle of your screen at the wall where it would hang, and move slowly. It appears at its real size: ${size}. If it lands on the floor, drag it up onto the wall.` };
   const lock = row(I.lock, "Real size, locked", `${product.brand}’s own size. Pinching can’t make it bigger or smaller`);
   switch (platform) {
+    // Phones: three steps the shop staff can follow while the customer watches. Quick Look puts it where the
+    // middle of the screen meets the floor; its Object tab shrinks the product to fit the screen, which is
+    // exactly the "it looks smaller" a customer must never see, and can't be switched off, so the note keeps
+    // them on AR.
     case "ios": return {
-      title: "How to use AR", sub: `${name}, in your room at real size.`,
-      place: onWall ? placeWall : placeFloor,
-      groups: [
-        ["In AR (camera)", [parts.length && row(I.tap, openTitle, "Tap it. Tap again to close", true), row(I.move, "Move", "Drag with one finger"), row(I.rotate, "Rotate", "Twist with two fingers"), lock]],
-        ["In 3D view (Object tab)", [row(I.rotate, "Turn it", "Drag with one finger"), row(I.zoom, "Zoom", "Pinch with two fingers"), parts.length && row(I.tap, openTitle, "Tap it here too")]],
+      title: "Place it at real size", sub: name,
+      steps: onWall ? [
+        step(1, "Point at the wall where it would hang", "Hold the middle of the screen there and move the phone slowly"),
+        step(2, "It appears there at real size", `${size}. If it lands on the floor, drag it up onto the wall`),
+        step(3, "Walk up to it", product.arTip),
+      ] : [
+        step(1, "Point at the spot on the floor", "Hold the middle of the screen on it and move the phone slowly"),
+        step(2, "It stands on that spot at real size", size),
+        step(3, "Walk around it", parts.length ? product.arTip : "Look at it from every side"),
       ],
-      note: "On a shiny or plain floor, move the phone slowly from side to side until it settles. Switch between AR and Object at the top of the screen; tap ✕ to come back here.",
+      note: `Stay on AR at the top of the screen: Object shrinks it to fit. On a ${onWall ? "plain wall" : "shiny or plain floor"}, move the phone slowly from side to side until it settles. To nudge it, drag it with one finger.`,
       go: "Open AR",
     };
     case "visionos": return {
@@ -1411,9 +1569,17 @@ function guide() {
       go: "Open in your room", alt: headsetVR ? "Walk around it in the showroom" : null,
     };
     case "android": return mv.canActivateAR ? {
-      title: "How to use AR", sub: `${name}, in your room at real size.`,
-      place: onWall ? { icon: I.wall, text: "Point your camera at the wall where it would hang and move slowly until it appears there." } : placeFloor,
-      groups: [["In AR", [parts.length && row(I.tap, openTitle, "Tap it, or use the buttons at the bottom", true), product.finishes.length > 1 && row(I.swatch, "Change the finish", "Tap a colour at the bottom"), row(I.move, "Move", "Drag with one finger"), row(I.rotate, "Rotate", "Twist with two fingers"), lock]]],
+      title: "Place it at real size", sub: name,
+      steps: onWall ? [
+        step(1, "Point at the wall where it would hang", "Move the phone slowly until it appears there"),
+        step(2, "It’s at real size", `${size}. Drag it with one finger to move it`),
+        step(3, "Walk up to it", product.arTip),
+      ] : [
+        step(1, "Point the dot at the spot on the floor", "Move the phone slowly until its outline appears"),
+        step(2, "Tap Place here", `It stands on that spot at real size and stays there: ${size}`),
+        step(3, "Walk around it", parts.length ? product.arTip : "Look at it from every side"),
+      ],
+      note: onWall ? null : "To put it somewhere else, tap Move to another spot.",
       go: "Open AR",
     } : {
       title: "AR isn’t available here", sub: "This browser or phone can’t open the camera view.",
@@ -1441,7 +1607,8 @@ function openGuide() {
       <button class="sheet-close" id="sheetClose" aria-label="Close">${I.close}</button></div>
     ${g.place ? `<div class="place">${g.place.icon}<div>${esc(g.place.text)}</div></div>` : ""}
     ${g.qr ? `<div class="g-qr"><div class="code">${qrSvg(6)}</div><p>Scan with your phone camera to open this page.</p></div>` : ""}
-    ${g.groups.map(([label, rows]) => `<div class="g-label">${esc(label)}</div>${rows.filter(Boolean).join("")}`).join("")}
+    ${g.steps ? `<div class="g-steps">${g.steps.join("")}</div>` : ""}
+    ${(g.groups || []).map(([label, rows]) => `<div class="g-label">${esc(label)}</div>${rows.filter(Boolean).join("")}`).join("")}
     ${g.note ? `<div class="g-note">${I.info}<div>${esc(g.note)}</div></div>` : ""}`;
   $("sheetFoot").innerHTML = `
     ${g.go ? `<button class="go" id="sheetGo">${I.ar}<span>${esc(g.go)}</span></button>` : ""}

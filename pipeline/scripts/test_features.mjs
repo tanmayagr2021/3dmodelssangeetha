@@ -71,7 +71,7 @@ for (const p of products) {
     const pt = await screenOf(front);
     if (!pt) { check(false, `${part.key}: no screen point`); continue; }
     await tap(pt[0], pt[1]);
-    await sleep(1100);
+    await sleep(1600); // a single tap waits 320 ms for a possible second one, then the part swings for 900 ms
     const after = await state();
     const changed = Object.keys(after).filter((k) => after[k] !== before[k]);
     check(changed.length === 1 && changed[0] === part.key, `tap on ${part.key} at ${pt.map(Math.round)} toggles ${changed.join(",") || "nothing"}`);

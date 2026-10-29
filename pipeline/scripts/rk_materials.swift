@@ -1,6 +1,6 @@
 // Loads a .usdz with RealityKit (what Quick Look uses) and reports, for every material that has
 // one, whether RealityKit picked up its fine grain (normal map, roughness map, clear coat).
-// Optional: renders the model with RealityKit's own renderer under one light to a PNG.
+// Also prints the size RealityKit places in the room. Optional: renders the model with RealityKit's own renderer under one light to a PNG.
 // usage: rk_materials <file.usdz> [out.png] [yaw degrees] [zoom 1 = whole model]
 import AppKit
 import Foundation
@@ -30,6 +30,9 @@ Task { @MainActor in
     }
     walk(root)
     print("materials with grain:", seen.count)
+    // the size RealityKit itself places in the room (Quick Look's engine), closed, in centimetres
+    let vb = root.visualBounds(relativeTo: nil)
+    print(String(format: "RealityKit size: W %.1f x H %.1f x D %.1f cm, lowest point y = %.1f cm", vb.extents.x * 100, vb.extents.y * 100, vb.extents.z * 100, vb.min.y * 100))
 
     if args.count > 2 {
       let out = URL(fileURLWithPath: args[2])

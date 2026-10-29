@@ -101,6 +101,36 @@ for (const id of ids) {
   const top1 = await b.evalJS("document.querySelector('aside').scrollTop");
   check(near(c.phi, home.phi, 0.5) && top1 > top0, `after a click in the side panel, arrows scroll it (${top0} -> ${top1} px) and the model stays`);
 
+  // a double-click flies to that spot and faces it head-on, and opens nothing
+  // back to the viewer with a click on its empty background (a click on the product would open a door)
+  const bg = { x: r.x + 40, y: r.y + r.height - 40 };
+  await b.send("Input.dispatchMouseEvent", { type: "mousePressed", ...bg, button: "left", clickCount: 1 });
+  await b.send("Input.dispatchMouseEvent", { type: "mouseReleased", ...bg, button: "left", clickCount: 1 });
+  await sleep(800);
+  if (await b.evalJS("Object.values(window.__demo.state).some(Boolean)")) await b.evalJS("document.querySelectorAll('#parts button').forEach((x) => x.textContent.startsWith('Close') && x.click())");
+  await reset(); await sleep(800); // find the spots from the view the double-clicks start from
+  const pts = JSON.parse(await b.evalJS(`(() => { const mv = document.querySelector('model-viewer'); const r = mv.getBoundingClientRect(), c = mv.getBoundingBoxCenter(), out = {};
+    for (let fy = 0.2; fy < 0.85; fy += 0.025) for (let fx = 0.2; fx < 0.8; fx += 0.0125) {
+      const x = r.x + r.width * fx, y = r.y + r.height * fy, h = mv.positionAndNormalFromPoint(x, y); if (!h) continue;
+      const k = h.normal.z > 0.97 ? 'front' : Math.abs(h.normal.x) > 0.97 ? 'side' : null; if (!k) continue;
+      const score = Math.abs(h.position.y - c.y);
+      if (!out[k] || score < out[k].score) out[k] = { x, y, score, nx: h.normal.x };
+    } return JSON.stringify(out); })()`));
+  const tap = async (x, y) => { await b.send("Input.dispatchMouseEvent", { type: "mousePressed", x, y, button: "left", clickCount: 1 }); await sleep(40); await b.send("Input.dispatchMouseEvent", { type: "mouseReleased", x, y, button: "left", clickCount: 1 }); };
+  for (const [k, theta] of [["front", 0], ["side", pts.side ? Math.sign(pts.side.nx) * 90 : 0]]) {
+    if (!pts[k]) { check(false, `found a spot on the ${k} to double-click`); continue; }
+    await reset(); await sleep(800);
+    const parts0 = await b.evalJS("JSON.stringify(window.__demo.state)");
+    await tap(pts[k].x, pts[k].y); await sleep(90); await tap(pts[k].x, pts[k].y);
+    await sleep(1800);
+    c = await cam();
+    const same = parts0 === await b.evalJS("JSON.stringify(window.__demo.state)");
+    check(near(c.theta, theta, 1) && near(c.phi, 90, 1) && c.fov < home.fov / 2 && same,
+      `a double-click on the ${k} faces it head-on, close up (turn ${c.theta.toFixed(0)}, tilt ${c.phi.toFixed(0)}, lens ${c.fov.toFixed(1)} degrees), nothing opens`);
+    await b.shot(`${out}/${id}-closeup-${k}.png`);
+  }
+  // a single click on a part still opens it: test_features.mjs taps every part with real clicks
+
   const errors = b.logs.filter((l) => /EXC|error/i.test(l));
   check(errors.length === 0, `no console errors${errors.length ? ": " + errors.join(" | ") : ""}`);
 }
