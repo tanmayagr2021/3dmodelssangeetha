@@ -83,6 +83,7 @@
   .controls button[aria-pressed="true"] { background: var(--navy); color: var(--paper); }
   .controls svg { width: 20px; height: 20px; }
   .controls hr { width: 22px; border: 0; border-top: 1px solid var(--hair); margin: 4px auto; }
+  .controls .view { font: 600 11px var(--sans); letter-spacing: .2px; }
 
   .hint { position: absolute; left: 20px; top: 20px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--slate); padding: 9px 14px 9px 10px; border-radius: 999px; z-index: 5; transition: opacity .5s; }
   .hint svg { width: 18px; height: 18px; color: var(--copper-dk); flex: none; }
@@ -300,11 +301,13 @@
     .brand span, .pill { display: none; }
     main { display: block; height: auto; min-height: 0; }
     .stage { height: 64svh; min-height: 420px; }
-    .controls { right: 12px; top: auto; bottom: 86px; transform: none; padding: 4px; }
+    /* top right, under "Show features": at the bottom, the part buttons wrap to two rows and covered it */
+    .controls { right: 12px; top: 68px; bottom: auto; transform: none; padding: 4px; }
+    .feat-btn { top: 12px; right: 12px; }
     .controls button { width: 40px; height: 40px; }
     /* on touch screens pinch zooms, and phones can't go full screen */
-    #btnZoomIn, #btnZoomOut, #btnFullscreen, .controls hr { display: none; }
-    .hint { left: 12px; top: 12px; right: 12px; width: fit-content; max-width: calc(100% - 24px); font-size: 12.5px; }
+    #btnZoomIn, #btnZoomOut, #btnFullscreen, .controls hr, .controls .view { display: none; }
+    .hint { left: 12px; top: 12px; right: auto; width: fit-content; max-width: calc(100% - 196px); font-size: 12.5px; text-wrap: balance; } /* clear of "Show features" */
     .parts { bottom: 16px; }
     .fcard { left: 12px; right: 12px; width: auto; bottom: 74px; }
     .parts { flex-wrap: wrap; justify-content: center; border-radius: 24px; width: max-content; }
@@ -321,6 +324,16 @@
     .sheet-body { padding: 26px 20px 8px; }
     .sheet-foot { padding: 12px 20px calc(16px + env(safe-area-inset-bottom, 0px)); }
   }
+
+  /* /p/<id>?embed: the viewer alone, filling the frame a retailer's page puts it in */
+  .embed-open { display: none; }
+  .embed header, .embed aside { display: none !important; }
+  .embed main { display: block; height: 100vh; min-height: 0; }
+  .embed .stage { height: 100vh; min-height: 0; }
+  .embed .embed-open { display: inline-flex; text-decoration: none; background: var(--navy); color: var(--paper); box-shadow: var(--shadow); }
+  .embed .embed-open svg { color: var(--copper); }
+  .embed #btnShowFeat { top: 72px; }
+  .embed .hint { right: auto; max-width: calc(100% - 230px); }
 </style>
 </head>
 <body>
@@ -339,10 +352,10 @@
   <section class="stage" id="stage">
     <model-viewer id="viewer"
       alt=""
-      camera-controls touch-action="pan-y"
-      max-camera-orbit="Infinity 157.5deg 300%"
+      camera-controls touch-action="pan-y" disable-tap
+      max-camera-orbit="Infinity 157.5deg 300%" min-field-of-view="4deg"
       shadow-intensity="1" shadow-softness="0.8"
-      environment-image="neutral" exposure="1.05"
+      environment-image="/env/studio.hdr" exposure="1.05"
       interaction-prompt="none"
       ar ar-modes="webxr scene-viewer" ar-scale="fixed" ar-placement="floor" xr-environment>
       <button slot="ar-button" class="hide" aria-hidden="true"></button>
@@ -372,6 +385,7 @@
 
     <div class="feat-layer" id="featLayer" aria-hidden="false"><svg class="feat-lines" id="featLines" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg></div>
     <button class="feat-btn glass hide" id="btnShowFeat" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Show features</span></button>
+    <a class="feat-btn embed-open" id="embedOpen" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg><span>View in your room</span></a>
 
     <div class="hint glass" id="hint"></div>
 
@@ -382,6 +396,11 @@
       <button id="btnDims" title="Show dimensions" aria-label="Show dimensions" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4z"/><path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2M4.5 13.5l2 2"/></svg></button>
       <button id="btnReset" title="Reset view" aria-label="Reset view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
       <button id="btnFullscreen" title="Full screen" aria-label="Full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      <hr>
+      <button class="view" data-view="front" title="Front view" aria-label="Front view">Front</button>
+      <button class="view" data-view="side" title="Side view" aria-label="Side view">Side</button>
+      <button class="view" data-view="back" title="Back view" aria-label="Back view">Back</button>
+      <button class="view" data-view="top" title="View from above" aria-label="View from above">Top</button>
     </div>
 
     <div class="parts glass hide" id="parts" role="group" aria-label="Open and close"></div>
@@ -549,10 +568,15 @@ if (!product) {
 // Vercel's other addresses for this site (per deployment and per branch) ask for a Vercel
 // login, so the links people scan and share always point at the public address
 const PUBLIC_ORIGIN = "https://3dmodelssangeetha.vercel.app";
-const shareUrl = (location.hostname.endsWith(".vercel.app") ? PUBLIC_ORIGIN : location.origin) + location.pathname + location.search;
+const shareUrl = (() => {
+  const u = new URL((location.hostname.endsWith(".vercel.app") ? PUBLIC_ORIGIN : location.origin) + location.pathname + location.search);
+  u.searchParams.delete("embed");   // links people share always open the full page
+  return u.href;
+})();
 // Phones kept model files for an hour before 24 Oct 2026; this query string made them fetch
-// the files with the fixed doors. The files now revalidate on every load (vercel.json).
-const model = (url) => `${url}?v=2`;
+// the files with the fixed doors. The files now revalidate on every load (vercel.json); v=3 (29 Oct)
+// makes sure Quick Look's own copy is replaced by the files with the panel grain.
+const model = (url) => `${url}?v=3`;
 
 // ── what this device can do ──
 const ua = navigator.userAgent;
@@ -572,6 +596,12 @@ const isPhone = !isHeadset && !isVisionPro && (/Android|iPhone|iPad|iPod/i.test(
 const headsetAR = xrAR && !isPhone && !hasQuickLook; // Meta Quest and similar
 const headsetVR = xrVR && !isPhone;                  // Quest, Vision Pro, PC headsets
 const framed = window.self !== window.top;
+// ?embed shows the viewer alone, for a box on a retailer's product page. AR from inside another
+// site's frame is not dependable on every phone, so its button opens the full page in a new tab.
+if (new URLSearchParams(location.search).has("embed")) {
+  document.documentElement.classList.add("embed");
+  $("embedOpen").href = shareUrl;
+}
 const platform = hasQuickLook ? (isVisionPro ? "visionos" : "ios")
   : headsetAR ? "quest"
   : isApple ? "ios-inapp"
@@ -653,7 +683,8 @@ if (product.sizeNote) { $("sizeNote").textContent = `${product.sizeNote}. Placed
   $("needList").classList.toggle("hide", !rows.length);
   $("needNote").textContent = f.note || `${product.brand} doesn’t publish installation gaps for this ${onWall ? "unit" : "model"}, so only its size is checked. Leave a little room for air.`;
 }
-$("hint").innerHTML = `${I.tap}<span>${parts.length ? `Drag to turn · ${product.arTip}` : "Drag to turn"}</span>`;
+const turnHint = platform === "desktop" ? "Drag or swipe to turn · Pinch or scroll to zoom" : "Drag to turn";
+$("hint").innerHTML = `${I.tap}<span>${parts.length ? `${turnHint} · ${product.arTip}` : turnHint}</span>`;
 if (headsetVR) $("btnVR").classList.remove("hide");
 if (platform === "desktop") $("arNote").querySelector("span").textContent = "Real size · On a phone or headset · No app";
 
@@ -765,17 +796,115 @@ mv.addEventListener("pointerup", (e) => {
 });
 
 // ── camera ──
+// A click no longer moves the pivot or zooms out (disable-tap): a click opens a door and nothing else.
 $("btnReset").addEventListener("click", () => {
   mv.cameraOrbit = orbit();
   mv.cameraTarget = "auto";
   mv.fieldOfView = "auto";
 });
-function zoom(f) {
-  const o = mv.getCameraOrbit();
-  mv.cameraOrbit = `${o.theta}rad ${o.phi}rad ${o.radius * f}m`;
+// front, side, back and top, at the product's own height and distance
+const VIEWS = { front: [0, null], side: [-90, null], back: [180, null], top: [0, 20] };
+for (const b of document.querySelectorAll(".controls .view")) b.addEventListener("click", () => {
+  const [theta, phi] = VIEWS[b.dataset.view];
+  const [, phi0, radius0] = orbit().split(" ");
+  mv.cameraTarget = "auto";
+  mv.fieldOfView = "auto";
+  mv.cameraOrbit = `${theta}deg ${phi === null ? phi0 : `${phi}deg`} ${radius0}`;
+});
+
+// Zoom and turn from code, toward a point under the pointer. The camera never comes closer than
+// model-viewer allows (2.2 times the model's radius, so it can't end up inside the model when turned);
+// past that the lens narrows instead, down to 4 degrees, close enough to see the grain of a panel.
+const MIN_FOV = 4, MAX_PHI = 157.5 * Math.PI / 180;
+const rad = (d) => (d * Math.PI) / 180, deg = (r) => (r * 180) / Math.PI;
+let goal = null, goalAt = 0, minRadius = 0, maxRadius = Infinity, baseFov = 30, home = null;
+mv.addEventListener("load", () => {
+  // the same limits model-viewer itself uses: 2.2 x the bounding sphere, up to 300% of the start distance
+  const d = mv.getDimensions();
+  minRadius = 2.2 * Math.hypot(d.x, d.y, d.z) / 2;
+  mv.minCameraOrbit = `auto auto ${minRadius}m`;
+  requestAnimationFrame(() => {
+    const o = mv.getCameraOrbit(), t = mv.getCameraTarget();
+    baseFov = mv.getFieldOfView();
+    maxRadius = o.radius * 300 / parseFloat(orbit().split(" ")[2]);
+    home = { span: o.radius * Math.tan(rad(baseFov) / 2), target: { x: t.x, y: t.y, z: t.z } };
+  });
+});
+function readGoal() {
+  // keep adding to our own goal while a gesture runs; start again from where the camera is after a pause
+  if (!goal || performance.now() - goalAt > 250) {
+    const o = mv.getCameraOrbit(), t = mv.getCameraTarget();
+    goal = { theta: o.theta, phi: o.phi, radius: o.radius, fov: mv.getFieldOfView(), target: { x: t.x, y: t.y, z: t.z } };
+  }
+  goalAt = performance.now();
+  return goal;
 }
-$("btnZoomIn").addEventListener("click", () => zoom(0.8));
-$("btnZoomOut").addEventListener("click", () => zoom(1.25));
+function applyGoal(g) {
+  mv.cameraTarget = `${g.target.x}m ${g.target.y}m ${g.target.z}m`;
+  mv.cameraOrbit = `${g.theta}rad ${g.phi}rad ${g.radius}m`;
+  mv.fieldOfView = `${g.fov}deg`;
+}
+function turnBy(dTheta, dPhi) {
+  const g = readGoal();
+  g.theta += dTheta;
+  g.phi = Math.min(MAX_PHI, Math.max(0.05, g.phi + dPhi));
+  applyGoal(g);
+}
+// f < 1 zooms in. What is seen spans radius x tan(fov / 2); the radius moves first, then the lens.
+function zoomBy(f, x, y) {
+  const g = readGoal();
+  const tanBase = Math.tan(rad(baseFov) / 2);
+  const before = g.radius * Math.tan(rad(g.fov) / 2);
+  const span = Math.min(maxRadius * tanBase, Math.max(minRadius * Math.tan(rad(MIN_FOV) / 2), before * f));
+  if (span >= minRadius * tanBase) { g.radius = span / tanBase; g.fov = baseFov; }
+  else { g.radius = minRadius; g.fov = deg(2 * Math.atan(span / minRadius)); }
+  // zooming in, the point under the pointer stays (about) where it is; zooming out, the view glides
+  // back to the middle of the model, and is centred again by the zoom it started at
+  const hit = span < before && x !== undefined ? mv.positionAndNormalFromPoint(x, y) : null;
+  const [to, k] = hit ? [hit.position, 1 - span / before]
+    : home && span > before && before < home.span ? [home.target, Math.min(1, (span - before) / (home.span - before))] : [null, 0];
+  if (to) for (const a of ["x", "y", "z"]) g.target[a] += (to[a] - g.target[a]) * k;
+  applyGoal(g);
+}
+$("btnZoomIn").addEventListener("click", () => zoomBy(0.75));
+$("btnZoomOut").addEventListener("click", () => zoomBy(1 / 0.75));
+
+// Laptops. model-viewer zooms on every scroll, so a two-finger swipe on a trackpad zoomed the model
+// instead of turning it. Now a two-finger swipe turns it, a pinch zooms toward the pointer, and a
+// mouse wheel zooms too. A trackpad shows itself by sideways movement or by its fine steps
+// (Chrome and Safari report wheelDeltaY = -3 x deltaY for it); once seen, the gesture stays a trackpad one.
+let padUntil = 0;
+const fromPad = (e) => e.deltaX !== 0 || (e.wheelDeltaY ? e.wheelDeltaY === -3 * e.deltaY : e.deltaMode === 0 && !Number.isInteger(e.deltaY));
+mv.addEventListener("wheel", (e) => {
+  if (arActive) return;
+  e.preventDefault();
+  e.stopPropagation(); // keep model-viewer's own zoom-on-scroll out of it
+  if (e.ctrlKey) return zoomBy(Math.exp(e.deltaY * 0.01), e.clientX, e.clientY); // trackpad pinch, or Ctrl + wheel
+  const now = performance.now();
+  if (fromPad(e) || now < padUntil) {
+    padUntil = now + 300;
+    return turnBy(e.deltaX * 0.006, e.deltaY * 0.004);
+  }
+  zoomBy(Math.exp((e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY) * 0.0015), e.clientX, e.clientY);
+}, { capture: true, passive: false });
+// Safari on a Mac reports a trackpad pinch as gesture events, not as a wheel
+if (platform === "desktop") {
+  let lastScale = 1;
+  mv.addEventListener("gesturestart", (e) => { e.preventDefault(); lastScale = 1; });
+  mv.addEventListener("gesturechange", (e) => { e.preventDefault(); zoomBy(lastScale / e.scale, e.clientX, e.clientY); lastScale = e.scale; });
+}
+// keys: arrows turn, + and - zoom, 0 puts the view back
+document.addEventListener("keydown", (e) => {
+  if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || arActive) return;
+  // not while a dialog is showing (the AR sheet, the photo tool)
+  if (e.target.closest?.("input, textarea, select, [contenteditable]") || [...document.querySelectorAll("[aria-modal='true']")].some((d) => d.getClientRects().length)) return;
+  const step = rad(10);
+  const act = { ArrowLeft: () => turnBy(-step, 0), ArrowRight: () => turnBy(step, 0), ArrowUp: () => turnBy(0, -step), ArrowDown: () => turnBy(0, step),
+    "+": () => zoomBy(0.8), "=": () => zoomBy(0.8), "-": () => zoomBy(1.25), "_": () => zoomBy(1.25), "0": () => $("btnReset").click() }[e.key];
+  if (!act) return;
+  e.preventDefault();
+  act();
+});
 if (!document.fullscreenEnabled) $("btnFullscreen").classList.add("hide");
 $("btnFullscreen").addEventListener("click", () => {
   if (document.fullscreenElement) document.exitFullscreen();
@@ -1244,9 +1373,10 @@ function qrSvg(size = 4) {
 }
 function guide() {
   const name = `${product.brand} ${product.shortName}`;
-  const placeFloor = { icon: I.floor, text: "Point your camera at the floor and move slowly. It appears where you point, at real size." };
-  const placeWall = { icon: I.wall, text: "Point your camera at the wall where it would hang and move slowly. If it lands on the floor, drag it up onto the wall." };
-  const lock = row(I.lock, "Real size", "Locked, so what you see is exactly how big it is");
+  const size = `${parseFloat(product.size.w)} cm wide, ${parseFloat(product.size.h)} cm high, ${parseFloat(product.size.d)} cm deep`;
+  const placeFloor = { icon: I.floor, text: `Point the middle of your screen at the spot on the floor where it should stand, and move the phone slowly. It lands on that spot at its real size: ${size}. Drag it with one finger to fine-tune.` };
+  const placeWall = { icon: I.wall, text: `Point the middle of your screen at the wall where it would hang, and move slowly. It appears at its real size: ${size}. If it lands on the floor, drag it up onto the wall.` };
+  const lock = row(I.lock, "Real size, locked", `${product.brand}’s own size. Pinching can’t make it bigger or smaller`);
   switch (platform) {
     case "ios": return {
       title: "How to use AR", sub: `${name}, in your room at real size.`,
@@ -1255,7 +1385,7 @@ function guide() {
         ["In AR (camera)", [parts.length && row(I.tap, openTitle, "Tap it. Tap again to close", true), row(I.move, "Move", "Drag with one finger"), row(I.rotate, "Rotate", "Twist with two fingers"), lock]],
         ["In 3D view (Object tab)", [row(I.rotate, "Turn it", "Drag with one finger"), row(I.zoom, "Zoom", "Pinch with two fingers"), parts.length && row(I.tap, openTitle, "Tap it here too")]],
       ],
-      note: "Switch between AR and Object at the top of the screen. Tap ✕ to come back here.",
+      note: "On a shiny or plain floor, move the phone slowly from side to side until it settles. Switch between AR and Object at the top of the screen; tap ✕ to come back here.",
       go: "Open AR",
     };
     case "visionos": return {
@@ -1331,7 +1461,7 @@ $("scrim").addEventListener("click", closeGuide);
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("sheet").classList.contains("hide")) closeGuide(); });
 
 $("btnAR").addEventListener("click", () => {
-  if (framed) return toast("AR works from the shared link on a phone or headset.");
+  if (framed) return void window.open(shareUrl, "_blank", "noopener");
   const canLaunch = ["ios", "visionos", "quest"].includes(platform) || (platform === "android" && mv.canActivateAR);
   if (canLaunch && skipGuide()) return launchAR();
   openGuide();

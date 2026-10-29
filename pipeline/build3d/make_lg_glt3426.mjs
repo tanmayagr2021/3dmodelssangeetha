@@ -336,4 +336,11 @@ const textures = {
   print_fresh0: `${T}/print_fresh0.png`, print_pullout: `${T}/print_pullout.png`, print_freshzone: `${T}/print_freshzone.png`,
 };
 Object.assign(textures, stock.textures());
-await exportGLB(root, clips, OUT, textures);
+// Grain (BENCHMARK.md section 10). LG lists the door as Shiny Steel on PET: a printed steel look with
+// fine vertical hairlines (seen in LG's photos) under a clear glossy film. The sides are smooth factory
+// paint: the soft peel (the full one looked like embossed leather up close).
+await exportGLB(root, clips, OUT, textures, { dir: `${TEX}/grain`, materials: {
+  DoorFreezer: { type: "hairline", dir: "v", clearcoat: [0.6, 0.12] },
+  DoorFridge: { type: "hairline", dir: "v", clearcoat: [0.6, 0.12] },
+  SideSteel: { type: "peel_soft" }, SideSteelL: { type: "peel_soft" }, TopSteel: { type: "peel_soft" },
+} });

@@ -9,7 +9,8 @@ import { launch, sleep } from "./cdp.mjs";
 const [base, out, ...ids] = process.argv.slice(2);
 fs.mkdirSync(out, { recursive: true });
 const products = (await (await fetch(`${base}/products.json`)).json()).products;
-const targets = ids.length ? ids : products.filter((p) => p.category === "Refrigerator").map((p) => p.id);
+// hidden products have no page, so only the fridges on show are tested unless ids are given
+const targets = ids.length ? ids : products.filter((p) => p.category === "Refrigerator" && !p.hidden).map((p) => p.id);
 let failed = 0;
 const check = (ok, msg) => { console.log(`  ${ok ? "ok  " : "FAIL"} ${msg}`); if (!ok) failed++; };
 

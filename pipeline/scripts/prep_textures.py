@@ -120,9 +120,14 @@ def lg():
     yy, xx = np.mgrid[0:h, 0:w]
     cx, cy, r = (535 - left) * scale, (495 - band_bottom) * scale, 268 * scale
     door = ((xx - cx) ** 2 + (yy - cy) ** 2) < r ** 2
+    # the energy sticker in this photo is another model's (FHP1410Z3M, 10 kg): painted out too; this model's own label
+    # is a separate decal drawn by tex_lg_label.py
+    sticker = (xx >= (744 - left) * scale) & (xx < (811 - left) * scale) & (yy < (346 - band_bottom) * scale)
+    beside = (xx >= (734 - left) * scale) & (xx < (744 - left) * scale) & (yy < (346 - band_bottom) * scale) & ~door
     shade = body[None, None, :] + brushed(w, h, 3.0)[:, :, None]
     shade += (yy / h * 10)[:, :, None]
     a[door] = shade[door]
+    a[sticker] = (shade - body + a[beside].mean(0))[sticker]       # the metal's own tone there, which is lighter than the door's
     save(Image.fromarray(a.clip(0, 255).astype(np.uint8)), "lg", "front.jpg")
 
     # plain body metal for the sides and top

@@ -4,7 +4,7 @@ import fs from "node:fs";
 import * as THREE from "three";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
 import { NodeIO } from "@gltf-transform/core";
-import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
+import { ALL_EXTENSIONS, KHRMaterialsClearcoat } from "@gltf-transform/extensions";
 import { defight } from "./defight.mjs";
 
 // GLTFExporter reads blobs with FileReader, which Node lacks
@@ -118,8 +118,73 @@ export function stateClips(root, parts, seconds = 1) {
   return clips;
 }
 
-// Exports the scene to GLB, then gives each named material its photo texture.
-export async function exportGLB(root, clips, out, textures = {}) {
+// Fine surface grain (BENCHMARK.md section 10): tiled normal and roughness maps made by
+// pipeline/scripts/tex_grain.py, laid on a second UV set measured in metres, so the grain is the
+// same real size on every part and sits under any photo texture. A builder passes
+// { dir: "<tex>/grain", materials: { Name: { type, dir, clearcoat } } } to exportGLB:
+// type is a key of GRAIN (each depth is its own map: Apple's AR view wants normal maps at the
+// standard scale), dir is the way brushed lines run ("v" up the panel, "h" across it), and
+// clearcoat is [amount, roughness] for a clear glossy film on top.
+export const GRAIN = {
+  hairline: { tile: 0.1, normal: "hairline_n.jpg", rough: "hairline_r.jpg" },
+  hairline_soft: { tile: 0.1, normal: "hairline_soft_n.jpg", rough: "hairline_r.jpg" },
+  peel: { tile: 0.128, normal: "peel_n.jpg" },
+  peel_soft: { tile: 0.128, normal: "peel_soft_n.jpg" },
+  peel_strong: { tile: 0.128, normal: "peel_strong_n.jpg" },
+};
+
+function grainUVs(root, materials) {
+  const done = new WeakSet(), s = new THREE.Vector3();
+  root.updateMatrixWorld(true);
+  root.traverse((o) => {
+    if (!o.isMesh || done.has(o.geometry)) return;
+    const spec = [o.material].flat().map((m) => materials[m.name]).find(Boolean);
+    if (!spec) return;
+    done.add(o.geometry);
+    o.getWorldScale(s);
+    const { tile } = GRAIN[spec.type];
+    const pos = o.geometry.attributes.position, nor = o.geometry.attributes.normal;
+    const uv = new Float32Array(pos.count * 2);
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i) * s.x, y = pos.getY(i) * s.y, z = pos.getZ(i) * s.z;
+      const ax = Math.abs(nor.getX(i)), ay = Math.abs(nor.getY(i)), az = Math.abs(nor.getZ(i));
+      // box projection onto the face the vertex looks out of: across the lines, then along them
+      let [a, b] = az >= ax && az >= ay ? [x, y] : ax >= ay ? [z, y] : [x, z];
+      if (spec.dir === "h") [a, b] = [b, a];
+      uv[2 * i] = a / tile;
+      uv[2 * i + 1] = b / tile;
+    }
+    o.geometry.setAttribute("uv1", new THREE.BufferAttribute(uv, 2));
+  });
+}
+
+function applyGrain(doc, { dir, materials }) {
+  const images = new Map();
+  const image = (file) => {
+    if (!images.has(file)) images.set(file, doc.createTexture(`grain_${file.replace(/\.\w+$/, "")}`).setImage(new Uint8Array(fs.readFileSync(`${dir}/${file}`))).setMimeType("image/jpeg"));
+    return images.get(file);
+  };
+  let coat = null;
+  for (const m of doc.getRoot().listMaterials()) {
+    const spec = materials[m.getName()];
+    if (!spec) continue;
+    const g = GRAIN[spec.type];
+    m.setNormalTexture(image(g.normal));
+    m.getNormalTextureInfo().setTexCoord(1);
+    if (g.rough) {
+      m.setMetallicRoughnessTexture(image(g.rough));
+      m.getMetallicRoughnessTextureInfo().setTexCoord(1);
+    }
+    if (spec.clearcoat) {
+      coat ||= doc.createExtension(KHRMaterialsClearcoat);
+      m.setExtension("KHR_materials_clearcoat", coat.createClearcoat().setClearcoatFactor(spec.clearcoat[0]).setClearcoatRoughnessFactor(spec.clearcoat[1]));
+    }
+  }
+}
+
+// Exports the scene to GLB, then gives each named material its photo texture (and its grain).
+export async function exportGLB(root, clips, out, textures = {}, grain = null) {
+  if (grain) grainUVs(root, grain.materials);
   const scene = new THREE.Scene();
   scene.add(root);
   const raw = await new GLTFExporter().parseAsync(scene, { binary: true, animations: clips, onlyVisible: true });
@@ -133,9 +198,10 @@ export async function exportGLB(root, clips, out, textures = {}) {
     const c = m.getBaseColorFactor();
     m.setBaseColorFactor([1, 1, 1, c[3]]);
   }
+  if (grain) applyGrain(doc, grain);
   const separated = defight(doc); // surfaces in the same plane flicker: move them 0.8 mm apart
   fs.writeFileSync(out, await io.writeBinary(doc));
-  const missing = Object.keys(textures).filter((k) => !doc.getRoot().listMaterials().some((m) => m.getName() === k));
+  const missing = [...Object.keys(textures), ...Object.keys(grain?.materials || {})].filter((k) => !doc.getRoot().listMaterials().some((m) => m.getName() === k));
   console.log(out, (fs.statSync(out).size / 1024).toFixed(0) + " KB", clips.length, "clips", `${separated} z-fights separated`, missing.length ? `MISSING MATERIALS: ${missing}` : "");
 }
 

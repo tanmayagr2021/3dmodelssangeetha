@@ -231,6 +231,11 @@ export function initRoom({ product, model, parts, onWall, toast, openButton }) {
     if (root) return;
     if (!document.getElementById("room-css")) { const st = document.createElement("style"); st.id = "room-css"; st.textContent = CSS; document.head.appendChild(st); }
     S = { photo: null, hc: 1.4, yh: 0.5, lens: 26, userSize: 1, turn: 0, xb: 0, yb: 0, wallDist: 3.2, cand: [], ci: 0, open: Object.fromEntries(parts.map((p) => [p.key, false])), busy: false };
+    // model-viewer drops its render scale after slow frames (loading the page's light, a big model) and keeps
+    // it low until something moves again; toBlob then cuts a smaller piece out of a still model's full-size
+    // picture, so "Save picture" came out cropped and too big. The model here stands still: keep full scale.
+    const MV = customElements.get("model-viewer");
+    if (MV) { S.minScale = MV.minimumRenderScale; MV.minimumRenderScale = 1; }
     root = document.createElement("div");
     root.className = "room";
     root.setAttribute("role", "dialog");
@@ -288,6 +293,7 @@ export function initRoom({ product, model, parts, onWall, toast, openButton }) {
     cancelAnimationFrame(raf);
     S?.ro?.disconnect();
     if (S?.photo) URL.revokeObjectURL(S.photo.url);
+    if (S?.minScale) customElements.get("model-viewer").minimumRenderScale = S.minScale;
     root.remove();
     root = null; S = null;
     document.documentElement.style.overflow = "";

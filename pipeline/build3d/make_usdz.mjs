@@ -187,9 +187,11 @@ for (const finish of finishes) {
     w.line(`int[] faceVertexIndices = [${indices.join(",")}]`);
     w.line(`point3f[] points = [${vec(pos, 3, P5)}]`);
     if (nor) { w.line(`normal3f[] normals = [${vec(nor, 3, N3)}] (`); w.line('    interpolation = "vertex"'); w.line(")"); }
-    if (uv) {
-      const st = []; for (const i of used) { uv.getElement(i, el); st.push(U4([el[0], 1 - el[1]])); }
-      w.line(`texCoord2f[] primvars:st = [${st.join(", ")}] (`); w.line('    interpolation = "vertex"'); w.line(")");
+    // st carries the photo textures; st1, when present, the fine grain (lib.mjs GRAIN), in tiles
+    for (const [set, name] of [[uv, "st"], [prim.getAttribute("TEXCOORD_1"), "st1"]]) {
+      if (!set) continue;
+      const st = []; for (const i of used) { set.getElement(i, el); st.push(U4([el[0], 1 - el[1]])); }
+      w.line(`texCoord2f[] primvars:${name} = [${st.join(", ")}] (`); w.line('    interpolation = "vertex"'); w.line(")");
     }
     w.line('uniform token subdivisionScheme = "none"');
     const m = materialFor(prim);
@@ -306,10 +308,23 @@ for (const finish of finishes) {
   // ── materials ──
   w.line();
   w.open('def Scope "Materials"');
+  const fileFor = (tex) => {
+    if (!textureFiles.has(tex)) {
+      const ext = tex.getMimeType() === "image/png" ? "png" : "jpg";
+      const file = `textures/${safe(tex.getName() || `tex${textureFiles.size}`).toLowerCase()}.${ext}`;
+      fs.writeFileSync(path.join(outDir, file), Buffer.from(tex.getImage()));
+      textureFiles.set(tex, file);
+    }
+    return textureFiles.get(tex);
+  };
+  const wrap = (v) => ({ 33071: "clamp", 33648: "mirror" })[v] || "repeat";
   for (const [m, n] of usedMaterials) {
     const mp = `/Root/Materials/${n}`;
     const [r, g, b, a] = m.getBaseColorFactor();
     const tex = m.getBaseColorTexture();
+    // the fine grain (lib.mjs GRAIN): a normal map, a roughness map (green), a clear film on top
+    const nTex = m.getNormalTexture(), rTex = m.getMetallicRoughnessTexture();
+    const coat = m.getExtension("KHR_materials_clearcoat");
     w.open(`def Material "${n}"`);
     w.line(`token outputs:surface.connect = <${mp}/Surface.outputs:surface>`);
     w.open('def Shader "Surface"');
@@ -317,38 +332,56 @@ for (const finish of finishes) {
     if (tex) w.line(`color3f inputs:diffuseColor.connect = <${mp}/BaseColor.outputs:rgb>`);
     else w.line(`color3f inputs:diffuseColor = ${tuple([r, g, b])}`);
     w.line(`float inputs:metallic = ${num(m.getMetallicFactor())}`);
-    w.line(`float inputs:roughness = ${num(m.getRoughnessFactor())}`);
+    if (rTex) w.line(`float inputs:roughness.connect = <${mp}/Roughness.outputs:g>`);
+    else w.line(`float inputs:roughness = ${num(m.getRoughnessFactor())}`);
+    if (nTex) w.line(`normal3f inputs:normal.connect = <${mp}/Normal.outputs:rgb>`);
+    if (coat) {
+      w.line(`float inputs:clearcoat = ${num(coat.getClearcoatFactor())}`);
+      w.line(`float inputs:clearcoatRoughness = ${num(coat.getClearcoatRoughnessFactor())}`);
+    }
     if (m.getAlphaMode() === "BLEND") w.line(`float inputs:opacity = ${num(a)}`);
     const e = m.getEmissiveFactor();
     if (e.some((v) => v > 0)) w.line(`color3f inputs:emissiveColor = ${tuple(e)}`);
     w.line("int inputs:useSpecularWorkflow = 0");
     w.line("token outputs:surface");
     w.close();
-    if (tex) {
-      if (!textureFiles.has(tex)) {
-        const ext = tex.getMimeType() === "image/png" ? "png" : "jpg";
-        const file = `textures/${safe(tex.getName() || `tex${textureFiles.size}`).toLowerCase()}.${ext}`;
-        fs.writeFileSync(path.join(outDir, file), Buffer.from(tex.getImage()));
-        textureFiles.set(tex, file);
+    const readers = new Set();
+    const reader = (set) => {
+      const name = set ? "St1Reader" : "StReader";
+      if (!readers.has(name)) {
+        readers.add(name);
+        w.open(`def Shader "${name}"`);
+        w.line('uniform token info:id = "UsdPrimvarReader_float2"');
+        w.line(`string inputs:varname = "${set ? "st1" : "st"}"`);
+        w.line("float2 inputs:fallback = (0, 0)");
+        w.line("float2 outputs:result");
+        w.close();
       }
-      const info = m.getBaseColorTextureInfo();
-      const wrap = (v) => ({ 33071: "clamp", 33648: "mirror" })[v] || "repeat";
-      w.open('def Shader "StReader"');
-      w.line('uniform token info:id = "UsdPrimvarReader_float2"');
-      w.line('string inputs:varname = "st"');
-      w.line("float2 inputs:fallback = (0, 0)");
-      w.line("float2 outputs:result");
-      w.close();
-      w.open('def Shader "BaseColor"');
+      return `${mp}/${name}.outputs:result`;
+    };
+    const texture = (name, t, info, color, extra, output) => {
+      const st = reader(info.getTexCoord());
+      w.open(`def Shader "${name}"`);
       w.line('uniform token info:id = "UsdUVTexture"');
-      w.line(`asset inputs:file = @${textureFiles.get(tex)}@`);
-      w.line('token inputs:sourceColorSpace = "sRGB"');
-      w.line(`float2 inputs:st.connect = <${mp}/StReader.outputs:result>`);
+      w.line(`asset inputs:file = @${fileFor(t)}@`);
+      w.line(`token inputs:sourceColorSpace = "${color}"`);
+      w.line(`float2 inputs:st.connect = <${st}>`);
       w.line(`token inputs:wrapS = "${wrap(info.getWrapS())}"`);
       w.line(`token inputs:wrapT = "${wrap(info.getWrapT())}"`);
-      if ([r, g, b].some((v) => v !== 1)) w.line(`float4 inputs:scale = ${tuple([r, g, b, 1])}`);
-      w.line("float3 outputs:rgb");
+      extra.forEach((x) => w.line(x));
+      w.line(output);
       w.close();
+    };
+    if (tex) texture("BaseColor", tex, m.getBaseColorTextureInfo(), "sRGB",
+      [r, g, b].some((v) => v !== 1) ? [`float4 inputs:scale = ${tuple([r, g, b, 1])}`] : [], "float3 outputs:rgb");
+    if (nTex) {
+      // glTF's normal scale bends only x and y: n = (2t - 1) * (s, s, 1)
+      const k = m.getNormalScale();
+      texture("Normal", nTex, m.getNormalTextureInfo(), "raw", [`float4 inputs:scale = ${tuple([2 * k, 2 * k, 2, 1])}`, `float4 inputs:bias = ${tuple([-k, -k, -1, 0])}`], "float3 outputs:rgb");
+    }
+    if (rTex) {
+      const f = m.getRoughnessFactor();
+      texture("Roughness", rTex, m.getMetallicRoughnessTextureInfo(), "raw", [`float4 inputs:scale = ${tuple([f, f, f, 1])}`], "float outputs:g");
     }
     w.close();
   }

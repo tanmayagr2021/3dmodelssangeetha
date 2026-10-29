@@ -45,6 +45,7 @@ const btnPower = mat("BtnPower", 0xffffff, { metal: 0.2, rough: 0.35 });
 const btnPlay = mat("BtnPlay", 0xffffff, { metal: 0.2, rough: 0.35 });
 const keyPad = mat("Keys", 0xffffff, { metal: 0.1, rough: 0.35 });
 const knobTop = mat("KnobTop", 0xffffff, { metal: 0.55, rough: 0.38 });
+const labelMat = mat("EnergyLabel", 0xffffff, { rough: 0.45 });
 
 // ── rear fittings: positions traced from LG's rear photo by tex_lg_rear.py (metres, front view) ──
 const rp = JSON.parse(fs.readFileSync(`${TEX}/lg/rear_paths.json`, "utf8"));
@@ -129,6 +130,18 @@ cab.add(mesh("ControlStrip", flipV(new THREE.BoxGeometry(stripW, stripH, 0.012))
 // the drawer bay: a dark slot the drawer slides out of
 const bayW = drawerX1 - drawerX0;
 cab.add(mesh("DrawerBay", inward(new THREE.BoxGeometry(bayW, stripH - 0.004, 0.3)), dark, drawerX0 + bayW / 2, stripY + stripH / 2, zF - 0.15));
+{ // energy label: this model's own BEE label, a die-cut sticker 64 x 117.4 mm with an arched top, just under the strip
+  // on the right where LG's photos put it (515-579 mm from the left edge). Printed crisp by tex_lg_label.py.
+  const lw = 0.064, lh = 0.1174, ry = 0.0322;
+  const sh = new THREE.Shape();
+  sh.moveTo(-lw / 2, -lh); sh.lineTo(lw / 2, -lh); sh.lineTo(lw / 2, -ry);
+  sh.absellipse(0, -ry, lw / 2, ry, 0, Math.PI, false);
+  sh.lineTo(-lw / 2, -lh);
+  const g = new THREE.ShapeGeometry(sh, 24);
+  const pos = g.attributes.position, uv = g.attributes.uv;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, (pos.getX(i) + lw / 2) / lw, -pos.getY(i) / lh);
+  cab.add(mesh("EnergyLabel", g, labelMat, 0.247, 0.737, zF + 0.0008));
+}
 
 // ── detergent drawer: LG's photographed front and a white tray behind it ──
 const drawer = group("Drawer", drawerX0 + bayW / 2, stripY + stripH / 2, zF - 0.006);
@@ -223,6 +236,12 @@ root.add(door);
 const parts = productParts(PRODUCTS, ID);
 const clips = stateClips(root, parts);
 saveZones(PRODUCTS, ID, root, parts);
+// Grain (BENCHMARK.md section 10): LG's close photos show horizontal hairlines on the Platinum
+// Black front and a fine speckled paint on the ribbed sides and the top.
+const grain = { dir: `${TEX}/grain`, materials: {
+  Front: { type: "hairline_soft", dir: "h" },
+  BodySide: { type: "peel" }, SideL: { type: "peel" }, SideR: { type: "peel" }, TopPlate: { type: "peel" },
+} };
 await exportGLB(root, clips, OUT, {
   BodySide: `${TEX}/lg/side.jpg`,
   SideL: `${TEX}/lg/side_l.jpg`,
@@ -238,4 +257,5 @@ await exportGLB(root, clips, OUT, {
   TopPlate: `${TEX}/lg/side.jpg`,
   DrawerFront: `${TEX}/lg/drawer.jpg`,
   Drum: `${TEX}/lg/drum.jpg`,
-});
+  EnergyLabel: `${TEX}/lg/label.jpg`,
+}, grain);

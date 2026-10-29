@@ -203,4 +203,10 @@ await exportGLB(root, clips, OUT, {
   PanelFront: `${TEX}/haier_hso52/panel.jpg`,
   Filter: `${TEX}/haier_hso52/filter.jpg`,
   TopGrille: `${TEX}/haier_hso52/top.jpg`,
-});
+}, { dir: `${TEX}/grain`, materials: {
+  // Grain (BENCHMARK.md section 10): glossy moulded white plastic, a faint ripple in the reflections.
+  // Not on the front panel: it carries the printed logo, display and badge, and the ripple mottled the
+  // dark print in close-ups. A gloss front panel is smooth; the studio light's reflections show its finish.
+  SideFace: { type: "peel_soft" }, Body: { type: "peel_soft" },
+  SideCap: { type: "peel_soft" }, Louvre: { type: "peel_soft" },
+} });

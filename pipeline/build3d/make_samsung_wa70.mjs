@@ -235,4 +235,9 @@ await exportGLB(root, clips, OUT, {
   Body: `${T}/body.jpg`, Front: `${T}/front.jpg`, SideL: `${T}/side_l.jpg`, SideR: `${T}/side.jpg`, TopPlate: `${T}/top.jpg`,
   PanelFace: `${T}/panel.jpg`, LabelBEE: `${T}/label.png`, DiamondDrum: `${T}/drum.jpg`, Pulsator: `${T}/pulsator.jpg`,
   DetergentFace: `${T}/detergent.jpg`, MagicFilter: `${T}/filter.jpg`,
-});
+}, { dir: `${TEX}/grain`, materials: {
+  // Grain (BENCHMARK.md section 10): painted Lavender Gray body (factory paint is fine: the soft peel;
+  // the full one looked like embossed leather up close), moulded black plinth
+  Body: { type: "peel_soft" }, Front: { type: "peel_soft" }, SideL: { type: "peel_soft" }, SideR: { type: "peel_soft" }, TopPlate: { type: "peel_soft" },
+  BlackPlastic: { type: "peel_strong" }, Plinth: { type: "peel_strong" },
+} });
