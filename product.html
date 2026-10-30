@@ -586,12 +586,14 @@ const PUBLIC_ORIGIN = "https://3dmodelssangeetha.vercel.app";
 const shareUrl = (() => {
   const u = new URL((location.hostname.endsWith(".vercel.app") ? PUBLIC_ORIGIN : location.origin) + location.pathname + location.search);
   u.searchParams.delete("embed");   // links people share always open the full page
+  u.searchParams.delete("ql");      // and the standard iPhone AR
   return u.href;
 })();
 // Phones kept model files for an hour before 24 Oct 2026; this query string made them fetch
 // the files with the fixed doors. The files now revalidate on every load (vercel.json); v=3 (29 Oct)
-// makes sure Quick Look's own copy is replaced by the files with the panel grain.
-const model = (url) => `${url}?v=3`;
+// made sure Quick Look's own copy was replaced by the files with the panel grain, and v=4 (30 Oct)
+// by the files with the iPhone colour fixes.
+const model = (url) => `${url}?v=4`;
 
 // ── what this device can do ──
 const ua = navigator.userAgent;
@@ -1344,12 +1346,15 @@ mv.addEventListener("load", () => {
 // ── AR and VR ──
 // iPhone, iPad, Vision Pro: Apple's AR view, with tap-to-open doors built into the file
 // and a banner along the bottom that keeps the tip on screen.
+// ?ql=free opens the same product without the floor anchor (the -free file), to compare on an
+// iPhone which one stands where it is pointed; Quick Look's placement can't be set from the page.
+const qlFree = new URLSearchParams(location.search).get("ql") === "free" && !onWall;
 function openQuickLook() {
   const f = product.finishes[finishIndex];
   const banner = `${location.origin}/banners/${product.id}`;
   const a = document.createElement("a");
   a.rel = "ar";
-  a.href = `${model(f.usdz)}#allowsContentScaling=0` +
+  a.href = `${model(qlFree ? f.usdz.replace(/\.usdz$/, "-free.usdz") : f.usdz)}#allowsContentScaling=0` +
     (location.protocol === "https:" ? `&custom=${banner}&customHeight=small` : "") +
     `&canonicalWebPageURL=${encodeURIComponent(shareUrl)}`;
   a.appendChild(document.createElement("img"));

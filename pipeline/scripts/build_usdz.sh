@@ -10,9 +10,11 @@ mkdir -p "$WORK" "$DEMO/models/usdz"
 cd "$HERE/../build3d"
 node -e '
 const { products } = require(process.argv[1]);
-for (const p of products) console.log(p.id, p.glb);
-' "$DEMO/products.json" | while read -r id glb; do
+for (const p of products) console.log(p.id, p.glb, p.placement || "floor");
+' "$DEMO/products.json" | while read -r id glb placement; do
   node make_usdz.mjs "$DEMO$glb" "$DEMO/products.json" "$id" "$WORK"
+  # floor products also get a copy without the floor anchor, opened by product links with ?ql=free
+  [ "$placement" = wall ] || node make_usdz.mjs "$DEMO$glb" "$DEMO/products.json" "$id" "$WORK" free
 done
 rm -f "$DEMO"/models/usdz/*.usdz
 for f in "$WORK"/*.usda; do

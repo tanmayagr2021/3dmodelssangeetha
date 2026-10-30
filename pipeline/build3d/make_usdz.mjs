@@ -8,18 +8,32 @@
 // runs reliably; no visibility token or Show/Hide action is used, since a part that
 // failed to show again would vanish after opening.
 //
-// usage: node make_usdz.mjs <model.glb> <products.json> <productId> <outDir>
+// usage: node make_usdz.mjs <model.glb> <products.json> <productId> <outDir> [free]
+// "free" writes <id>-<finish>-free.usda with no floor anchoring, to compare how Quick Look places it.
 import fs from "node:fs";
 import path from "node:path";
 import { NodeIO } from "@gltf-transform/core";
 import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 
-const [glbPath, productsPath, productId, outDir] = process.argv.slice(2);
+const [glbPath, productsPath, productId, outDir, mode] = process.argv.slice(2);
+const free = mode === "free";
 const product = JSON.parse(fs.readFileSync(productsPath, "utf8")).products.find((p) => p.id === productId);
 if (!product) throw new Error(`no product ${productId}`);
 const doc = await new NodeIO().registerExtensions(ALL_EXTENSIONS).read(glbPath);
 const root = doc.getRoot();
-fs.mkdirSync(path.join(outDir, "textures"), { recursive: true });
+// Each product's textures go in their own folder. They used to share one, named after the material, so
+// building several products into one folder let a later one overwrite another's: the LG FHP1412Z9B
+// washer shipped with the Samsung WA70's light grey front, sides and top, and looked silver on iPhone.
+const texDir = `textures/${productId}`;
+fs.mkdirSync(path.join(outDir, texDir), { recursive: true });
+
+// a PNG whose pixels carry alpha (colour type 4 or 6, or a tRNS chunk)
+const hasAlpha = (tex) => {
+  const d = tex.getImage();
+  if (tex.getMimeType() !== "image/png" || !d || d.length < 33) return false;
+  if (d[25] === 4 || d[25] === 6) return true;
+  return Buffer.from(d).includes("tRNS");
+};
 
 const SWING = 0.8; // seconds for a door to open or close
 const PARK = 0.001; // scale of a parked copy (a 60 cm door becomes 0.6 mm)
@@ -243,7 +257,7 @@ for (const finish of finishes) {
   // Floor products anchor to the floor. Wall units get no anchoring at all: with
   // "vertical" Quick Look turns the model so its base faces the wall, while without
   // anchoring it snaps upright to a wall, back first (model-viewer issue #3989).
-  const anchored = product.placement !== "wall";
+  const anchored = product.placement !== "wall" && !free;
   w.open('def Xform "Root"');
   w.open('def Scope "Scenes"', ['kind = "sceneLibrary"']);
   w.open('def Xform "Scene"', [
@@ -311,7 +325,10 @@ for (const finish of finishes) {
   const fileFor = (tex) => {
     if (!textureFiles.has(tex)) {
       const ext = tex.getMimeType() === "image/png" ? "png" : "jpg";
-      const file = `textures/${safe(tex.getName() || `tex${textureFiles.size}`).toLowerCase()}.${ext}`;
+      const base = safe(tex.getName() || `tex${textureFiles.size}`).toLowerCase();
+      const taken = new Set(textureFiles.values());
+      let file = `${texDir}/${base}.${ext}`;
+      for (let n = 2; taken.has(file); n++) file = `${texDir}/${base}_${n}.${ext}`; // two images, one name
       fs.writeFileSync(path.join(outDir, file), Buffer.from(tex.getImage()));
       textureFiles.set(tex, file);
     }
@@ -320,8 +337,21 @@ for (const finish of finishes) {
   const wrap = (v) => ({ 33071: "clamp", 33648: "mirror" })[v] || "repeat";
   for (const [m, n] of usedMaterials) {
     const mp = `/Root/Materials/${n}`;
-    const [r, g, b, a] = m.getBaseColorFactor();
+    let [r, g, b, a] = m.getBaseColorFactor();
     const tex = m.getBaseColorTexture();
+    // Painted and film-coated steel is built part-metal (0.15 to 0.4). RealityKit, Quick Look's renderer,
+    // draws part-metal surfaces far darker than three.js does in the same light: the LG Shiny Steel door
+    // came out at 26% of the white energy label's brightness, against 49% on the web and 46% in LG's
+    // photo. Written as non-metal and a little lighter, it measures 47%. Real metal (0.5 and up) stays.
+    let metallic = m.getMetallicFactor();
+    if (metallic > 0 && metallic < 0.5) {
+      const k = 1 + 0.4 * metallic;
+      [r, g, b] = [r, g, b].map((v) => (tex ? v * k : Math.min(1, v * k)));
+      metallic = 0;
+    }
+    // a decal on a see-through background (a logo, printed text) takes its shape from the image's alpha;
+    // without it Quick Look draws the whole rectangle, and the clear part comes out as a dark box
+    const cutout = m.getAlphaMode() !== "OPAQUE" && tex && hasAlpha(tex);
     // the fine grain (lib.mjs GRAIN): a normal map, a roughness map (green), a clear film on top
     const nTex = m.getNormalTexture(), rTex = m.getMetallicRoughnessTexture();
     const coat = m.getExtension("KHR_materials_clearcoat");
@@ -331,7 +361,7 @@ for (const finish of finishes) {
     w.line('uniform token info:id = "UsdPreviewSurface"');
     if (tex) w.line(`color3f inputs:diffuseColor.connect = <${mp}/BaseColor.outputs:rgb>`);
     else w.line(`color3f inputs:diffuseColor = ${tuple([r, g, b])}`);
-    w.line(`float inputs:metallic = ${num(m.getMetallicFactor())}`);
+    w.line(`float inputs:metallic = ${num(metallic)}`);
     if (rTex) w.line(`float inputs:roughness.connect = <${mp}/Roughness.outputs:g>`);
     else w.line(`float inputs:roughness = ${num(m.getRoughnessFactor())}`);
     if (nTex) w.line(`normal3f inputs:normal.connect = <${mp}/Normal.outputs:rgb>`);
@@ -339,7 +369,10 @@ for (const finish of finishes) {
       w.line(`float inputs:clearcoat = ${num(coat.getClearcoatFactor())}`);
       w.line(`float inputs:clearcoatRoughness = ${num(coat.getClearcoatRoughnessFactor())}`);
     }
-    if (m.getAlphaMode() === "BLEND") w.line(`float inputs:opacity = ${num(a)}`);
+    if (cutout) w.line(`float inputs:opacity.connect = <${mp}/BaseColor.outputs:a>`);
+    else if (m.getAlphaMode() === "BLEND") w.line(`float inputs:opacity = ${num(a)}`);
+    // cut the clear part away entirely: left in, RealityKit still puts a sheen on it, a faint box round the logo
+    if (cutout) w.line(`float inputs:opacityThreshold = ${num(m.getAlphaMode() === "MASK" ? m.getAlphaCutoff() : 0.05)}`);
     const e = m.getEmissiveFactor();
     if (e.some((v) => v > 0)) w.line(`color3f inputs:emissiveColor = ${tuple(e)}`);
     w.line("int inputs:useSpecularWorkflow = 0");
@@ -369,11 +402,12 @@ for (const finish of finishes) {
       w.line(`token inputs:wrapS = "${wrap(info.getWrapS())}"`);
       w.line(`token inputs:wrapT = "${wrap(info.getWrapT())}"`);
       extra.forEach((x) => w.line(x));
-      w.line(output);
+      [].concat(output).forEach((o) => w.line(o));
       w.close();
     };
     if (tex) texture("BaseColor", tex, m.getBaseColorTextureInfo(), "sRGB",
-      [r, g, b].some((v) => v !== 1) ? [`float4 inputs:scale = ${tuple([r, g, b, 1])}`] : [], "float3 outputs:rgb");
+      [r, g, b, cutout ? a : 1].some((v) => v !== 1) ? [`float4 inputs:scale = ${tuple([r, g, b, cutout ? a : 1])}`] : [],
+      cutout ? ["float3 outputs:rgb", "float outputs:a"] : "float3 outputs:rgb");
     if (nTex) {
       // glTF's normal scale bends only x and y: n = (2t - 1) * (s, s, 1)
       const k = m.getNormalScale();
@@ -388,7 +422,7 @@ for (const finish of finishes) {
   w.close(); // Materials
   w.close(); // Root
 
-  const file = path.join(outDir, `${productId}-${finish.slug}.usda`);
+  const file = path.join(outDir, `${productId}-${finish.slug}${free ? "-free" : ""}.usda`);
   fs.writeFileSync(file, w.toString());
   console.log("wrote", file, `${(fs.statSync(file).size / 1024).toFixed(0)} KB`, "parts:", [...partInfo.keys()].join(","), "materials:", usedMaterials.size, "textures:", [...textureFiles.values()].join(","));
 }
